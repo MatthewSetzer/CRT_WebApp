@@ -1,0 +1,40 @@
+﻿@page "/"
+@inject HttpClient httpClient
+@using CRT_WebApp.Shared
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<button @onclick="createQuote">Click Here</button>
+<button @onclick="getQuotes">Click Here to load</button>
+
+
+@code{
+
+    QuoteModel quote = new QuoteModel();
+    List<QuoteModel> allQuotes;
+
+    async Task createQuote()
+    {
+        quote.QuoteUser = "Matt";
+        quote.QuoteTitle = "TestQuote";
+        quote.QuoteDate = DateTime.Now;
+        quote.IsDeleted = false;
+        quote.Total = 58.00;
+
+        await httpClient.PostAsJsonAsync("quotes", quote);
+    }
+
+    async Task getQuotes()
+    {
+        allQuotes = await httpClient.GetFromJsonAsync<List<QuoteModel>>("quotes");
+
+        foreach (QuoteModel quote in allQuotes)
+        {
+            Console.WriteLine(quote.QuoteDate);
+        }
+    }
+}
