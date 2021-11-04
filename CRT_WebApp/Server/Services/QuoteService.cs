@@ -19,17 +19,7 @@ namespace CRT_WebApplication.Server
 
         public async Task CreateQuote(QuoteModel model)
         {
-            _context.Quotes.Add(new QuoteModel
-            {
-                // Id = ID,
-                QuoteTitle = model.QuoteTitle,
-                QuoteState = model.QuoteState,
-                QuoteDate = model.QuoteDate,
-                QuoteUser = model.QuoteUser,
-                Total = model.Total,
-                IsDeleted = model.IsDeleted
-            });
-
+            _context.Quotes.Add(model);
             await _context.SaveChangesAsync();
         }
 
