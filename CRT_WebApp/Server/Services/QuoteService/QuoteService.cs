@@ -36,12 +36,39 @@ namespace CRT_WebApp.Server.Services.QuoteService
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
-        /// Gets a list of Quotes from DB
+        /// Gets a list of non 'deleted' Quotes from DB
         /// </summary>
         /// <returns>A list of type Quote.</returns>
         public async Task<List<QuoteModel>> GetQuotes()
         {
-            return await _context.Quotes.ToListAsync();
+            return await _context.Quotes.Where(q => q.IsDeleted == false).ToListAsync();
+        }
+
+        //---------------------------------------------------------------------------------------------------------//
+        //TODO implement GetQuotesByUser function
+        public Task<List<QuoteModel>> GetQuotesByUser(string userID)
+        {
+            throw new NotImplementedException();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        //TODO implement SoftDeleteQuote function
+        public Task SoftDeleteQuote(int quoteID)
+        {
+            throw new NotImplementedException();
+        }
+
+        //---------------------------------------------------------------------------------------------------------//
+        //TODO implement DeleteQuote function
+        public Task DeleteQuote(int quoteID)
+        {
+            throw new NotImplementedException();
+        }
+
+        //---------------------------------------------------------------------------------------------------------//
+        //TODO implement FindQuoteByID function
+        public Task<QuoteModel> FindQuoteByID(int quoteID)
+        {
+            throw new NotImplementedException();
         }
 
         //Not async;Also its bad to try and format data's representation in the back end.
