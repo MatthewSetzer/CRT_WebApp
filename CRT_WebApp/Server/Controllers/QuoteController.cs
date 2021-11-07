@@ -54,8 +54,7 @@ namespace CRT_WebApplication.Server.Controllers
         //We DONT want to create a new instance every time we want to use something that functions like a service.
         //Thats why we inject it as a dependency, so that we can use the same instance of a service(in this case scoped) 
         //for multiple things, without having to create a new one everytime. 
-        //Object creation takes a lot of memory. If we are running this on a server and every request creates a new instance of an object
-        //It makes the server a lot more vulnerable to DDOS. 
+        //Object creation takes a lot of memory!
 
 
         //private ApplicationDbContext _ctx;
