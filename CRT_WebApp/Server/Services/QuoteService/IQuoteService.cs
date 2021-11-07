@@ -56,7 +56,12 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns>The quote if found</returns>
         Task<QuoteModel> FindQuoteByID(int quoteID);
 
-
+        /// <summary>
+        /// Update quote using QuoteModel
+        /// </summary>
+        /// <param name="quote"></param>
+        /// <returns></returns>
+        Task<int> UpdateQuote(QuoteModel quote);
 
     }
 }

@@ -13,7 +13,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
     /// <summary>
     /// QuoteService implementation
     /// </summary>
-    class QuoteService:IQuoteService
+    class QuoteService : IQuoteService
     {
         ApplicationDbContext _context;
 
@@ -44,35 +44,68 @@ namespace CRT_WebApp.Server.Services.QuoteService
             return await _context.Quotes.Where(q => q.IsDeleted == false).ToListAsync();
         }
 
-        //---------------------------------------------------------------------------------------------------------//
-        //TODO implement GetQuotesByUser function
-        public Task<List<QuoteModel>> GetQuotesByUser(string userID)
+        /// <summary>
+        /// Retrieves quotes by userID
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public async Task<List<QuoteModel>> GetQuotesByUser(string userID)
         {
-            throw new NotImplementedException();
-        }
-        //---------------------------------------------------------------------------------------------------------//
-        //TODO implement SoftDeleteQuote function
-        public Task SoftDeleteQuote(int quoteID)
-        {
-            throw new NotImplementedException();
+            return await _context.Quotes.Where(q => q.QuoteUser == userID).ToListAsync();
         }
 
         //---------------------------------------------------------------------------------------------------------//
-        //TODO implement DeleteQuote function
-        public Task DeleteQuote(int quoteID)
+        //TODO check logic here 
+        public async Task SoftDeleteQuote(int quoteID)
         {
-            throw new NotImplementedException();
+            var quote = _context.Quotes.FirstOrDefault(x => x.Id == quoteID);
+            _context.Quotes.Remove(quote);
+            await _context.SaveChangesAsync();
         }
 
-        //---------------------------------------------------------------------------------------------------------//
-        //TODO implement FindQuoteByID function
-        public Task<QuoteModel> FindQuoteByID(int quoteID)
+        /// <summary>
+        /// Deletes the quote
+        /// </summary>
+        /// <param name="quoteID"></param>
+        /// <returns></returns>
+        public async Task DeleteQuote(int quoteID)
         {
-            throw new NotImplementedException();
+            var quote = _context.Quotes.FirstOrDefault(x => x.Id == quoteID);
+            _context.Quotes.Remove(quote);
+            await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Finds the quote from quoteID
+        /// </summary>
+        /// <param name="quoteID"></param>
+        /// <returns></returns>
+        public async Task<QuoteModel> FindQuoteByID(int quoteID)
+        {
+            var quote =_context.Quotes.Where(x => x.Id == quoteID).FirstOrDefaultAsync();
+            return await quote;
+        }
+
+        /// <summary>
+        /// Updates quote with new QuoteModel
+        /// </summary>
+        /// <param name="quote"></param>
+        /// <returns></returns>
+        public async Task<int> UpdateQuote(QuoteModel quote)
+        {
+            _context.Quotes.Update(quote);
+            return await _context.SaveChangesAsync();
+        }
+
 
         //Not async;Also its bad to try and format data's representation in the back end.
         //We dont want to make seperate calls everytime we want to retrieve data in a different format right???
+
+
+        //TODO ^^ Not sure where that format would be different? Any total value would need to be displayed in dollar format? Happy either way
+
+
+
         //public IEnumerable<QuoteModel> GetQuotes()
         //{
         //    return _context.Quotes.ToList().Select(x => new QuoteModel
