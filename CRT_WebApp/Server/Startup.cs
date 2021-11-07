@@ -45,7 +45,8 @@ namespace CRT_WebApp.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             //---------------------------------------------------------------------------------------------------------//
-            //Created services
+            //TODO: Add our services HERE
+            //Created services. 99% of the time its scoped for our use case. 
             services.AddScoped<IQuoteService, QuoteService>();
         }
 
