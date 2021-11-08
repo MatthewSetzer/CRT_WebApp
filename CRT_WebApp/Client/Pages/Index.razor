@@ -14,16 +14,17 @@ Welcome to your new app.
 
 @code{
 
+    //TODO we need to implement a service that makes the http requests to hide it!
     QuoteModel quote = new QuoteModel();
     List<QuoteModel> allQuotes;
 
     async Task createQuote()
     {
-        quote.QuoteUser = "Matt";
-        quote.QuoteTitle = "TestQuote";
+        quote.QuoteUser = "JP";
+        quote.QuoteTitle = "TestQuote2";
         quote.QuoteDate = DateTime.Now;
         quote.IsDeleted = false;
-        quote.Total = 58.00;
+        quote.Total = 69.00;
 
         await httpClient.PostAsJsonAsync("quotes", quote);
     }
