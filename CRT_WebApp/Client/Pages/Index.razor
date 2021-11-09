@@ -27,7 +27,7 @@ Welcome to your new app.
         quote.IsDeleted = false;
         quote.Total = 69.00;
 
-        await httpClient.PostAsJsonAsync("api/Quote/UpdateQuote", quote);
+        await httpClient.PostAsJsonAsync("api/Quote/DisableQuote", quote);
     }
 
     async Task getQuotes()

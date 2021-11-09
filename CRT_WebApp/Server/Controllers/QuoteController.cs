@@ -43,7 +43,7 @@ namespace CRT_WebApplication.Server.Controllers
         /// Create Quote API route, creates a quote in database using the QuoteService
         /// </summary>
         /// <param name="quoteModel">The quote to be created</param>
-        [HttpPost]
+        [HttpPost("CreateQuote")]
         public async Task CreateQuote(QuoteModel quoteModel)
         {
             await _quoteService.CreateQuote(quoteModel);
@@ -63,7 +63,7 @@ namespace CRT_WebApplication.Server.Controllers
         /// Hard delete Quote API, permanently deletes a quote using the QuoteService.
         /// </summary>
         /// <param name="quoteModel"></param>
-        [HttpPost]
+        [HttpPost("DeleteQuote")]
         public async Task DeleteQuote(QuoteModel quoteModel)
         {
             await _quoteService.DeleteQuote(quoteModel.Id);
@@ -73,19 +73,29 @@ namespace CRT_WebApplication.Server.Controllers
         /// Soft delete Quote API, "soft" deletion of a quote using the QuoteService.
         /// </summary>
         /// <param name="quoteModel"></param>
-        [HttpPost]
+        [HttpPost("SoftDelete")]
         public async Task SoftDeleteQuote(QuoteModel quoteModel)
         {
             await _quoteService.SoftDeleteQuote(quoteModel.Id);
         }
         //---------------------------------------------------------------------------------------------------------//
-        [HttpPost]
+        /// <summary>
+        /// Enable quote API, Changes a survey Quote to a normal Quote
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        /// <returns></returns>
+        [HttpPost("EnableQuote")]
         public async Task EnableQuote(QuoteModel quoteModel)
         {
             await _quoteService.EnableQuote(quoteModel);
         }
         //---------------------------------------------------------------------------------------------------------//
-        [HttpPost]
+        /// <summary>
+        /// Disable Quote API, changes a normal Quote to a Survey Quote again. 
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        /// <returns></returns>
+        [HttpPost("DisableQuote")]
         public async Task DisableQuote(QuoteModel quoteModel)
         {
             await _quoteService.DisableQuote(quoteModel);
