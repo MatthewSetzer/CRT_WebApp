@@ -44,6 +44,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
             return await _context.Quotes.Where(q => q.IsDeleted == false).ToListAsync();
         }
 
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Retrieves quotes by userID
         /// </summary>
@@ -55,14 +56,20 @@ namespace CRT_WebApp.Server.Services.QuoteService
         }
 
         //---------------------------------------------------------------------------------------------------------//
-        //TODO check logic here 
+        /// <summary>
+        /// Soft delete a Quote by ID. 
+        /// </summary>
+        /// <param name="quoteID"></param>
+        /// <returns></returns>
         public async Task SoftDeleteQuote(int quoteID)
         {
             var quote = _context.Quotes.FirstOrDefault(x => x.Id == quoteID);
-            _context.Quotes.Remove(quote);
+            quote.IsDeleted = true;
+            _context.Quotes.Update(quote);
             await _context.SaveChangesAsync();
         }
 
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Deletes the quote
         /// </summary>
@@ -75,6 +82,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
             await _context.SaveChangesAsync();
         }
 
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Finds the quote from quoteID
         /// </summary>
@@ -82,10 +90,10 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task<QuoteModel> FindQuoteByID(int quoteID)
         {
-            var quote =_context.Quotes.Where(x => x.Id == quoteID).FirstOrDefaultAsync();
-            return await quote;
+            return await _context.Quotes.Where(x => x.Id == quoteID).FirstOrDefaultAsync();
         }
 
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Updates quote with new QuoteModel
         /// </summary>
@@ -93,32 +101,26 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task<int> UpdateQuote(QuoteModel quote)
         {
-            _context.Quotes.Update(quote);
+            //TODO test this out
+            _context.Update(quote);
             return await _context.SaveChangesAsync();
         }
-
-
-        //Not async;Also its bad to try and format data's representation in the back end.
-        //We dont want to make seperate calls everytime we want to retrieve data in a different format right???
-
-
-        //TODO ^^ Not sure where that format would be different? Any total value would need to be displayed in dollar format? Happy either way
-
-
-
-        //public IEnumerable<QuoteModel> GetQuotes()
-        //{
-        //    return _context.Quotes.ToList().Select(x => new QuoteModel
-        //    {
-        //        QuoteTitle = x.QuoteTitle,
-        //        QuoteUser= x.QuoteUser,
-        //        QuoteDate = x.QuoteDate,
-        //        QuoteState = x.QuoteState,
-        //        IsDeleted = x.IsDeleted,
-        //        Total = x.Total
-        //    });
-        //}
-
+        //---------------------------------------------------------------------------------------------------------//
+        public async Task EnableQuote(QuoteModel quote)
+        {
+            quote.QuoteState = true;
+            _context.Quotes.Update(quote);
+            await _context.SaveChangesAsync();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        public async Task DisableQuote(QuoteModel quote)
+        {
+            quote.QuoteState = false;
+            _context.Update(quote);
+            await _context.SaveChangesAsync();
+              
+        }
+        
 
     }
 }

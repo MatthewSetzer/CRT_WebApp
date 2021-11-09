@@ -11,8 +11,8 @@ namespace CRT_WebApplication.Server.Controllers
     //TODO: Might need to change this route to something like "api/[controller]"
     [ApiController]
     [Route("quotes")]
-    
-    public class QuoteController: ControllerBase
+
+    public class QuoteController : ControllerBase
     {
 
         //---------------------------------------------------------------------------------------------------------//
@@ -48,33 +48,49 @@ namespace CRT_WebApplication.Server.Controllers
         {
             await _quoteService.CreateQuote(quoteModel);
         }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Update Quote API route, updates a quote in the database using the QuoteService. 
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        [HttpPost]
+        public async void UpdateQuote(QuoteModel quoteModel)
+        {
+            await _quoteService.UpdateQuote(quoteModel);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Hard delete Quote API, permanently deletes a quote using the QuoteService.
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        [HttpPost]
+        public async void DeleteQuote(QuoteModel quoteModel)
+        {
+            await _quoteService.DeleteQuote(quoteModel.Id);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Soft delete Quote API, "soft" deletion of a quote using the QuoteService.
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        [HttpPost]
+        public async void SoftDeleteQuote(QuoteModel quoteModel)
+        {
+            await _quoteService.SoftDeleteQuote(quoteModel.Id);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        [HttpPost]
+        public async void EnableQuote(QuoteModel quoteModel)
+        {
+            await _quoteService.EnableQuote(quoteModel);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        [HttpPost]
+        public async void DisableQuote(QuoteModel quoteModel)
+        {
+            await _quoteService.DisableQuote(quoteModel);
+        }
             
-
-        //Not async. There is no point in using a service if you end up using the db context in the controller.....
-        //We DONT want to create a new instance every time we want to use something that functions like a service.
-        //Thats why we inject it as a dependency, so that we can use the same instance of a service(in this case scoped) 
-        //for multiple things, without having to create a new one everytime. 
-        //Object creation takes a lot of memory!
-
-
-        //private ApplicationDbContext _ctx;
-
-        //public QuoteController(ApplicationDbContext ctx)
-        //{
-        //    _ctx = ctx;
-        //}
-
-        //[HttpPost]
-        //public IActionResult CreateQuote(QuoteModel quoteModel)
-        //{
-        //  return Ok(new QuoteService(_ctx).CreateQuote(quoteModel));      
-        //}
-        
-        //[HttpGet]
-        //public IActionResult RetrieveQuotes()
-        //{
-        //    return Ok(new QuoteService(_ctx).GetQuotes());
-        //}
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

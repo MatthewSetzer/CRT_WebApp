@@ -56,6 +56,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns>The quote if found</returns>
         Task<QuoteModel> FindQuoteByID(int quoteID);
 
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Update quote using QuoteModel
         /// </summary>
@@ -63,6 +64,20 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         Task<int> UpdateQuote(QuoteModel quote);
 
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// "Enables" a Quote, which represents a survey being edited into a quote. 
+        /// </summary>
+        /// <param name="quote"></param>
+        /// <returns></returns>
+        Task EnableQuote(QuoteModel quote);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Disables a Quote, essentially reverting it back to a survey. 
+        /// </summary>
+        /// <param name="quote"></param>
+        /// <returns></returns>
+        Task DisableQuote(QuoteModel quote);
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
