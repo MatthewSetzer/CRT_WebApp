@@ -101,7 +101,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task<int> UpdateQuote(QuoteModel quote)
         {
-            //TODO test this out
+            
             _context.Update(quote);
             return await _context.SaveChangesAsync();
         }
@@ -109,7 +109,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         public async Task EnableQuote(QuoteModel quote)
         {
             quote.QuoteState = true;
-            _context.Quotes.Update(quote);
+            _context.Update(quote);
             await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//

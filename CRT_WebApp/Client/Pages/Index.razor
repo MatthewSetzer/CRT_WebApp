@@ -20,18 +20,19 @@ Welcome to your new app.
 
     async Task createQuote()
     {
+        quote.Id = 4;
         quote.QuoteUser = "JP";
-        quote.QuoteTitle = "TestQuote2";
+        quote.QuoteTitle = "Testing update";
         quote.QuoteDate = DateTime.Now;
         quote.IsDeleted = false;
         quote.Total = 69.00;
 
-        await httpClient.PostAsJsonAsync("quotes", quote);
+        await httpClient.PostAsJsonAsync("api/Quote/UpdateQuote", quote);
     }
 
     async Task getQuotes()
     {
-        allQuotes = await httpClient.GetFromJsonAsync<List<QuoteModel>>("quotes");
+        allQuotes = await httpClient.GetFromJsonAsync<List<QuoteModel>>("api/Quote/RetrieveQuotes");
 
         foreach (QuoteModel quote in allQuotes)
         {
