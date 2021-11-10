@@ -10,6 +10,10 @@ namespace CRT_WebApp.Client.Services.QuoteService
     public class QuoteService : IQuoteService
     {
         private readonly HttpClient _http;
+        public QuoteService(HttpClient http)
+        {
+            _http = http;
+        }
 
         public event Action OnChange;
         public List<QuoteModel> Quotes { get; set; } = new List<QuoteModel>();
