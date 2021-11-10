@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject HttpClient httpClient
+@inject IQuoteService QuoteService
 @using CRT_WebApp.Shared
 
 <h1>Hello, world!</h1>
@@ -27,12 +27,12 @@ Welcome to your new app.
         quote.IsDeleted = false;
         quote.Total = 69.00;
 
-        await httpClient.PostAsJsonAsync("api/Quote/DisableQuote", quote);
+        await QuoteService.AddQuote(quote);
     }
 
     async Task getQuotes()
     {
-        allQuotes = await httpClient.GetFromJsonAsync<List<QuoteModel>>("api/Quote/RetrieveQuotes");
+        allQuotes = await QuoteService.GetAllQuotes();
 
         foreach (QuoteModel quote in allQuotes)
         {

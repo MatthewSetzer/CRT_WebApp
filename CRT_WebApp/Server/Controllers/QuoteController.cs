@@ -14,7 +14,6 @@ namespace CRT_WebApplication.Server.Controllers
 
     public class QuoteController : ControllerBase
     {
-        //TODO: ADD ROUTES TO ALL CONTROLLERS
         //---------------------------------------------------------------------------------------------------------//
         //Local variables
         private readonly IQuoteService _quoteService;
@@ -99,6 +98,28 @@ namespace CRT_WebApplication.Server.Controllers
         public async Task DisableQuote(QuoteModel quoteModel)
         {
             await _quoteService.DisableQuote(quoteModel);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets Quotes associated by user ID
+        /// </summary>
+        /// <param name="UserID">The user ID</param>
+        /// <returns>A List of Quotes</returns>
+        [HttpGet("QuotesByUser/{UserID}")]
+        public async Task<ActionResult<List<QuoteModel>>>GetQuotesByUser(string UserID)
+        {
+            return Ok(await _quoteService.GetQuotesByUser(UserID));
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Finds a Quote by its ID 
+        /// </summary>
+        /// <param name="Id">The Quotes ID</param>
+        /// <returns>The Quote associated with the ID</returns>
+        [HttpGet("QuoteByID/{Id}")]
+        public async Task<ActionResult<QuoteModel>> GetQuoteById(int Id)
+        {
+            return Ok(await _quoteService.FindQuoteByID(Id));
         }
             
     }
