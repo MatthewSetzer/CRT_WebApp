@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CRT_WebApplication.Server.Controllers
 {
-    //TODO: Might need to change this route to something like "api/[controller]"
+    
     [ApiController]
     [Route("api/[controller]")]
 
