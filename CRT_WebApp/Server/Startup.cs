@@ -1,5 +1,6 @@
 using CRT_WebApp.Server.Data;
 using CRT_WebApp.Server.Models;
+using CRT_WebApp.Server.Services.ItemService;
 using CRT_WebApp.Server.Services.QuoteService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -48,6 +49,7 @@ namespace CRT_WebApp.Server
             //TODO: Add our services HERE
             //Created services. 99% of the time its scoped for our use case. 
             services.AddScoped<IQuoteService, QuoteService>();
+            services.AddScoped<IItemService, ItemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
