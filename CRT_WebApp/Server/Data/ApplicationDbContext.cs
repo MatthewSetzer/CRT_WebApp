@@ -21,5 +21,6 @@ namespace CRT_WebApp.Server.Data
         public DbSet<ImageModel> Images { get; set; }
         public DbSet<NoteModel> Notes { get; set; }
         public DbSet<AssemblyItemModel> AssemblyItems { get; set; }
+        public DbSet<ItemModel> Items { get; set; }
     }
 }
