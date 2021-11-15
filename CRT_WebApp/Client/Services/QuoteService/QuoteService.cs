@@ -47,7 +47,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             if(UserID != null)
             {
-                Quotes = await _http.GetFromJsonAsync<List<QuoteModel>>($"QuotesByUser/{UserID}");
+                Quotes = await _http.GetFromJsonAsync<List<QuoteModel>>($"api/QuotesByUser/{UserID}");
                 //We can use this to call other methods as soon as this loads completely. 
                 OnChange.Invoke();
             }
