@@ -1,0 +1,45 @@
+﻿@inject IItemService ItemService
+@using CRT_WebApp.Shared
+@implements IDisposable;
+
+<div class="border border-primary" style="margin:5px;">
+    <h3>Item demo</h3>
+    <button class="btn-secondary" @onclick="addBanana" style="margin:5px;">Add banana</button>
+    <button class="btn-primary" @onclick="LoadBananas" style="margin:5px;">Load bananas</button>
+    <ul class="list-unstyled" style="margin:5px;">
+        @foreach (var item in ItemService.Items)
+        {
+            <li class="align-content-center">
+                <div class="card">
+                    <div class="card-header">@item.Id</div>
+                    <div class="card-body">@item.Description</div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+
+
+
+@code {
+    //---------------------------------------------------------------------------------------------------------//
+    protected override void OnInitialized()
+    {
+        ItemService.OnChange += StateHasChanged;
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    public void Dispose()
+    {
+        ItemService.OnChange -= StateHasChanged;
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    public void addBanana()
+    {
+        ItemModel banana = new ItemModel { Description = "Banana" };
+        ItemService.AddItem(banana);
+    }
+    public void LoadBananas()
+    {
+        ItemService.LoadItems();
+    }
+}

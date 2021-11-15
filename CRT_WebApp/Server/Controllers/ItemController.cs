@@ -26,6 +26,12 @@ namespace CRT_WebApp.Server.Controllers
         {
             return Ok( await _itemService.GetItems());
         }
+        //---------------------------------------------------------------------------------------------------------//
+        [HttpPost("AddItem")]
+        public async Task AddItem(ItemModel item)
+        {
+            await _itemService.AddItem(item);
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
