@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject HttpClient httpClient
+@inject IQuoteService QuoteService
 @using CRT_WebApp.Shared
 
 <h1>Hello, world!</h1>
@@ -14,24 +14,23 @@ Welcome to your new app.
 
 @code{
 
-    //TODO we need to implement a service that makes the http requests to hide it!
     QuoteModel quote = new QuoteModel();
     List<QuoteModel> allQuotes;
 
     async Task createQuote()
     {
         quote.QuoteUser = "JP";
-        quote.QuoteTitle = "TestQuote2";
+        quote.QuoteTitle = "Testing insert with service";
         quote.QuoteDate = DateTime.Now;
         quote.IsDeleted = false;
         quote.Total = 69.00;
 
-        await httpClient.PostAsJsonAsync("quotes", quote);
+        await QuoteService.AddQuote(quote);
     }
 
     async Task getQuotes()
     {
-        allQuotes = await httpClient.GetFromJsonAsync<List<QuoteModel>>("quotes");
+        allQuotes = await QuoteService.GetAllQuotes();
 
         foreach (QuoteModel quote in allQuotes)
         {
