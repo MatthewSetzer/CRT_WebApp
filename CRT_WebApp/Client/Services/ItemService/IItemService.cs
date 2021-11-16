@@ -35,6 +35,8 @@ namespace CRT_WebApp.Client.Services.ItemService
         /// Makes API call to database and loads up all the items to the list.
         /// </summary>
         Task LoadItems();
+       
+  
 
     }
 }

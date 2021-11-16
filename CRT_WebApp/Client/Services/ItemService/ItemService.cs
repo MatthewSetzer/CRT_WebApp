@@ -36,6 +36,7 @@ namespace CRT_WebApp.Client.Services.ItemService
             Items = await _http.GetFromJsonAsync<List<ItemModel>>("api/Item/GetAllItems");
             OnChange.Invoke();
         }
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

@@ -24,10 +24,19 @@ namespace CRT_WebApp.Server.Services.ItemService
         /// Creates a new item
         /// </summary>
         /// <param name="itemModel">The item to be stored in the DB</param>
-        public async Task AddItem(ItemModel itemModel)
+        public async Task<bool> AddItem(ItemModel itemModel)
         {
-            _context.Items.Add(itemModel);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Items.Add(itemModel);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -48,7 +57,27 @@ namespace CRT_WebApp.Server.Services.ItemService
         {
             return await _context.Items.ToListAsync();
         }
-        
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Deletes an item from the database
+        /// </summary>
+        /// <param name="item">The item to be deleted</param>
+        /// <returns>True if operation was successfull, else false</returns>
+        public async Task<bool> DeleteItem(ItemModel item)
+        {
+            try
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 
 

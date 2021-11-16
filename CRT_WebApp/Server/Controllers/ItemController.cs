@@ -20,17 +20,21 @@ namespace CRT_WebApp.Server.Controllers
         /// <summary>
         /// API route for getting all items from database
         /// </summary>
-        /// <returns></returns>
+        /// <returns></returns>       
         [HttpGet("GetAllItems")]
         public async Task<ActionResult<List<ItemModel>>>GetAllItems()
         {
             return Ok( await _itemService.GetItems());
         }
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// API route for adding an item to the database
+        /// </summary>
+        /// <param name="item">The item to be added to the database</param>
         [HttpPost("AddItem")]
-        public async Task AddItem(ItemModel item)
+        public async Task<ActionResult<bool>> AddItem(ItemModel item)
         {
-            await _itemService.AddItem(item);
+            return Ok(await _itemService.AddItem(item));
         }
     }
 }
