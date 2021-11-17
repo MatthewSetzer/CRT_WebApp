@@ -1,3 +1,4 @@
+using CRT_WebApp.Client.Services.ItemService;
 using CRT_WebApp.Client.Services.QuoteService;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -26,8 +27,9 @@ namespace CRT_WebApp.Client
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CRT_WebApp.ServerAPI"));
 
             builder.Services.AddApiAuthorization();
-            //TODO: ADD OUR OWN SERVICES HERE
+            //TODO: Add your CLIENT services here
             builder.Services.AddScoped<IQuoteService, QuoteService>();
+            builder.Services.AddScoped<IItemService, ItemService>();
 
             await builder.Build().RunAsync();
         }

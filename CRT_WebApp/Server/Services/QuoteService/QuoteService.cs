@@ -11,7 +11,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
 {
     //---------------------------------------------------------------------------------------------------------//
     /// <summary>
-    /// QuoteService implementation
+    /// QuoteService implementation for the server
     /// </summary>
     class QuoteService : IQuoteService
     {
