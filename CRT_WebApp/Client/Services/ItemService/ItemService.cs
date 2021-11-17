@@ -42,6 +42,10 @@ namespace CRT_WebApp.Client.Services.ItemService
             return await _http.GetFromJsonAsync<List<ItemModel>>("api/Item/GetAllItems");
         }
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Makes an API call to get all items from the database, loads it up to its local list, then invokes all method registered
+        /// to the OnChange event
+        /// </summary>
         public async Task LoadItems()
         {
             Items = await _http.GetFromJsonAsync<List<ItemModel>>("api/Item/GetAllItems");
