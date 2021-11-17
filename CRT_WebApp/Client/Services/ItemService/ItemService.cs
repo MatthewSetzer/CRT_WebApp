@@ -8,6 +8,9 @@ using System.Net.Http.Json;
 namespace CRT_WebApp.Client.Services.ItemService
 {
     //---------------------------------------------------------------------------------------------------------//
+    /// <summary>
+    /// Interface of the Itemservice for the client
+    /// </summary>
     public class ItemService : IItemService
     {
         private readonly HttpClient _http;
@@ -21,11 +24,20 @@ namespace CRT_WebApp.Client.Services.ItemService
 
         public event Action OnChange;
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Makes API call to add item to the database
+        /// </summary>
+        /// <param name="itemModel">The item to be added</param>
         public async Task AddItem(ItemModel itemModel)
         {
             await _http.PostAsJsonAsync("api/Item/AddItem",itemModel);
         }
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<List<ItemModel>> GetItems()
         {
             throw new NotImplementedException();

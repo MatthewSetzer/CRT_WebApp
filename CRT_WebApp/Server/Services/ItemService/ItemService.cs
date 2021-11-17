@@ -2,13 +2,14 @@
 using CRT_WebApp.Shared;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CRT_WebApp.Server.Services.ItemService
 {
     //---------------------------------------------------------------------------------------------------------//
     /// <summary>
-    /// ItemService implementation
+    /// ItemService implementation for the server
     /// </summary>
     public class ItemService : IItemService
     {
@@ -47,6 +48,16 @@ namespace CRT_WebApp.Server.Services.ItemService
         {
             _context.AddRange(itemModels);
             await _context.SaveChangesAsync();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Get an item matching the ID from the database
+        /// </summary>
+        /// <param name="id">The id of the item to be retrieved</param>
+        /// <returns>An ItemModel of the item</returns>
+        public async Task<ItemModel> GetItemById(int id)
+        {
+            return await _context.Items.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>

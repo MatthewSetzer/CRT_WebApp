@@ -8,7 +8,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
 {
     //---------------------------------------------------------------------------------------------------------//
     /// <summary>
-    /// Interface for quote service
+    /// Interface for quote service for the server
     /// </summary>
     public interface IQuoteService
     {

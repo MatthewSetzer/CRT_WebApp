@@ -6,7 +6,7 @@ namespace CRT_WebApp.Server.Services.ItemService
 {
     //---------------------------------------------------------------------------------------------------------//
     /// <summary>
-    /// Interface for Itemservice
+    /// Interface for Itemservice of the server
     /// </summary>
     public interface IItemService
     {
@@ -35,6 +35,13 @@ namespace CRT_WebApp.Server.Services.ItemService
         /// <param name="item">The item to be deleted</param>
         /// <returns>Returns true on successful delete operation</returns>
         Task<bool> DeleteItem(ItemModel item);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets an item by its ID from the database
+        /// </summary>
+        /// <param name="id">The ID of the item to get from the database</param>
+        /// <returns>An ItemModel of the item</returns>
+        Task<ItemModel> GetItemById(int id);
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
