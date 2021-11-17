@@ -34,13 +34,12 @@ namespace CRT_WebApp.Client.Services.ItemService
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
-        /// 
+        /// Makes API call and gets all items from the database
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Task<List<ItemModel>> GetItems()
+        public async Task<List<ItemModel>> GetItems()
         {
-            throw new NotImplementedException();
+            return await _http.GetFromJsonAsync<List<ItemModel>>("api/Item/GetAllItems");
         }
         //---------------------------------------------------------------------------------------------------------//
         public async Task LoadItems()
