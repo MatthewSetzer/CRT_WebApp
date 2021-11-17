@@ -36,6 +36,28 @@ namespace CRT_WebApp.Server.Controllers
         {
             return Ok(await _itemService.AddItem(item));
         }
+
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// API route to delete an item by its ID from the database
+        /// </summary>
+        /// <param name="id">The id of the item to be deleted</param>
+        [HttpPost("DeleteItem")]
+        public async Task<ActionResult<bool>> DeleteItemByID(ItemModel item)
+        {
+            return Ok(await _itemService.DeleteItem(item));
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// API route to get an item by its ID from the database
+        /// </summary>
+        /// <param name="id">The ID of the item to be retrieved from the database</param>
+        /// <returns>An ItemModel representing the item</returns>
+        [HttpGet("GetItemByID/{id}")]
+        public async Task<ActionResult<ItemModel>> GetItemByID(int id)
+        {
+            return Ok(await _itemService.GetItemById(id));
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
