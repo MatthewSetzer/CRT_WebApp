@@ -2,21 +2,19 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-<div class="border border-primary" style="margin:5px;">
-    <h3>Item demo</h3>
-    <button class="btn-secondary" @onclick="addBanana" style="margin:5px;">Add banana</button>
-    <button class="btn-primary" @onclick="LoadBananas" style="margin:5px;">Load bananas</button>
-    <ul class="list-unstyled" style="margin:5px;">
-        @foreach (var item in ItemService.Items)
+@*<button class="btn-secondary" @onclick="addBanana" style="margin:5px;">Add banana</button>*@
+
+<div class="container my-4">
+
+    <label>Select Assembly Item:</label>
+    <input type="text" list="itemList"/>
+    <datalist id="itemList" @onchange="ItemSelected">
+        @for (var i = 0; i < ItemService.Items.Count; i++)
         {
-            <li class="align-content-center">
-                <div class="card">
-                    <div class="card-header">@item.Id</div>
-                    <div class="card-body">@item.Description</div>
-                </div>
-            </li>
+            <option value = "@ItemService.Items[i].Description)"/>
         }
-    </ul>
+    </datalist>
+
 </div>
 
 
@@ -26,6 +24,7 @@
     protected override void OnInitialized()
     {
         ItemService.OnChange += StateHasChanged;
+        LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
@@ -33,15 +32,21 @@
         ItemService.OnChange -= StateHasChanged;
     }
     //---------------------------------------------------------------------------------------------------------//
-    public void addBanana()
+    public void addItem()
     {
-        ItemModel banana = new ItemModel { Description = "Banana" };
-        ItemService.AddItem(banana);
+        ItemModel newItem = new ItemModel { Description = "Banana" };
+        ItemService.AddItem(newItem);
     }
     //---------------------------------------------------------------------------------------------------------//
-    public void LoadBananas()
+    public void LoadItems()
     {
         ItemService.LoadItems();
     }
+
+    void ItemSelected(ChangeEventArgs e)
+    {
+        
+    }
+
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
 }
