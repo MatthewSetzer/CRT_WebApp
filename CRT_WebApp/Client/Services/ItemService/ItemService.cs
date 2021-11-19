@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace CRT_WebApp.Client.Services.ItemService
 {
@@ -20,7 +20,7 @@ namespace CRT_WebApp.Client.Services.ItemService
             _http = http;
         }
 
-       public List<ItemModel> Items { get; set; } = new List<ItemModel>();
+        public List<ItemModel> Items { get; set; } = new List<ItemModel>();
 
         public event Action OnChange;
         //---------------------------------------------------------------------------------------------------------//
@@ -30,7 +30,7 @@ namespace CRT_WebApp.Client.Services.ItemService
         /// <param name="itemModel">The item to be added</param>
         public async Task AddItem(ItemModel itemModel)
         {
-            await _http.PostAsJsonAsync("api/Item/AddItem",itemModel);
+            await _http.PostAsJsonAsync("api/Item/AddItem", itemModel);
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>

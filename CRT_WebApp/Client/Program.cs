@@ -1,5 +1,7 @@
+using CRT_WebApp.Client.Services.AssemblyItemService;
 using CRT_WebApp.Client.Services.ItemService;
 using CRT_WebApp.Client.Services.QuoteService;
+using CRT_WebApp.Client.Services.SubGroupService;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +32,8 @@ namespace CRT_WebApp.Client
             //TODO: Add your CLIENT services here
             builder.Services.AddScoped<IQuoteService, QuoteService>();
             builder.Services.AddScoped<IItemService, ItemService>();
-
+            builder.Services.AddScoped<ISubGroupService, SubGroupService>();
+            builder.Services.AddTransient<IAssemblyItemService, AssemblyItemService>();
             await builder.Build().RunAsync();
         }
     }
