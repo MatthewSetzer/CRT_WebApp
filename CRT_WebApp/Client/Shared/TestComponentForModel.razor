@@ -1,59 +1,55 @@
-﻿@using Microsoft.Extensions.Logging
-@inject ILogger<TestComponentForModel> Logger
+﻿
+@using CRT_WebApp.Shared
+
 @inject IItemService ItemService
 @implements IDisposable;
 <h3>TestPageForModel</h3>
 
-
-<EditForm Model="@Item" OnValidSubmit="@onSubmit">
+<div class="col-6 col-md-4"></div>
+    <EditForm Model="@Item" OnValidSubmit="@onSubmit">
         <DataAnnotationsValidator />
-    <ValidationSummary />
-       @* <div class="input-group mb-3">
-        <input class="form-control" type="text" list="itemList" />
-        <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
-            @for (var i = 0; i < ItemService.Items.Count; i++)
-            {
-                <option value="@ItemService.Items[i].Description" />
-            }
-        </datalist>
-    </div>*@
+        <ValidationSummary />
+        <label>Select Assembly Item:</label>
+        <div class="input-group mb-3">
+            <InputText id="Item" @bind-Value=Item.Description list="itemList">
+                <datalist id="itemList" @onchange="@((args) =>Item.Description = args.Value.ToString())">
+                    @foreach (var item in ItemService.Items)
+                    {
+                        <option value="@item.Description">@item.Description</option>
+                     
+                    }
+                </datalist>
+            </InputText>
+        </div>
+        <label>Quantity: </label>
+        <div class="input-group mb-3">
+            <select class="custom-select" id="metricSelect">
+                <option selected>Select...</option>
+                <option value="1">Quantity</option>
+                <option value="2">Linear Foot</option>
+                <option value="3">Square Foot</option>
+            </select>
+            <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
 
-    <InputText id="Item" @bind-Value=Item.Description list="itemList">
-        @*
-        @foreach (var item in ItemService.Items)
-        {
-        <option value="@item.Description">@item.Description</option>
-        }*@
-                <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
-            @for (var i = 0; i < ItemService.Items.Count; i++)
-            {
-                <option value="@ItemService.Items[i].Description" />
-            }
-        </datalist>
+        </div>
 
+        <label>Rate: </label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
+        </div>
 
-    </InputText>
-    <br />
-    <br />
-    <div class="input-group mb-3">
-        <select class="custom-select" id="metricSelect">
-            <option selected>Select...</option>
-            <option value="1">Quantity</option>
-            <option value="2">Linear Foot</option>
-            <option value="3">Square Foot</option>
-        </select>
-        <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
-
-    </div>
-
-    <button class="btn btn-secondary" type="submit">Submit</button>
-</EditForm>
+        <button class="btn btn-secondary" type="submit">Submit</button>
+    </EditForm>
 
 @code {
     private AssemblyItemViewModel Item =new();
+    
     private void onSubmit()
     {
-        Logger.LogInformation("on submit called");
+
         Console.WriteLine("submitted" + Item.Quantity+ Item.Description);
     }
 
@@ -61,7 +57,9 @@
     protected override void OnInitialized()
     {
         ItemService.OnChange += StateHasChanged;
+        
         LoadItems();
+        
     }
     //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
