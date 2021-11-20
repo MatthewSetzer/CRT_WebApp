@@ -5,43 +5,43 @@
 @implements IDisposable;
 <h3>TestPageForModel</h3>
 
-<div class="col-6 col-md-4"></div>
-<EditForm Model="@Item" OnValidSubmit="@onSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <label>Select Assembly Item:</label>
+<div class="col-6 col-md-4">
+    <EditForm Model="@Item" OnValidSubmit="@onSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <label>Select Assembly Item:</label>
         <div class="input-group mb-3">
-        <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description/>
-        <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
-            @for (var i = 0; i < ItemService.Items.Count; i++)
-            {
-                <option value="@ItemService.Items[i].Description" />
-            }
-        </datalist>
-    </div>
-    <label>Quantity: </label>
-    <div class="input-group mb-3">
-        <select class="custom-select" id="metricSelect">
-            <option selected>Select...</option>
-            <option value="1">Quantity</option>
-            <option value="2">Linear Foot</option>
-            <option value="3">Square Foot</option>
-        </select>
-        <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
-
-    </div>
-
-    <label>Rate: </label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
+            <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description />
+            <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
+                @for (var i = 0; i < ItemService.Items.Count; i++)
+                {
+                    <option value="@ItemService.Items[i].Description" />
+                }
+            </datalist>
         </div>
-        <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
-    </div>
+        <label>Quantity: </label>
+        <div class="input-group mb-3">
+            <select class="custom-select" id="metricSelect">
+                <option selected>Select...</option>
+                <option value="1">Quantity</option>
+                <option value="2">Linear Foot</option>
+                <option value="3">Square Foot</option>
+            </select>
+            <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
 
-    <button class="btn btn-secondary" type="submit">Submit</button>
-</EditForm>
+        </div>
 
+        <label>Rate: </label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">$</span>
+            </div>
+            <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
+        </div>
+
+        <button class="btn btn-secondary" type="submit">Submit</button>
+    </EditForm>
+</div>
 @code {
     private AssemblyItemViewModel Item =new();
     //private List<ItemModel> itemList = new List<ItemModel>();
