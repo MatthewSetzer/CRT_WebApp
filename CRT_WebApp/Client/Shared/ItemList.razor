@@ -23,9 +23,10 @@
             <option value="2">Linear Foot</option>
             <option value="3">Square Foot</option>
         </select>
-        <input type="number" @bind="metric" @oninput="@((e) => { metric = (double)e.Value; })" class="form-control">
+        <input type="number" @bind="metric" min="0.00" max="9999.00" step="0.01" class="form-control">
+        
     </div>
-
+    @*<InputNumber @bind-Value="metric"></InputNumber>*@
 
     <label>Rate: </label>
     <div class="input-group mb-3">
