@@ -1,4 +1,19 @@
-﻿<h3>Registration</h3>
+﻿<div class="align-content-center background rounded pb-5">
+  <h3 class="text-center text-white">Registration</h3>
+  <input type="text" class="form-control w-25" id="username" placeholder="Username" />
+  <input type="text" class="form-control w-25 mt-2" id="firstName" placeholder="First Name" />
+  <input type="text" class="form-control w-25 mt-2" id="lastName" placeholder="Surname" />
+  <input type="email" class="form-control w-25 mt-2" id="email" placeholder="Email" />
+  <input type="password" class="form-control w-25 mt-2" id="password" placeholder="Password" />
+  <button type="submit" class="btn btn-light mt-2">Sign up</button>
+</div>
+
+<style>
+  .background {
+    background: rgb(97,64,194);
+    background: linear-gradient(0deg, rgba(97,64,194,1) 0%, rgba(142,0,144,1) 100%);
+  }
+</style>
 
 @code {
 
