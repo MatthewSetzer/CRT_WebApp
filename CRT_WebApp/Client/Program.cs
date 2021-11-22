@@ -35,7 +35,7 @@ namespace CRT_WebApp.Client
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ISubGroupService, SubGroupService>();
             builder.Services.AddScoped<INotesService, NotesService>();
-            builder.Services.AddTransient<IAssemblyItemService, AssemblyItemService>();
+            builder.Services.AddScoped<IAssemblyItemService, AssemblyItemService>();
             await builder.Build().RunAsync();
         }
     }

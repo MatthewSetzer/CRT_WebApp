@@ -1,0 +1,26 @@
+﻿@inject ISubGroupService SubGroupService
+@using CRT_WebApp.Shared
+@implements IDisposable;
+
+@foreach(var sub in SubGroupService.SubGroups)
+{
+    <div>
+        <SubGroup subGroup=sub></SubGroup>
+    </div>
+
+}
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        SubGroupService.OnChange += StateHasChanged;
+    }
+
+
+    public void Dispose()
+    {
+        SubGroupService.OnChange -= StateHasChanged;
+
+    }
+}

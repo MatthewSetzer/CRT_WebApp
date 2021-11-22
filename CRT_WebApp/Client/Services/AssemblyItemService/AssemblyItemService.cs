@@ -27,8 +27,9 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         //---------------------------------------------------------------------------------------------------------//
         public void AddAssemblyItemToList(AssemblyItemModel item)
         {
+            item.Total = item.NumberOfUnits * item.Rate;
             AssemblyItems.Add(item);
-            OnChange.Invoke();
+            //OnChange.Invoke();
         }
         //---------------------------------------------------------------------------------------------------------//
         public void AddAssemblyListToSubGroup(string Title)
@@ -45,7 +46,7 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         public void ClearAssemblyItemList()
         {
             AssemblyItems = new List<AssemblyItemModel>();
-            OnChange.Invoke();
+            //OnChange.Invoke();
         }
         //---------------------------------------------------------------------------------------------------------//
         public void RemoveAssemblyItemFromList(AssemblyItemModel item)
