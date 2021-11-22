@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-6">
-        <EditForm Model="@Item" OnValidSubmit="@onSubmit">
+        <EditForm Model="@Item" OnValidSubmit="@addItem">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label>Select Assembly Item:</label>
@@ -63,12 +63,29 @@
                 }
             </tbody>
         </table>
+
+        <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
+
+        <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Sub Group Title: </label>
+            <div class="input-group mb-3">
+                <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
+            </div>
+            <button class="btn btn-success" type="submit">Add Sub-Group</button>
+        </EditForm>
+
+
     </div>
 </div>
 
 @code {
     private AssemblyItemViewModel Item = new();
     private List<AssemblyItemModel> Items = new();
+
+    private SubGroupViewModel SubGroup = new();
+    private List<SubGroupModel> SubGroups = new();
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
@@ -77,14 +94,25 @@
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
-    private void onSubmit()
+    private void addItem()
     {
         Items.Add(new AssemblyItemModel
         {
             Description = Item.Description,
             NumberOfUnits = Item.Quantity,
             Rate = Item.Rate,
-            Total = Item.Rate*Item.Quantity
+            Total = Item.Rate * Item.Quantity
+        });
+
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;
+    }
+    private void addSubGroup()
+    {
+        SubGroups.Add(new SubGroupModel
+        {
+            SubGroupTitle = SubGroup.SubGroupTitle,
+            ListOfItems = Items,
+            SubTotal = SubGroup.SubTotal
         });
     }
     //---------------------------------------------------------------------------------------------------------//
