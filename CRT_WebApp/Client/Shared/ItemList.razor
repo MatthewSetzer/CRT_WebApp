@@ -107,38 +107,19 @@
             Description = Item.Description,
             Rate = Item.Rate,
             NumberOfUnits = Item.Quantity
-          };
+        };
         AssemblyItemService.AddAssemblyItemToList(assemblyItem);
 
-        /*
-        Items.Add(new AssemblyItemModel
-            {
-            Description = Item.Description,
-            NumberOfUnits = Item.Quantity,
-            Rate = Item.Rate,
-            Total = Item.Rate * Item.Quantity
-        });
-
-        SubGroup.SubTotal += Item.Rate * Item.Quantity;*/
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;
     }
+    //---------------------------------------------------------------------------------------------------------//
     private void addSubGroup()
     {
         AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
         AssemblyItemService.ClearAssemblyItemList();
-        /*
-        SubGroupService.AddSubGroupToList( new SubGroupModel
-        {
-            SubGroupTitle = SubGroup.SubGroupTitle,
-            ListOfItems = Items,
-            SubTotal = SubGroup.SubTotal
-        });*/
 
-        /*SubGroups.Add(new SubGroupModel
-        {
-            SubGroupTitle = SubGroup.SubGroupTitle,
-            ListOfItems = Items,
-            SubTotal = SubGroup.SubTotal
-        });*/
+        SubGroup = new SubGroupViewModel();
+        Item = new AssemblyItemViewModel();
     }
     //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
