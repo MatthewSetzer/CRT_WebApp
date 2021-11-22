@@ -2,24 +2,74 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-@*<button class="btn-secondary" @onclick="addBanana" style="margin:5px;">Add banana</button>*@
+<div class="row">
+    <div class="col-6">
+        <EditForm Model="@Item" OnValidSubmit="@onSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Select Assembly Item:</label>
+            <div class="input-group mb-3">
+                <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description />
+                <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
+                    @for (var i = 0; i < ItemService.Items.Count; i++)
+                    {
+                        <option value="@ItemService.Items[i].Description" />
+                    }
+                </datalist>
+            </div>
+            <label>Quantity: </label>
+            <div class="input-group mb-3">
+                <select class="custom-select" id="metricSelect">
+                    <option selected>Select...</option>
+                    <option value="1">Quantity</option>
+                    <option value="2">Linear Foot</option>
+                    <option value="3">Square Foot</option>
+                </select>
+                <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
 
-<div class="container my-4">
+            </div>
 
-    <label>Select Assembly Item:</label>
-    <input type="text" list="itemList"/>
-    <datalist id="itemList" @onchange="ItemSelected">
-        @for (var i = 0; i < ItemService.Items.Count; i++)
-        {
-            <option value = "@ItemService.Items[i].Description)"/>
-        }
-    </datalist>
+            <label>Rate: </label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
+            </div>
 
+            <button class="btn btn-primary" type="submit">Add Item</button>
+        </EditForm>
+    </div>
+
+    <div class="col-6">
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Number of Units</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Items)
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                        <td>@item.NumberOfUnits</td>
+                        <td>$@item.GetFormattedRate()</td>
+                        <td>$@item.GetFormattedTotalPrice()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
-
 @code {
+    private AssemblyItemViewModel Item = new();
+    private List<AssemblyItemModel> Items = new();
+
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
     {
@@ -27,25 +77,25 @@
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
+    private void onSubmit()
+    {
+        Items.Add(new AssemblyItemModel
+        {
+            Description = Item.Description,
+            NumberOfUnits = Item.Quantity,
+            Rate = Item.Rate,
+            Total = Item.Rate*Item.Quantity
+        });
+    }
+    //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
     {
         ItemService.OnChange -= StateHasChanged;
     }
     //---------------------------------------------------------------------------------------------------------//
-    public void addItem()
-    {
-        ItemModel newItem = new ItemModel { Description = "Banana" };
-        ItemService.AddItem(newItem);
-    }
-    //---------------------------------------------------------------------------------------------------------//
     public void LoadItems()
     {
         ItemService.LoadItems();
-    }
-
-    void ItemSelected(ChangeEventArgs e)
-    {
-        
     }
 
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
