@@ -12,8 +12,8 @@ namespace CRT_WebApp.Client.ViewModels
         public int Id { get; set; }
         [Required]
         public string SubGroupTitle { get; set; }
-        [Required]
-        public List<AssemblyItemModel> ListOfItems { get; set; }
+        /*[Required]
+        public List<AssemblyItemModel> ListOfItems { get; set; }*/
         [Required]
         public double SubTotal { get; set; }
 

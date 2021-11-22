@@ -1,5 +1,8 @@
 ﻿@inject IItemService ItemService
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
 @using CRT_WebApp.Shared
+@using CRT_WebApp.Client.Shared.SubGroup
 @implements IDisposable;
 
 <div class="row">
@@ -52,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Items)
+                @foreach (var item in AssemblyItemService.AssemblyItems)
                 {
                     <tr>
                         <td>@item.Description</td>
@@ -78,6 +81,10 @@
 
 
     </div>
+
+</div>
+<div>
+    <SubGroupList></SubGroupList>
 </div>
 
 @code {
@@ -96,24 +103,42 @@
     //---------------------------------------------------------------------------------------------------------//
     private void addItem()
     {
+        AssemblyItemModel assemblyItem = new AssemblyItemModel{
+            Description = Item.Description,
+            Rate = Item.Rate,
+            NumberOfUnits = Item.Quantity
+          };
+        AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+
+        /*
         Items.Add(new AssemblyItemModel
-        {
+            {
             Description = Item.Description,
             NumberOfUnits = Item.Quantity,
             Rate = Item.Rate,
             Total = Item.Rate * Item.Quantity
         });
 
-        SubGroup.SubTotal += Item.Rate * Item.Quantity;
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;*/
     }
     private void addSubGroup()
     {
-        SubGroups.Add(new SubGroupModel
+        AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
+        AssemblyItemService.ClearAssemblyItemList();
+        /*
+        SubGroupService.AddSubGroupToList( new SubGroupModel
         {
             SubGroupTitle = SubGroup.SubGroupTitle,
             ListOfItems = Items,
             SubTotal = SubGroup.SubTotal
-        });
+        });*/
+
+        /*SubGroups.Add(new SubGroupModel
+        {
+            SubGroupTitle = SubGroup.SubGroupTitle,
+            ListOfItems = Items,
+            SubTotal = SubGroup.SubTotal
+        });*/
     }
     //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
