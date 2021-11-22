@@ -1,0 +1,38 @@
+﻿@using CRT_WebApp.Shared
+@implements IDisposable;
+
+<h3>SubGroup</h3>
+<Accordion Title=subGroup.SubGroupTitle Value=subGroup.SubTotal>
+
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Description</th>
+                <th scope="col">Number of Units</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in subGroup.ListOfItems)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                    <td>@item.NumberOfUnits</td>
+                    <td>$@item.GetFormattedRate()</td>
+                    <td>$@item.GetFormattedTotalPrice()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</Accordion>
+
+@code {
+    [Parameter]
+    public SubGroupModel subGroup{ get; set; }
+
+    public void Dispose()
+    {
+        
+    }
+}
