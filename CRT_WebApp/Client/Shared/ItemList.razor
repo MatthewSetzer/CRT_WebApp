@@ -107,16 +107,18 @@
             Description = Item.Description,
             Rate = Item.Rate,
             NumberOfUnits = Item.Quantity
-          };
+        };
         AssemblyItemService.AddAssemblyItemToList(assemblyItem);
 
         SubGroup.SubTotal += Item.Rate * Item.Quantity;
     }
+    //---------------------------------------------------------------------------------------------------------//
     private void addSubGroup()
     {
         AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
         AssemblyItemService.ClearAssemblyItemList();
-        SubGroup.SubTotal = 0;
+
+
 
     }
     //---------------------------------------------------------------------------------------------------------//
