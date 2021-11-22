@@ -10,6 +10,7 @@ namespace CRT_WebApp.Client.ViewModels
         public string Description { get; set; }
         [Required]
         public double Quantity { get; set; }
+
         [Required]
         public double Rate { get; set; }
     }

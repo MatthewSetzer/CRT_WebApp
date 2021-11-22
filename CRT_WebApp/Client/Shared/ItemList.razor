@@ -2,59 +2,73 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
+<div class="row">
+    <div class="col-6">
+        <EditForm Model="@Item" OnValidSubmit="@onSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Select Assembly Item:</label>
+            <div class="input-group mb-3">
+                <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description />
+                <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
+                    @for (var i = 0; i < ItemService.Items.Count; i++)
+                    {
+                        <option value="@ItemService.Items[i].Description" />
+                    }
+                </datalist>
+            </div>
+            <label>Quantity: </label>
+            <div class="input-group mb-3">
+                <select class="custom-select" id="metricSelect">
+                    <option selected>Select...</option>
+                    <option value="1">Quantity</option>
+                    <option value="2">Linear Foot</option>
+                    <option value="3">Square Foot</option>
+                </select>
+                <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
 
-<div class="col-6 col-md-4">
+            </div>
 
-    <label>Select Assembly Item:</label>
-    <div class="input-group mb-3">
-        <input class="form-control" type="text" list="itemList" />
-        <datalist id="itemList" @onchange="@((args) => description = args.Value.ToString())">
-            @for (var i = 0; i < ItemService.Items.Count; i++)
-            {
-                <option value="@ItemService.Items[i].Description" />
-            }
-        </datalist>
-    </div>
-    <label>Quantity: </label>
-    <div class="input-group mb-3">
-        <select class="custom-select" id="metricSelect">
-            <option selected>Select...</option>
-            <option value="1">Quantity</option>
-            <option value="2">Linear Foot</option>
-            <option value="3">Square Foot</option>
-        </select>
-        <input type="number" @bind="metric" min="0.00" max="9999.00" step="0.01" class="form-control">
-        
-    </div>
-    @*<InputNumber @bind-Value="metric"></InputNumber>*@
+            <label>Rate: </label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
+            </div>
 
-    <label>Rate: </label>
-    <div class="input-group mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text">$</span>
-        </div>
-        <input type="number" @bind="rate" @oninput="@((e) => { rate = (double)e.Value; })" class="form-control">
-        <div class="input-group-append">
-            <span class="input-group-text">.00</span>
-        </div>
+            <button class="btn btn-primary" type="submit">Add Item</button>
+        </EditForm>
     </div>
-    <button class="btn btn-success ml-auto">Add to Sub-Group</button>
-    <hr />
-    <div class="input-group mb-3">
-        <input @bind="addedItem" @oninput="@((e) => { addedItem = (string)e.Value; })" type="text" class="form-control">
+
+    <div class="col-6">
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Number of Units</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Items)
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                        <td>@item.NumberOfUnits</td>
+                        <td>$@item.GetFormattedRate()</td>
+                        <td>$@item.GetFormattedTotalPrice()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <button class="btn btn-secondary" @onclick="addItem">Manually Add Assembly Item</button>
 </div>
 
-
-
 @code {
-    private double rate;
-    private double metric;
-    private string description;
-    private string addedItem;
-
-    AssemblyItemModel assemblyItem = new AssemblyItemModel();
+    private AssemblyItemViewModel Item = new();
+    private List<AssemblyItemModel> Items = new();
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
@@ -63,15 +77,20 @@
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
+    private void onSubmit()
+    {
+        Items.Add(new AssemblyItemModel
+        {
+            Description = Item.Description,
+            NumberOfUnits = Item.Quantity,
+            Rate = Item.Rate,
+            Total = Item.Rate*Item.Quantity
+        });
+    }
+    //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
     {
         ItemService.OnChange -= StateHasChanged;
-    }
-    //---------------------------------------------------------------------------------------------------------//
-    public void addItem()
-    {
-        ItemModel newItem = new ItemModel { Description = addedItem };
-        ItemService.AddItem(newItem);
     }
     //---------------------------------------------------------------------------------------------------------//
     public void LoadItems()
@@ -79,10 +98,5 @@
         ItemService.LoadItems();
     }
 
-    public void addToSubGroup()
-    {
-
-
-    }
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
 }
