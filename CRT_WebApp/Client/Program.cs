@@ -1,5 +1,6 @@
 using CRT_WebApp.Client.Services.AssemblyItemService;
 using CRT_WebApp.Client.Services.ItemService;
+using CRT_WebApp.Client.Services.NotesService;
 using CRT_WebApp.Client.Services.QuoteService;
 using CRT_WebApp.Client.Services.SubGroupService;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -33,6 +34,7 @@ namespace CRT_WebApp.Client
             builder.Services.AddScoped<IQuoteService, QuoteService>();
             builder.Services.AddScoped<IItemService, ItemService>();
             builder.Services.AddScoped<ISubGroupService, SubGroupService>();
+            builder.Services.AddScoped<INotesService, NotesService>();
             builder.Services.AddTransient<IAssemblyItemService, AssemblyItemService>();
             await builder.Build().RunAsync();
         }
