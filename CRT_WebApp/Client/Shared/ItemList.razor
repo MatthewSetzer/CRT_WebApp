@@ -118,13 +118,14 @@
             Rate = Item.Rate,
             Total = Item.Rate * Item.Quantity
         });
-
-        SubGroup.SubTotal += Item.Rate * Item.Quantity;*/
+        */
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;
     }
     private void addSubGroup()
     {
         AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
         AssemblyItemService.ClearAssemblyItemList();
+        SubGroup.SubTotal = 0;
         /*
         SubGroupService.AddSubGroupToList( new SubGroupModel
         {
