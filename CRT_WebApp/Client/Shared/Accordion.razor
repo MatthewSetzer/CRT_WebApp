@@ -1,4 +1,5 @@
 ﻿<div class="collapsable">
+
     <div class="title" @onclick="@Toggle">
         @if (Collapsed)
         {
@@ -10,12 +11,14 @@
         }
         @Title
     </div>
+   
     @if (!string.IsNullOrEmpty(Value))
     {
     <div class="value">
-        <h4><span class="badge badge-success">Total $@Value</span></h4>
+       <h4><span class="badge badge-success">Total $@Value</span></h4> 
     </div>
     }
+    
 </div>
  
 @if (!Collapsed)

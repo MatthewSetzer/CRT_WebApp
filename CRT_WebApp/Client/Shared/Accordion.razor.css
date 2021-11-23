@@ -6,7 +6,8 @@
 }
 
 .collapsable .title {
-    display: table-cell
+    display: table-cell;
+       padding: 10px;
 }
 
 .collapsable .value {
