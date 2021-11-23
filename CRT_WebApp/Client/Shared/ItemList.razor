@@ -1,10 +1,13 @@
 ﻿@inject IItemService ItemService
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
 @using CRT_WebApp.Shared
+@using CRT_WebApp.Client.Shared.SubGroup
 @implements IDisposable;
 
 <div class="row">
     <div class="col-6">
-        <EditForm Model="@Item" OnValidSubmit="@onSubmit">
+        <EditForm Model="@Item" OnValidSubmit="@addItem">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <label>Select Assembly Item:</label>
@@ -52,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Items)
+                @foreach (var item in AssemblyItemService.AssemblyItems)
                 {
                     <tr>
                         <td>@item.Description</td>
@@ -63,12 +66,33 @@
                 }
             </tbody>
         </table>
+
+        <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
+
+        <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Sub Group Title: </label>
+            <div class="input-group mb-3">
+                <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
+            </div>
+            <button class="btn btn-success" type="submit">Add Sub-Group</button>
+        </EditForm>
+
+
     </div>
+
+</div>
+<div>
+    <SubGroupList></SubGroupList>
 </div>
 
 @code {
     private AssemblyItemViewModel Item = new();
     private List<AssemblyItemModel> Items = new();
+
+    private SubGroupViewModel SubGroup = new();
+    private List<SubGroupModel> SubGroups = new();
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
@@ -77,15 +101,26 @@
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
-    private void onSubmit()
+    private void addItem()
     {
-        Items.Add(new AssemblyItemModel
-        {
+        AssemblyItemModel assemblyItem = new AssemblyItemModel{
             Description = Item.Description,
-            NumberOfUnits = Item.Quantity,
             Rate = Item.Rate,
-            Total = Item.Rate*Item.Quantity
-        });
+            NumberOfUnits = Item.Quantity
+        };
+        AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    private void addSubGroup()
+    {
+        AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
+        AssemblyItemService.ClearAssemblyItemList();
+
+        SubGroup = new SubGroupViewModel();
+        Item = new AssemblyItemViewModel();
+
     }
     //---------------------------------------------------------------------------------------------------------//
     public void Dispose()
