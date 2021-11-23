@@ -229,11 +229,41 @@ namespace CRT_WebApp.Client.Services.PdfService
                     infoTable.CompleteRow();
                 }
 
-                int y = 1;
-                foreach()
+                cell = new PdfPCell(new Phrase(quote.Id.ToString(), this.fontStyle));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell.BackgroundColor = BaseColor.LightGray;
+                infoTable.AddCell(cell);
+
+                cell = new PdfPCell(new Phrase(quote.QuoteUser.ToString(), this.fontStyle));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                cell.BackgroundColor = BaseColor.LightGray;
+                infoTable.AddCell(cell);
+
+                if(!isSurvey)
                 {
+                    string stateString = "";
+                    if (quote.QuoteState == true)
+                        stateString = "Active";
+                    else
+                        stateString = "Inactive";
+
+                    cell = new PdfPCell(new Phrase(stateString, this.fontStyle));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    cell.BackgroundColor = BaseColor.LightGray;
+                    infoTable.AddCell(cell);
+
+                    cell = new PdfPCell(new Phrase("$ "+quote.Total.ToString(), this.fontStyle));
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+                    cell.BackgroundColor = BaseColor.LightGray;
+                    infoTable.AddCell(cell);
 
                 }
+
+
             }
             catch (Exception e)
             {
