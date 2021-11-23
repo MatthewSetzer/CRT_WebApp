@@ -1,0 +1,98 @@
+﻿
+<div>
+    <div class="row">
+
+
+
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <select class="custom-select" id="metricSelect">
+                    <option selected>Select...</option>
+                    <option value="1">Meters</option>
+                    <option value="2">Linear Foot</option>
+                    <option value="3">Square Foot</option>
+                    <option value="4">Center Meters</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="input-group mb-3">
+                <select class="custom-select" id="metricSelect">
+                    <option selected>Select...</option>
+                    <option value="1">Meters</option>
+                    <option value="2">Linear Foot</option>
+                    <option value="3">Square Foot</option>
+                    <option value="4">Center Meters</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <input placeholder="Enter  Number" @bind="@num1" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <p>Second Number</p>
+        </div>
+        <div class="col-md-4">
+            <input placeholder="Enter Second Number" @bind="@num2" />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            <p>Result</p>
+        </div>
+        <div class="col-md-4">
+            <input readonly @bind="@finalresult" />
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-2">
+            <button @onclick="AddNumbers" class="btn btn-light">Add (+)</button>
+        </div>
+        <div class="col-md-2">
+            <button @onclick="SubtractNumbers" class="btn btn-primary">Subtract (−)</button>
+        </div>
+        <div class="col-md-2">
+            <button @onclick="MultiplyNumbers" class="btn btn-success ">Multiply (X)</button>
+        </div>
+        <div class="col-md-2">
+            <button @onclick="DivideNumbers" class="btn btn-info">Divide (/)</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    string num1;
+    string num2;
+    string finalresult;
+    void AddNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
+    }
+    void SubtractNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
+    }
+    void MultiplyNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
+    }
+    void DivideNumbers()
+    {
+        if (Convert.ToDouble(num2) != 0)
+        {
+            finalresult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
+        }
+        else
+        {
+            finalresult = "Cannot Divide by Zero";
+        }
+    }
+}

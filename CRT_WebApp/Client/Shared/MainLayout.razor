@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject IModalService modal
 
 <div class="page">
     <div class="sidebar">
@@ -7,8 +8,10 @@
 
     <div class="main">
         <div class="top-row px-4 auth">
+            <button @onclick="@(()=>modal.Show<Pages.ConversionCalculator>("Conversion Calculator"))"  class="btn btn-primary">Conversion Calculator</button>
             <LoginDisplay />
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+
         </div>
 
         <div class="content px-4">
