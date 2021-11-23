@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using CRT_WebApp.Client.Services.AssemblyItemService;
 using CRT_WebApp.Client.Services.ItemService;
 using CRT_WebApp.Client.Services.NotesService;
@@ -28,7 +29,7 @@ namespace CRT_WebApp.Client
 
             // Supply HttpClient instances that include access tokens when making requests to the server project
             builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CRT_WebApp.ServerAPI"));
-
+            builder.Services.AddBlazoredModal();
             builder.Services.AddApiAuthorization();
             //TODO: Add your CLIENT services here
             builder.Services.AddScoped<IQuoteService, QuoteService>();
