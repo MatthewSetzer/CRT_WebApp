@@ -1,4 +1,5 @@
 ﻿@page "/adminportal"
+@attribute [Authorize(Roles = "Admin")]
 <h3>AdminPortal</h3>
 
 @code {
