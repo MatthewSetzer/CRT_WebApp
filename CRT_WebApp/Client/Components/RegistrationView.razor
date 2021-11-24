@@ -1,20 +1,102 @@
-﻿<div class="align-content-center background rounded pb-5">
-  <h3 class="text-center text-white">Registration</h3>
-  <input type="text" class="form-control w-25" id="username" placeholder="Username" />
-  <input type="text" class="form-control w-25 mt-2" id="firstName" placeholder="First Name" />
-  <input type="text" class="form-control w-25 mt-2" id="lastName" placeholder="Surname" />
-  <input type="email" class="form-control w-25 mt-2" id="email" placeholder="Email" />
-  <input type="password" class="form-control w-25 mt-2" id="password" placeholder="Password" />
-  <button type="submit" class="btn btn-light mt-2">Sign up</button>
+﻿<div class="container form">
+  <div class="row">
+    <div class="col center-content">
+      <!-- Todo: CRT Logo to go here-->
+      <EditForm Model="@viewModel" OnValidSubmit="@HandleValidSubmit">
+        <div class="mb-5">
+          <h3 class="text-center text-white">Register</h3>
+        </div>
+        <div class="mb-5">
+          <span class="oi oi-person text-white"></span> <InputText type="username" placeholder="Username" @bind-Value="viewModel.Username" />
+          <br />
+          <br />
+          <span class="oi oi-person text-white"></span> <InputText type="email" placeholder="Email" @bind-Value="viewModel.Email" />
+          <br />
+          <br />
+          <span class="oi oi-person text-white"></span> <InputText type="firstname" placeholder="First Name" @bind-Value="viewModel.FirstName" />
+          <br />
+          <br />
+          <span class="oi oi-person text-white"></span> <InputText type="lastname" placeholder="Last Name" @bind-Value="viewModel.LastName" />
+          <br />
+          <br />
+          <span class="oi oi-key text-white"></span> <InputText type="password" placeholder="Password" @bind-Value="viewModel.Password" />
+        </div>
+        <CustomButton ButtonType="submit" Text="Sign Up"></CustomButton>
+        <br />
+        <br />
+        <a href="/authentication/login">Already registered? Click here to login</a>
+      </EditForm>
+    </div>
+  </div>
 </div>
 
 <style>
-  .background {
-    background: rgb(97,64,194);
-    background: linear-gradient(0deg, rgba(97,64,194,1) 0%, rgba(142,0,144,1) 100%);
+  .form {
+    display: block;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background: linear-gradient( 180deg, rgba(133,47,147) 0%, #673AB7 70%);
+    width: fit-content;
+    padding: 60px;
+    border-radius: 60px;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content {
+    flex: 1;
+    align-items: center;
+    display: flex;
+  }
+
+  .page {
+    min-height: 100vh;
+  }
+
+  .center-content {
+    display: flex;
+    justify-content: center;
+  }
+
+  .form input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #3a2b2b;
+    outline: none;
+    color: #FFF;
+  }
+
+  /* https://stackoverflow.com/questions/44688186/how-can-i-change-the-placeholder-text-color-to-white */
+  input::placeholder {
+    color: #fff;
+  }
+
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #fff;
+  }
+
+  ::-moz-placeholder { /* Firefox 19+ */
+    color: #fff;
+  }
+
+  :-moz-placeholder { /* Firefox 18- */
+    color: #fff;
+  }
+
+  :-ms-input-placeholder { /* Edge/IE 10+ */
+    color: #fff;
   }
 </style>
 
 @code {
+  private RegistrationViewModel viewModel = new();
 
+  private void HandleValidSubmit()
+  {
+
+  }
 }
