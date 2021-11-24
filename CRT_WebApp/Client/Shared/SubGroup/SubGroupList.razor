@@ -3,11 +3,11 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-<div class="row">
-    <div class="col-8">
+<div class="row" style="margin-top:2px">
+    <div class="col-6">
         @foreach (var sub in SubGroupService.SubGroups)
         {
-            <div>
+            <div style="margin-top:2px">
                 <SubGroup subGroup=sub></SubGroup>
             </div>
         }

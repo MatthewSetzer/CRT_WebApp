@@ -1,6 +1,7 @@
-﻿<div class="border-primary align-content-center">
-    <div class="collapsable">
-        <div class="row " @onclick="@Toggle">
+﻿
+<div class="collapsable">
+    <div class="card " @onclick="@Toggle">
+        <div class="card-header">
             @if (Collapsed)
             {
                 <span class="oi oi-chevron-right mr-1"></span>
@@ -12,20 +13,25 @@
             @Title
             @if (!string.IsNullOrEmpty(Value))
             {
-                <span class=" float-right">Total $@Value</span>
-                @*<div class="value">
-                    <span class=" float-right">Total $@Value</span>
-                </div>*@
+                <span class="float-right">Total $@Value</span>
+
             }
         </div>
 
     </div>
+
 </div>
+
 
  
 @if (!Collapsed)
 {
-    <div class="collapsable-panel">
+    @*
+            <div class="collapsable-panel">
+        @ChildContent
+    </div>
+    *@
+    <div class="card-body">
         @ChildContent
     </div>
 }
