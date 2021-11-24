@@ -1,9 +1,9 @@
 ﻿@page "/"
 @inject IQuoteService QuoteService
 @using CRT_WebApp.Shared
- 
+@inject IToastService toastService
+<button class="btn btn-info" @onclick="@(() => toastService.ShowInfo("I'm an INFO message"))">Info Toast</button>
 <ItemList></ItemList>
-
 
 @code{
 
