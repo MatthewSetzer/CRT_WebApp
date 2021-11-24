@@ -55,6 +55,17 @@ namespace CRT_WebApp.Client.Services.QuoteService
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Makes API Call that gets all quotes from DB. 
+        /// </summary>
+        public async Task LoadAllQuotes()
+        {
+            Quotes = await _http.GetFromJsonAsync<List<QuoteModel>>("api/Quote/RetrieveQuotes");
+            //We can use this to call other methods as soon as this loads completely. 
+            OnChange.Invoke();
+        }
+
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// API call that gets all quotes
         /// </summary>
         /// <returns></returns>
@@ -72,6 +83,8 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             await _http.PostAsJsonAsync("api/Quote/SoftDelete", quoteModel);
         }
+
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

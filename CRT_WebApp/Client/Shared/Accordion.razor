@@ -1,22 +1,27 @@
-﻿<div class="collapsable">
-    <div class="title" @onclick="@Toggle">
-        @if (Collapsed)
-        {
-            <span class="oi oi-chevron-right mr-1"></span>
-        }
-        else
-        {
-            <span class="oi oi-chevron-bottom mr-1"></span>
-        }
-        @Title
+﻿<div class="border-primary align-content-center">
+    <div class="collapsable">
+        <div class="row " @onclick="@Toggle">
+            @if (Collapsed)
+            {
+                <span class="oi oi-chevron-right mr-1"></span>
+            }
+            else
+            {
+                <span class="oi oi-chevron-bottom mr-1"></span>
+            }
+            @Title
+            @if (!string.IsNullOrEmpty(Value))
+            {
+                <span class=" float-right">Total $@Value</span>
+                @*<div class="value">
+                    <span class=" float-right">Total $@Value</span>
+                </div>*@
+            }
+        </div>
+
     </div>
-    @if (!string.IsNullOrEmpty(Value))
-    {
-    <div class="value">
-        <h4><span class="badge badge-success">Total $@Value</span></h4>
-    </div>
-    }
 </div>
+
  
 @if (!Collapsed)
 {

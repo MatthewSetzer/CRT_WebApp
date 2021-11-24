@@ -1,12 +1,36 @@
 ﻿@inject IQuoteService QuoteService
 <h3>QuoteList</h3>
+    <div class="col-6">
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Quote Name</th>
+                    <th scope="col">Creation date</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in QuoteService.Quotes)
+                {
+                    <tr>
+                        <td>@item.QuoteTitle</td>
+                        <td>@item.QuoteDate</td>
+                        <td>$@item.Total</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
+        
+
+    </div>
 
 @code {
 
     protected override void OnInitialized()
     {
         QuoteService.OnChange += StateHasChanged;
+        QuoteService.LoadAllQuotes();
     }
 
 
