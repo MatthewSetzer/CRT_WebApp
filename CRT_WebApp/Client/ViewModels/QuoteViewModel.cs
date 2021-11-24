@@ -1,22 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRT_WebApp.Shared
+namespace CRT_WebApp.Client.ViewModels
 {
-    public class QuoteModel
+    public class QuoteViewModel
     {
-        public int Id { get; set; }
+        [Required]
         public string QuoteTitle { get; set; }
+        [Required]
         public bool QuoteState { get; set; }
+        [Required]
         public DateTime QuoteDate { get; set; }
+        [Required]
         public string QuoteUser { get; set; }
-        public List<SubGroupModel> SubGroups { get; set; }
-        public List<ImageModel> Images { get; set; }
-        public List<NoteModel> Notes { get; set; }
+        [Required]
         public double Total { get; set; }
+        [Required]
         public bool IsDeleted { get; set; }
 
-        public string GetFormattedTotalPrice() => Total.ToString("0.00");
+        public string GetFormattedTotal() => Total.ToString("0.00");
+
     }
 }

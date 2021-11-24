@@ -50,6 +50,11 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         /// </summary>
         /// <returns>A list of subgroups</returns>
         List<SubGroupModel> GetSubGroupList();
+        /// <summary>
+        /// Gets the grand total for current list of subgroups
+        /// </summary>
+        /// <returns></returns>
+        double GetSubGroupsTotal();
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

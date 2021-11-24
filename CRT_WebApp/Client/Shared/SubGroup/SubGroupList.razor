@@ -1,16 +1,38 @@
 ﻿@inject ISubGroupService SubGroupService
+@inject IQuoteService QuoteService
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-@foreach(var sub in SubGroupService.SubGroups)
-{
-    <div>
-        <SubGroup subGroup=sub></SubGroup>
+<div class="row" style="margin-top:2px">
+    <div class="col-6">
+        @foreach (var sub in SubGroupService.SubGroups)
+        {
+            <div style="margin-top:2px">
+                <SubGroup subGroup=sub></SubGroup>
+            </div>
+        }
     </div>
+    <div class="col-4">
+        <EditForm Model="@quote" OnValidSubmit="@addQuote">
 
-}
+            <label>Quote Name: </label>
+            <div class="input-group mb-3">
+                <InputText @bind-Value="quote.QuoteTitle"></InputText>
+            </div>
+            <div class="input-group mb-3">
+                <label>Quote Total: @SubGroupService.GetSubGroupsTotal()</label>
+            </div>
+            <button class="btn btn-success" type="submit">Create Quote</button>
+        </EditForm>
+    </div>
+</div>
+
 
 @code {
+    [Parameter]
+    public SubGroupModel subGroup { get; set; }
+
+    QuoteViewModel quote = new QuoteViewModel();
 
     protected override void OnInitialized()
     {
@@ -21,6 +43,21 @@
     public void Dispose()
     {
         SubGroupService.OnChange -= StateHasChanged;
+    }
 
+    public void addQuote()
+    {
+        QuoteModel newQuote = new QuoteModel
+        {
+            QuoteTitle = quote.QuoteTitle,
+            QuoteState = true,
+            QuoteDate = DateTime.Now,
+            QuoteUser = "Test",
+            SubGroups = SubGroupService.GetSubGroupList(),
+            Total = SubGroupService.GetSubGroupsTotal(),
+            IsDeleted = false
+        };
+
+        QuoteService.AddQuote(newQuote);
     }
 }

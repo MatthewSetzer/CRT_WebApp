@@ -35,6 +35,17 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         {
             return SubGroups;
         }
+        //---------------------------------------------------------------------------------------------------------//s
+        public double GetSubGroupsTotal()
+        {
+            double Total = 0;
+            foreach (var subGroup in SubGroups)
+            {
+                Total += subGroup.SubTotal;
+            }
+
+            return Total;
+        }
 
         //---------------------------------------------------------------------------------------------------------//
         public void RemoveSubGroupFromList(SubGroupModel subGroup)

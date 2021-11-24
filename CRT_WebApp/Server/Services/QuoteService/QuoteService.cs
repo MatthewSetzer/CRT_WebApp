@@ -118,10 +118,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
             quote.QuoteState = false;
             _context.Update(quote);
             await _context.SaveChangesAsync();
-              
         }
-        
-
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
