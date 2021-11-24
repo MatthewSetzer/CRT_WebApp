@@ -16,5 +16,7 @@ namespace CRT_WebApp.Shared
         public List<NoteModel> Notes { get; set; }
         public double Total { get; set; }
         public bool IsDeleted { get; set; }
+
+        public string GetFormattedTotalPrice() => Total.ToString("0.00");
     }
 }

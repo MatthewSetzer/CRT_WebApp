@@ -1,6 +1,17 @@
 ﻿@inject IQuoteService QuoteService
 <h3>QuoteList</h3>
 
+
 @code {
 
+    protected override void OnInitialized()
+    {
+        QuoteService.OnChange += StateHasChanged;
+    }
+
+
+    public void Dispose()
+    {
+        QuoteService.OnChange -= StateHasChanged;
+    }
 }

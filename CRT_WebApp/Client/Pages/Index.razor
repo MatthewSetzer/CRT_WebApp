@@ -1,53 +1,12 @@
 ﻿@page "/"
 @inject IQuoteService QuoteService
-@using CRT_WebApp.Shared
+@using CRT_WebApp.Client.Shared.Quote
  
-<ItemList></ItemList>
+<QuoteList></QuoteList>
 
 
 @code{
 
-    QuoteModel quote = new QuoteModel
-    {        
-        QuoteUser = "JP",
-        QuoteTitle = "Testing multiple notes",
-        QuoteDate = DateTime.Now,
-        IsDeleted = false,
-        Total = 69.00,
 
-    };
-    NoteModel note1 = new NoteModel
-    {
-        NoteHeader ="This is a test note",
-        NoteContent = "Lets hope this thing works"
-    };
-       NoteModel note2 = new NoteModel
-    {
-        NoteHeader ="This is a test note2",
-        NoteContent = "Lets hope this thing works2"
-    };
-
-
-    List<QuoteModel> allQuotes;
-
-    async Task createQuote()
-    {
-        quote.Notes = new List<NoteModel>();
-        quote.Notes.Add(note1);
-        quote.Notes.Add(note2);
-
-
-        await QuoteService.AddQuote(quote);
-    }
-    
-    async Task getQuotes()
-    {
-        allQuotes = await QuoteService.GetAllQuotes();
-
-        foreach (QuoteModel quote in allQuotes)
-        {
-            Console.WriteLine(quote.QuoteDate);
-        }
-    }
 }
 
