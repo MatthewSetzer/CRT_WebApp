@@ -1,26 +1,7 @@
 ﻿@page "/authentication/{action}"
-
-@using CRT_WebApp.Client.Components;
-
-@if (Action == "login")
-{
-  <LoginView></LoginView>
-}
-else if (Action == "register")
-{
-  <RegistrationView></RegistrationView>
-}
-else if (Action == "forgot-password")
-{
-  <ForgotPasswordView></ForgotPasswordView>
-}
-
-<style>
-  .sidebar {
-    display: none;
-  }
-</style>
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+<RemoteAuthenticatorView Action="@Action" />
 
 @code{
-  [Parameter] public string Action { get; set; }
+    [Parameter] public string Action { get; set; }
 }
