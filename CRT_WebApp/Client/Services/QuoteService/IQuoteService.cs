@@ -19,11 +19,16 @@ namespace CRT_WebApp.Client.Services.QuoteService
         public List<QuoteModel> Quotes { get; set; }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
-        /// Loads Quotes from DB
+        /// Loads Quotes from DB matching the current user id
         /// </summary>
-        /// <param name="UserID"></param>
-        /// <returns></returns>
+        /// <param name="UserID">The users id</param>
+        /// <returns>A list of quotes</returns>
         Task LoadQuotes(string UserID);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Loads all Quotes from DB
+        /// </summary>
+        Task LoadAllQuotes();
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Adds a quote to DB

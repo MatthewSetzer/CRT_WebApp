@@ -126,8 +126,8 @@ namespace CRT_WebApp.Server.Services.QuoteService
             quote.QuoteState = false;
             _context.Update(quote);
             await _context.SaveChangesAsync();
-              
         }
+
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Get all quotes that match the supplied state
@@ -149,6 +149,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         {
             return await _context.Quotes.Where(x=>x.QuoteState == state).Where(u => u.QuoteUser.Equals(UserID)).ToListAsync();
         }
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
