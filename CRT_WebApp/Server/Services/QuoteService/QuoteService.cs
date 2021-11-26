@@ -106,6 +106,10 @@ namespace CRT_WebApp.Server.Services.QuoteService
             return await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Enables a quote
+        /// </summary>
+        /// <param name="quote">The quote to be enabled</param>
         public async Task EnableQuote(QuoteModel quote)
         {
             quote.QuoteState = true;
@@ -113,6 +117,10 @@ namespace CRT_WebApp.Server.Services.QuoteService
             await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Disables a quote
+        /// </summary>
+        /// <param name="quote">The quote to be disabled</param>
         public async Task DisableQuote(QuoteModel quote)
         {
             quote.QuoteState = false;
@@ -120,8 +128,27 @@ namespace CRT_WebApp.Server.Services.QuoteService
             await _context.SaveChangesAsync();
               
         }
-        
-
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Get all quotes that match the supplied state
+        /// </summary>
+        /// <param name="state">True = quote; False = survey</param>
+        /// <returns>A List of Quotes matching the condition</returns>
+        public async Task<List<QuoteModel>> GetQuotesByState(bool state)
+        {
+            return await _context.Quotes.Where(x=>x.QuoteState == state).ToListAsync();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets all quotes that matches the quote state and UserID
+        /// </summary>
+        /// <param name="state">The state of the quote. False = Survey; True = Quote</param>
+        /// <param name="UserID">The users ID</param>
+        /// <returns>A List of Quotes matching the condition</returns>
+        public async Task<List<QuoteModel>> GetQuotesByStateAndUser(bool state, string UserID)
+        {
+            return await _context.Quotes.Where(x=>x.QuoteState == state).Where(u => u.QuoteUser.Equals(UserID)).ToListAsync();
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

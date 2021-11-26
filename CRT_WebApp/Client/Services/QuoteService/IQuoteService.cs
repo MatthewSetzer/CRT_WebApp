@@ -50,6 +50,8 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// </summary>
         /// <param name="id">The id of the Quote to be soft deleted</param>
         Task SoftDeleteQuoteByID(QuoteModel quoteModel);
+
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

@@ -72,7 +72,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             await _http.PostAsJsonAsync("api/Quote/SoftDelete", quoteModel);
         }
-        
+        //---------------------------------------------------------------------------------------------------------//
 
     }
 }

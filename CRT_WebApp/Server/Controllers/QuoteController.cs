@@ -121,6 +121,7 @@ namespace CRT_WebApplication.Server.Controllers
         {
             return Ok(await _quoteService.FindQuoteByID(Id));
         }
+
             
     }
 }
