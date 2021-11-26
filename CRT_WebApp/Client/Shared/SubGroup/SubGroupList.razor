@@ -1,5 +1,6 @@
 ﻿@inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
+
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
@@ -52,7 +53,7 @@
             QuoteTitle = quote.QuoteTitle,
             QuoteState = true,
             QuoteDate = DateTime.Now,
-            QuoteUser = "Test",
+            QuoteUser = "",
             SubGroups = SubGroupService.GetSubGroupList(),
             Total = SubGroupService.GetSubGroupsTotal(),
             IsDeleted = false

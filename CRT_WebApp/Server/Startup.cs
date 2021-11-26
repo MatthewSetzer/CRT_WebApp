@@ -52,6 +52,7 @@ namespace CRT_WebApp.Server
             System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler
             .DefaultInboundClaimTypeMap.Remove("role");
 
+            services.AddHttpContextAccessor();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
