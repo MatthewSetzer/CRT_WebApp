@@ -9,6 +9,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Document = iTextSharp.text.Document;
 using System.Windows;
+using Microsoft.JSInterop;
 
 namespace CRT_WebApp.Client.Services.PdfService
 {
@@ -23,7 +24,11 @@ namespace CRT_WebApp.Client.Services.PdfService
         QuoteModel quote;
         bool isSurvey;
 
-        private byte[] GenPDF(QuoteModel quote)
+        byte[] pdfBytes;
+
+        public PdfService()
+        { }
+        public void GenPDF(QuoteModel quote, IJSRuntime iJSRuntime)
         {
             try
             {
@@ -107,16 +112,21 @@ namespace CRT_WebApp.Client.Services.PdfService
                 doc.Add(noteTable);
                 doc.Close();
 
-                return memStream.ToArray();
+                pdfBytes = memStream.ToArray();
+
+                iJSRuntime.InvokeAsync<QuoteModel>(
+                    "saveAsFile",
+                    "QuoteDetails.pdf",
+                    Convert.ToBase64String(pdfBytes)
+                    ); 
             }
             catch (Exception e)
             {
                 //generic popup message box here              
-                return new byte[1];
             }
         }
 
-        private void GetHeader(int infoPageColumns)
+        public void GetHeader(int infoPageColumns)
         {
             cell = new PdfPCell(this.SetPageTitle());
             cell.Colspan = infoPageColumns - 1;
@@ -124,87 +134,9 @@ namespace CRT_WebApp.Client.Services.PdfService
             infoTable.AddCell(cell);
 
             infoTable.CompleteRow();
-        }
+        }      
 
-        private byte[] CreateImagePDF(List<string> imageURLs)
-        {
-            try
-            {
-                Document newDoc = new Document();
-                var ms = new MemoryStream();
-                {
-                    PdfCopy pdf = new PdfCopy(doc, ms);
-                    doc.Open();
-
-                    foreach (string url in imageURLs)
-                    {
-                        byte[] imgData = File.ReadAllBytes(url);
-                        //doc.NewPage();
-                        Document imgDoc = null;
-                        PdfWriter imgDocWriter = null;
-
-                        using (var imageMS = new MemoryStream())
-                        {
-                            imgDocWriter = PdfWriter.GetInstance(imgDoc, imageMS);
-                            imgDoc.Open();
-
-                            var image = Image.GetInstance(imgData);
-                            image.Alignment = Element.ALIGN_CENTER;
-                            image.ScaleToFit(imgDoc.PageSize.Width - 10, imgDoc.PageSize.Height - 10);
-
-                            if (!imgDoc.Add(image))
-                            {
-                                throw new Exception("An error occurred while adding an image to the PDF!");
-                            }
-
-                            imgDoc.Close();
-                            imgDocWriter.Close();
-                            PdfReader imgDocReader = new PdfReader(ms.ToArray());
-                            var page = pdf.GetImportedPage(imgDocReader, 1);
-                            pdf.AddPage(page);
-                            imgDocReader.Close();
-                        }
-                    }
-
-
-                }
-                if (newDoc.IsOpen()) 
-                    newDoc.Close();
-
-                return ms.ToArray();
-
-            }
-            catch (Exception e)
-            {
-                //ERROR MESSAGE HERE
-                return new byte[10];
-            }
-        }   
-        
-        private Document combinePDFs(byte[] imageDocBytes, string outFileName)
-        {
-            Document imageDoc = new Document(PageSize.A4);
-            PdfWriter.GetInstance(imageDoc, new FileStream(path, FileAccess.ReadWrite));
-
-            Document mergedDoc = new Document();
-            using (FileStream fs = new FileStream(outFileName, FileMode.Create))
-            {
-                PdfCopy copyWriter = new PdfCopy(mergedDoc, fs);
-                if(copyWriter == null)
-                {
-                    return new Document();
-                }
-
-                mergedDoc.Open();
-
-                PdfReader reader = new PdfReader(filename);
-
-            }
-            
-            return new Document();
-        }
-
-        private PdfPTable SetPageTitle()
+        public PdfPTable SetPageTitle()
         {
             try
             {
@@ -212,16 +144,7 @@ namespace CRT_WebApp.Client.Services.PdfService
                 PdfPTable table = new PdfPTable(maxCol);
 
                 this.fontStyle = FontFactory.GetFont("Verdana", 28f, 1);
-                cell = new PdfPCell(new Phrase(this.quote.QuoteTitle, this.fontStyle));
-                cell.Colspan = maxCol;
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.Border = 0;
-                cell.ExtraParagraphSpace = 0;
-                table.AddCell(cell);
-                table.CompleteRow();
-
-                this.fontStyle = FontFactory.GetFont("Verdana", 20f, 1);
-                cell = new PdfPCell(new Phrase(this.quote.QuoteDate.ToString(), this.fontStyle));
+                cell = new PdfPCell(new Phrase(this.quote.QuoteTitle +" - "+this.quote.QuoteDate.Date, this.fontStyle));
                 cell.Colspan = maxCol;
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.Border = 0;
@@ -238,7 +161,7 @@ namespace CRT_WebApp.Client.Services.PdfService
             }           
         }
 
-        private void GetBody()
+        public void GetBody()
         {
             try
             {
@@ -307,8 +230,6 @@ namespace CRT_WebApp.Client.Services.PdfService
                     infoTable.AddCell(cell);
 
                 }
-
-
             }
             catch (Exception e)
             {

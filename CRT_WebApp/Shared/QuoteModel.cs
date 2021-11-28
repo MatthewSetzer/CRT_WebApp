@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CRT_WebApp.Shared;
 
 namespace CRT_WebApp.Shared
 {

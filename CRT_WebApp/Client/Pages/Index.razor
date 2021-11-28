@@ -1,14 +1,17 @@
 ﻿@page "/"
 @inject IQuoteService QuoteService
 @using CRT_WebApp.Shared
- 
-<ItemList></ItemList>
 
+@using CRT_WebApp.Client.Services.PdfService;
+@inject IJSRuntime ijsRuntime;
+
+<ItemList></ItemList>
+<button class="btn btn-primary" name="pdfTest" @onclick="createPDF">Create PDF</button>
 
 @code{
 
     QuoteModel quote = new QuoteModel
-    {        
+    {
         QuoteUser = "JP",
         QuoteTitle = "Testing multiple notes",
         QuoteDate = DateTime.Now,
@@ -18,12 +21,12 @@
     };
     NoteModel note1 = new NoteModel
     {
-        NoteHeader ="This is a test note",
+        NoteHeader = "This is a test note",
         NoteContent = "Lets hope this thing works"
     };
-       NoteModel note2 = new NoteModel
+    NoteModel note2 = new NoteModel
     {
-        NoteHeader ="This is a test note2",
+        NoteHeader = "This is a test note2",
         NoteContent = "Lets hope this thing works2"
     };
 
@@ -39,7 +42,7 @@
 
         await QuoteService.AddQuote(quote);
     }
-    
+
     async Task getQuotes()
     {
         allQuotes = await QuoteService.GetAllQuotes();
@@ -48,6 +51,12 @@
         {
             Console.WriteLine(quote.QuoteDate);
         }
+    }
+
+    public void createPDF()
+    {
+        PdfService pdfService = new PdfService();
+        pdfService.GenPDF(quote, ijsRuntime);
     }
 }
 
