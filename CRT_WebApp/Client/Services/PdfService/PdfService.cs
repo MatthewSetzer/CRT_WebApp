@@ -9,12 +9,11 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Document = iTextSharp.text.Document;
 using System.Windows;
-using Xceed.Wpf.Toolkit;
 
 namespace CRT_WebApp.Client.Services.PdfService
 {
     public class PdfService
-    { 
+    {
         Document doc;
         PdfPTable infoTable, noteTable;
         List<PdfPTable> subgroupTables = new List<PdfPTable>();
@@ -103,8 +102,8 @@ namespace CRT_WebApp.Client.Services.PdfService
 
                 infoTable.HeaderRows = 4;
                 doc.Add(infoTable);
-                for(int x = 0; x < subgroupTables.Count; x++)
-                    doc.Add(subgroupTables[x]);               
+                for (int x = 0; x < subgroupTables.Count; x++)
+                    doc.Add(subgroupTables[x]);
                 doc.Add(noteTable);
                 doc.Close();
 
@@ -119,11 +118,6 @@ namespace CRT_WebApp.Client.Services.PdfService
 
         private void GetHeader(int infoPageColumns)
         {
-            cell = new PdfPCell(this.AddImage());
-            cell.Colspan = 1;
-            cell.Border = 0;
-            infoTable.AddCell(cell);
-
             cell = new PdfPCell(this.SetPageTitle());
             cell.Colspan = infoPageColumns - 1;
             cell.Border = 0;
@@ -132,31 +126,82 @@ namespace CRT_WebApp.Client.Services.PdfService
             infoTable.CompleteRow();
         }
 
-        private PdfPTable AddImage()
+        private byte[] CreateImagePDF(List<string> imageURLs)
         {
             try
             {
-                int maxColumn = 1;
-                PdfPTable pdfTable = new PdfPTable(maxColumn);
-                string imgCombine = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\images\goldenstar.jpg"}";
-                Image img = Image.GetInstance(imgCombine);
+                Document newDoc = new Document();
+                var ms = new MemoryStream();
+                {
+                    PdfCopy pdf = new PdfCopy(doc, ms);
+                    doc.Open();
 
-                cell = new PdfCell(img, 0, 5f, 5f, 5f, 10f, 12f); //ISSUE HERE
+                    foreach (string url in imageURLs)
+                    {
+                        byte[] imgData = File.ReadAllBytes(url);
+                        //doc.NewPage();
+                        Document imgDoc = null;
+                        PdfWriter imgDocWriter = null;
 
-                cell.Colspan = maxColumn;
-                cell.HorizontalAlignment = Element.ALIGN_LEFT;
-                cell.Border = 0;
-                cell.ExtraParagraphSpace = 0;
-                infoTable.AddCell(cell);
+                        using (var imageMS = new MemoryStream())
+                        {
+                            imgDocWriter = PdfWriter.GetInstance(imgDoc, imageMS);
+                            imgDoc.Open();
 
-                infoTable.CompleteRow();
-                return pdfTable;
+                            var image = Image.GetInstance(imgData);
+                            image.Alignment = Element.ALIGN_CENTER;
+                            image.ScaleToFit(imgDoc.PageSize.Width - 10, imgDoc.PageSize.Height - 10);
+
+                            if (!imgDoc.Add(image))
+                            {
+                                throw new Exception("An error occurred while adding an image to the PDF!");
+                            }
+
+                            imgDoc.Close();
+                            imgDocWriter.Close();
+                            PdfReader imgDocReader = new PdfReader(ms.ToArray());
+                            var page = pdf.GetImportedPage(imgDocReader, 1);
+                            pdf.AddPage(page);
+                            imgDocReader.Close();
+                        }
+                    }
+
+
+                }
+                if (newDoc.IsOpen()) 
+                    newDoc.Close();
+
+                return ms.ToArray();
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //ERROR MESSAGE HERE
-                return new PdfPTable(0);
+                return new byte[10];
             }
+        }   
+        
+        private Document combinePDFs(byte[] imageDocBytes, string outFileName)
+        {
+            Document imageDoc = new Document(PageSize.A4);
+            PdfWriter.GetInstance(imageDoc, new FileStream(path, FileAccess.ReadWrite));
+
+            Document mergedDoc = new Document();
+            using (FileStream fs = new FileStream(outFileName, FileMode.Create))
+            {
+                PdfCopy copyWriter = new PdfCopy(mergedDoc, fs);
+                if(copyWriter == null)
+                {
+                    return new Document();
+                }
+
+                mergedDoc.Open();
+
+                PdfReader reader = new PdfReader(filename);
+
+            }
+            
+            return new Document();
         }
 
         private PdfPTable SetPageTitle()
