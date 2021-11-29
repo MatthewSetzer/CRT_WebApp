@@ -2,97 +2,108 @@
 <div>
     <div class="row">
 
-
-
-        <div class="col-md-3">
-            <div class="input-group mb-3">
-                <select class="custom-select" id="metricSelect">
-                    <option selected>Select...</option>
-                    <option value="1">Meters</option>
-                    <option value="2">Linear Foot</option>
-                    <option value="3">Square Foot</option>
-                    <option value="4">Center Meters</option>
+         <div class="col-md-3">
+           <p>Select Conversion</p>
+        </div>
+         <div class="col-md-3">
+                <select class="custom-select" @bind="@selectedConversion" style="min-width:300px">
+                    <option value="0" selected>Select...</option>
+                    <option value="1">Linear Feet To Meters</option>
+                    <option value="2">Square Feet To Square Meters</option>
+                    <option value="3">Square Meters To Square Feet</option>
+                    <option value="4">Meters To Linear Feet</option>
                 </select>
             </div>
-        </div>
+       </div>
+       <br />
 
-        <div class="col-md-3">
-            <div class="input-group mb-3">
-                <select class="custom-select" id="metricSelect">
-                    <option selected>Select...</option>
-                    <option value="1">Meters</option>
-                    <option value="2">Linear Foot</option>
-                    <option value="3">Square Foot</option>
-                    <option value="4">Center Meters</option>
-                </select>
-            </div>
+       <div class="row">
+            <div class="col-md-3">
+                <p>@InputMetric</p>
         </div>
-
         <div class="col-md-4">
-            <input placeholder="Enter  Number" @bind="@num1" />
+            <input type="number" placeholder="Enter  Number" @bind="@NumToConvert" @bind:event="oninput"/>
         </div>
-    </div>
+        </div>
+   
+
     <br />
     <div class="row">
         <div class="col-md-3">
-            <p>Second Number</p>
+            <p>@ResultMetric</p>
         </div>
-        <div class="col-md-4">
-            <input placeholder="Enter Second Number" @bind="@num2" />
-        </div>
-    </div>
-    <br />
-    <div class="row">
         <div class="col-md-3">
-            <p>Result</p>
-        </div>
-        <div class="col-md-4">
             <input readonly @bind="@finalresult" />
         </div>
+        
+                
+        
     </div>
 
     <br />
-    <div class="row">
-        <div class="col-md-2">
-            <button @onclick="AddNumbers" class="btn btn-light">Add (+)</button>
-        </div>
-        <div class="col-md-2">
-            <button @onclick="SubtractNumbers" class="btn btn-primary">Subtract (−)</button>
-        </div>
-        <div class="col-md-2">
-            <button @onclick="MultiplyNumbers" class="btn btn-success ">Multiply (X)</button>
-        </div>
-        <div class="col-md-2">
-            <button @onclick="DivideNumbers" class="btn btn-info">Divide (/)</button>
-        </div>
-    </div>
+   
 </div>
 
 @code {
-    string num1;
-    string num2;
-    string finalresult;
-    void AddNumbers()
+
+    string ResultMetric = "Result";
+    string InputMetric = "Enter Measurment";
+    private string myVar;
+    private double myDouble;
+    double finalresult;
+
+    public double NumToConvert
     {
-        finalresult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
-    }
-    void SubtractNumbers()
-    {
-        finalresult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
-    }
-    void MultiplyNumbers()
-    {
-        finalresult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
-    }
-    void DivideNumbers()
-    {
-        if (Convert.ToDouble(num2) != 0)
+        get { return myDouble; }
+        set
         {
-            finalresult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
-        }
-        else
-        {
-            finalresult = "Cannot Divide by Zero";
+            myDouble = value;
+            ConvertNumbers();
         }
     }
+
+    public string selectedConversion
+    {
+        get { return myVar; }
+        set { myVar = value;
+            ConvertNumbers();
+        }
+    } 
+
+   
+    private void ConvertNumbers()
+    {
+          if(selectedConversion == "0")
+        {
+            InputMetric = "Enter Measurment";
+            ResultMetric = "Result";
+
+        }else if(selectedConversion == "1")
+        {
+            InputMetric = "Linear Feet";
+            ResultMetric = "Meters";
+
+             finalresult = Math.Round((NumToConvert * 0.3048),4);
+        }else if (selectedConversion == "2")
+        {
+            InputMetric = "Square Feet";
+            ResultMetric = "Square Meters";
+
+             finalresult =  Math.Round((NumToConvert * 0.0929),4);
+        }else if(selectedConversion == "3")
+        {
+            InputMetric = "Square Meters";
+            ResultMetric = "Square Feet";
+
+             finalresult =  Math.Round((NumToConvert * 10.764),4);
+        }else if(selectedConversion == "4")
+        {
+            InputMetric = "Meters";
+            ResultMetric = "Linear Feet";
+
+             finalresult =  Math.Round((NumToConvert * 3.2808398950131),4);
+        }
+       
+    }
+
 }

@@ -1,4 +1,3 @@
-﻿
 <div class="collapsable">
     <div class="card " @onclick="@Toggle">
         <div class="card-header">
@@ -26,11 +25,7 @@
  
 @if (!Collapsed)
 {
-    @*
-            <div class="collapsable-panel">
-        @ChildContent
-    </div>
-    *@
+
     <div class="card-body">
         @ChildContent
     </div>
