@@ -1,5 +1,7 @@
 ﻿using CRT_WebApp.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace CRT_WebApp.Server.Services.UserService
 {
@@ -24,6 +26,15 @@ namespace CRT_WebApp.Server.Services.UserService
             
             var result = await _userManager.AddToRoleAsync(user, role);
             return result;
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Returns a list of all the users
+        /// </summary>
+        /// <returns>a list of Identity users.</returns>
+        public async Task<List<IdentityUser>> GetAllUsers()
+        {
+            return await _userManager.Users.ToListAsync();
         }
 
         //---------------------------------------------------------------------------------------------------------//

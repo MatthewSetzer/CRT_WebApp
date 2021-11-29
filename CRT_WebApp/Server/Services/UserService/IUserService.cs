@@ -1,5 +1,6 @@
 ﻿using CRT_WebApp.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CRT_WebApp.Server.Services.UserService
@@ -17,7 +18,7 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <summary>
         /// Changes the user's role
         /// </summary>
-        /// <param name="user">The user whose role should be changed</param>
+        /// <param name="userID">The user whose role should be changed</param>
         /// <param name="role">The role to be changed to</param>
         Task<IdentityResult> AddRoleToUser(string userID, string role);
         //---------------------------------------------------------------------------------------------------------//
@@ -27,6 +28,13 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <param name="userID">The id of the user to be removed from a role</param>
         /// <param name="role">The role to be removed from</param>
         Task<IdentityResult> RemoveRoleFromUser(string userID, string role);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets all registered users
+        /// </summary>
+        /// <returns>A list of all registered users</returns>
+        Task<List<IdentityUser>> GetAllUsers();
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//
