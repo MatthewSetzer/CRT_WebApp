@@ -84,6 +84,16 @@ namespace CRT_WebApp.Client.Services.QuoteService
             await _http.PostAsJsonAsync("api/Quote/SoftDelete", quoteModel);
         }
 
+        /// <summary>
+        /// API call to delete entire quote
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task DeleteQuote(int id)
+        {
+            await _http.DeleteAsync($"api/Quote/DeleteQuote/{id}");
+        }
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

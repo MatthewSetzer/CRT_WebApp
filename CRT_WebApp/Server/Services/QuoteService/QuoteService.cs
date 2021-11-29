@@ -75,10 +75,11 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quoteID"></param>
         /// <returns></returns>
-        public async Task DeleteQuote(int quoteID)
+        public async Task DeleteQuote(int id)
         {
-            var quote = _context.Quotes.FirstOrDefault(x => x.Id == quoteID);
-            _context.Quotes.Remove(quote);
+            var product = _context.Quotes.FirstOrDefault(x => x.Id == id);
+            _context.Quotes.Remove(product);
+
             await _context.SaveChangesAsync();
         }
 

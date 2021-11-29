@@ -62,10 +62,10 @@ namespace CRT_WebApplication.Server.Controllers
         /// Hard delete Quote API, permanently deletes a quote using the QuoteService.
         /// </summary>
         /// <param name="quoteModel"></param>
-        [HttpPost("DeleteQuote")]
-        public async Task DeleteQuote(QuoteModel quoteModel)
+        [HttpDelete("DeleteQuote/{id}")]
+        public async Task DeleteQuote(int id)
         {
-            await _quoteService.DeleteQuote(quoteModel.Id);
+            await _quoteService.DeleteQuote(id);
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
