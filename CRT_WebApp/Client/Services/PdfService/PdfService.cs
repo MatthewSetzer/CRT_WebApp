@@ -1,242 +1,182 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CRT_WebApp.Shared;
+using Microsoft.AspNetCore.Http;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using System;
 using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
-using CRT_WebApp.Shared;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Document = iTextSharp.text.Document;
-using System.Windows;
-using Microsoft.JSInterop;
 
 namespace CRT_WebApp.Client.Services.PdfService
 {
     public class PdfService
     {
-        Document doc;
-        PdfPTable infoTable, noteTable;
-        List<PdfPTable> subgroupTables = new List<PdfPTable>();
-        PdfPCell cell;
-        Font fontStyle;
-        MemoryStream memStream = new MemoryStream();
+        PdfDocument doc;
+        PdfPage page;
+        XGraphics xg;        
         QuoteModel quote;
-        bool isSurvey;
+        bool isSurvey = false;
+        MemoryStream memStream = new MemoryStream();
 
-        byte[] pdfBytes;
+        readonly XFont font = new XFont("Verdana", 20, XFontStyle.Regular);
+        readonly XFont headerFont = new XFont("Verdana", 28, XFontStyle.Bold);
 
         public PdfService()
         { }
-        public void GenPDF(QuoteModel quote, IJSRuntime iJSRuntime)
+
+        public void GenPDF(QuoteModel quote)
         {
-            try
-            {
-                int infoColumns = 4, subgroupColumns = 3, noteColumns = 2, subgroupCount;
-
-                if (quote.Total == 0)
-                {
-                    infoColumns = 2;
-                    subgroupColumns = 2;
-                    isSurvey = true;
-                }
-                else
-                    isSurvey = false;
-
-                this.quote = quote;
-                doc = new Document(PageSize.A4, 10f, 10f, 20f, 30f);
-
-                subgroupCount = quote.SubGroups.Count;
-
-                for (int x = 0; x < subgroupCount; x++)
-                {
-                    subgroupTables.Add(new PdfPTable(subgroupColumns));
-                    this.subgroupTables[x].WidthPercentage = 100;
-                    this.subgroupTables[x].HorizontalAlignment = Element.ALIGN_CENTER;
-                }
-
-                infoTable.WidthPercentage = 100;
-                infoTable.HorizontalAlignment = Element.ALIGN_CENTER;
-                noteTable.WidthPercentage = 100;
-                noteTable.HorizontalAlignment = Element.ALIGN_CENTER;
-
-                fontStyle = FontFactory.GetFont("Verdana", 10f, 1);
-                PdfWriter.GetInstance(doc, memStream);
-                doc.Open();
-
-                float[] infoTableSizes = new float[infoColumns];
-                float[] subgroupSizes = new float[subgroupColumns];
-                float[] noteSizes = new float[subgroupColumns];
-
-                for (int x = 0; x < infoColumns; x++)
-                {
-                    if (x == 0)
-                        infoTableSizes[x] = 50;
-                    else
-                        infoTableSizes[x] = 100;
-                }
-
-                for (int x = 0; x < subgroupColumns; x++)
-                {
-                    if (x == 0)
-                        subgroupSizes[x] = 50;
-                    else if (x == 1)
-                        subgroupSizes[x] = 20;
-                    else
-                        subgroupSizes[x] = 100;
-                }
-
-                for (int x = 0; x < noteColumns; x++)
-                {
-                    if (x == 0)
-                        noteSizes[x] = 35;
-                    else
-                        noteSizes[x] = 130;
-                }
-
-
-                infoTable.SetWidths(infoTableSizes);
-                noteTable.SetWidths(noteSizes);
-                for (int x = 0; x < subgroupTables.Count; x++)
-                {
-                    subgroupTables[x].SetWidths(subgroupSizes);
-                }
-
-                this.GetHeader(infoColumns);
-                this.GetBody();
-
-                infoTable.HeaderRows = 4;
-                doc.Add(infoTable);
-                for (int x = 0; x < subgroupTables.Count; x++)
-                    doc.Add(subgroupTables[x]);
-                doc.Add(noteTable);
-                doc.Close();
-
-                pdfBytes = memStream.ToArray();
-
-                iJSRuntime.InvokeAsync<QuoteModel>(
-                    "saveAsFile",
-                    "QuoteDetails.pdf",
-                    Convert.ToBase64String(pdfBytes)
-                    ); 
-            }
-            catch (Exception e)
-            {
-                //generic popup message box here              
-            }
+            this.quote = quote;
+            CreateDoc();
+            AddHeaderPage();
+            AddSubgroupPages();
+            AddNotesPage();
+            DownloadPDF();
         }
 
-        public void GetHeader(int infoPageColumns)
-        {
-            cell = new PdfPCell(this.SetPageTitle());
-            cell.Colspan = infoPageColumns - 1;
-            cell.Border = 0;
-            infoTable.AddCell(cell);
-
-            infoTable.CompleteRow();
-        }      
-
-        public PdfPTable SetPageTitle()
+        public void CreateDoc()
         {
             try
             {
-                int maxCol = 2;
-                PdfPTable table = new PdfPTable(maxCol);
+                doc = new PdfDocument();
+                doc.Info.Title = quote.QuoteTitle + " - " + quote.QuoteDate;
+                doc.Info.Author = quote.QuoteUser;
 
-                this.fontStyle = FontFactory.GetFont("Verdana", 28f, 1);
-                cell = new PdfPCell(new Phrase(this.quote.QuoteTitle +" - "+this.quote.QuoteDate.Date, this.fontStyle));
-                cell.Colspan = maxCol;
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.Border = 0;
-                cell.ExtraParagraphSpace = 0;
-                table.AddCell(cell);
-                table.CompleteRow();
-
-                return table;
+                if (quote.Total == 0)
+                    isSurvey = true;
             }
             catch(Exception e)
             {
-                //ERROR MESSAGE HERE
-                return new PdfPTable(0);
-            }           
+                Console.WriteLine("ERROR: "+e.Message);
+            }
         }
 
-        public void GetBody()
+        public void AddHeaderPage()
         {
             try
             {
-                this.fontStyle = FontFactory.GetFont("Verdana", 12f, 1);
-                var altFontStyle = FontFactory.GetFont("Verdana", 9f, 1);
+                page = doc.AddPage();
+                xg = XGraphics.FromPdfPage(page);
 
-                cell = new PdfPCell(new Phrase("ID", this.fontStyle));
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                cell.BackgroundColor = BaseColor.LightGray;
-                infoTable.AddCell(cell);
+                xg.DrawString(quote.QuoteTitle + " - " + quote.QuoteDate, headerFont,
+                    XBrushes.Black, new XPoint(200, 70));
+                xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, 100),
+                    new XPoint(400, 110));
 
-                cell = new PdfPCell(new Phrase("Created by", this.fontStyle));
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                cell.BackgroundColor = BaseColor.LightGray;
-                infoTable.AddCell(cell);
+                //headings for quote info. Arranged horizontally
+                xg.DrawString("ID", font, XBrushes.Black, new XPoint(100, 280));
+                xg.DrawString("Created by", font, XBrushes.Black, new XPoint(250, 280));
+                xg.DrawString("State", font, XBrushes.Black, new XPoint(400, 280));
 
-                if (!isSurvey)
-                {
-                    cell = new PdfPCell(new Phrase("State", this.fontStyle));
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell.BackgroundColor = BaseColor.LightGray;
-                    infoTable.AddCell(cell);
+                //adding total if applicable and drawing a final line underneath
+                if (isSurvey)
+                    xg.DrawString("Total", font, XBrushes.Black, new XPoint(550, 280));
 
-                    cell = new PdfPCell(new Phrase("Total", this.fontStyle));
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell.BackgroundColor = BaseColor.LightGray;
-                    infoTable.AddCell(cell);
+                //TODO: pop rows with quote info
 
-                    infoTable.CompleteRow();
-                }
-
-                cell = new PdfPCell(new Phrase(quote.Id.ToString(), this.fontStyle));
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                cell.BackgroundColor = BaseColor.LightGray;
-                infoTable.AddCell(cell);
-
-                cell = new PdfPCell(new Phrase(quote.QuoteUser.ToString(), this.fontStyle));
-                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                cell.BackgroundColor = BaseColor.LightGray;
-                infoTable.AddCell(cell);
-
-                if(!isSurvey)
-                {
-                    string stateString = "";
-                    if (quote.QuoteState == true)
-                        stateString = "Active";
-                    else
-                        stateString = "Inactive";
-
-                    cell = new PdfPCell(new Phrase(stateString, this.fontStyle));
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell.BackgroundColor = BaseColor.LightGray;
-                    infoTable.AddCell(cell);
-
-                    cell = new PdfPCell(new Phrase("$ "+quote.Total.ToString(), this.fontStyle));
-                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                    cell.BackgroundColor = BaseColor.LightGray;
-                    infoTable.AddCell(cell);
-
-                }
+                //bottom line of info tables (Y 300)
+                xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, 290),
+                        new XPoint(400, 300));
             }
-            catch (Exception e)
+            catch(Exception e)
             {
-                //ERROR MESSAGE HERE'
-                return;
+                Console.WriteLine("ERROR: " + e.Message);
             }
         }
 
+        public void AddSubgroupPages()
+        {
+            try
+            {
+                int currYV = 100, currYL = 130;
+                AssemblyItemModel currItem;
+
+                for (int x = 0; x < quote.SubGroups.Count; x++)
+                {
+                    page = doc.AddPage();
+                    xg = XGraphics.FromPdfPage(page);
+
+                    //drawing subgroup title (x 100 y bottom line + 250)
+                    xg.DrawString(quote.SubGroups[x].SubGroupTitle, headerFont, XBrushes.Black,
+                        new XPoint(100, currYV));
+
+                    //drawing subgroup line under title (x 100 y bottom line + 280)
+                    xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, currYL),
+                            new XPoint(400, currYL + 20));
+
+                    for (int y = 0; y < quote.SubGroups[x].ListOfItems.Count; y++)
+                    {
+                        currItem = quote.SubGroups[x].ListOfItems[y];
+                        xg.DrawString(currItem.Description, font, XBrushes.Black,
+                            new XPoint(100, currYV));
+                        xg.DrawString(currItem.NumberOfUnits.ToString(), font, XBrushes.Black,
+                            new XPoint(250, currYV));
+
+                        if (currItem.NumberOfUnits > 0)
+                            xg.DrawString('$' + currItem.GetFormattedTotalPrice(), headerFont, XBrushes.Black,
+                            new XPoint(400, currYV));
+
+                        xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, currYL),
+                        new XPoint(400, currYL + 10));
+
+                        currYV += 30;
+                        currYL += 30;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+        }
+
+        public void AddNotesPage()
+        {
+            try
+            {
+                int currYV = 100, currYL = 130;
+                page = doc.AddPage();
+                xg = XGraphics.FromPdfPage(page);
+                NoteModel currNote = new NoteModel();
+
+                xg.DrawString("Additional Notes", headerFont, XBrushes.Black,
+                    new XPoint(100, currYV));
+
+                xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, currYL),
+                        new XPoint(400, currYL + 20));
+
+                for(int x = 0; x < quote.Notes.Count; x++)
+                {
+                    currNote = quote.Notes[x];
+                    xg.DrawString(currNote.NoteHeader, font, XBrushes.Black,
+                        new XPoint(100, currYV));
+                    xg.DrawString(currNote.NoteContent, font, XBrushes.Black,
+                        new XPoint(250, currYV));
+
+                    xg.DrawLine(new XPen(XColor.FromArgb(50, 30, 200)), new XPoint(100, currYL),
+                        new XPoint(400, currYL + 10));
+
+                    currYV += 30;
+                    currYL += 30;
+                }
+
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("ERROR: " + e.Message);
+            }           
+        }
+
+        public void DownloadPDF()
+        {
+            try
+            {
+                doc.Save(@"C:\Users\user\Desktop\" + this.quote.QuoteTitle.ToUpper().Trim()+".pdf");
+                //doc.Save(memStream, false);
+                //HttpResponse.Clear();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("ERROR: " + e.Message);
+            }
+        }
     }
 }

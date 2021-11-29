@@ -22,6 +22,16 @@
     <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="~/js/SaveAsFile.js"></script>
+
+    <script>
+            var link = document.createElement('a');
+            link.download = fileName;
+            link.href = 'data:application/octet-stream;base64' + bytesBase64;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+    </script>
+
 </body>
 
 </html>
