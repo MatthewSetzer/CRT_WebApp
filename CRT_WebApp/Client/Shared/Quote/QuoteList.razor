@@ -1,30 +1,54 @@
 ﻿@inject IQuoteService QuoteService
-<h3>QuoteList</h3>
-    <div class="col-6">
+<div class="container">
+    <div class="row">
+        <div class="table-title">
+            <h2>Quote <b>Details</b></h2>
+        </div>
+    </div>
+    <div class="row">
         <table class="table">
-            <thead class="thead-light">
+            <thead>
                 <tr>
-                    <th scope="col">Quote Name</th>
-                    <th scope="col">Creation date</th>
-                    <th scope="col">Total</th>
+                    <th>Quote Name</th>
+                    <th>Creation Date</th>
+                    <th>Quote Creator</th>
+                    <th>Total</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in QuoteService.Quotes)
                 {
-                    <tr>
-                        <td>@item.QuoteTitle</td>
-                        <td>@item.QuoteDate</td>
-                        <td>$@item.Total</td>
-                    </tr>
+                <tr>
+                    <td>@item.QuoteTitle</td>
+                    <td>@item.QuoteDate</td>
+                    <td>@item.QuoteUser</td>
+                    <td>$@item.Total</td>
+                    <td>
+                        <ul class="list-inline m-0">
+                            <li class="list-inline-item">
+                                <button type="button" class="btn btn-warning btn-sm">
+                                    Edit
+                                </button>
+                            </li>
+                            <AuthorizeView Roles="Admin">
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-danger btn-sm">
+                                        Remove
+                                    </button>
+                                </li>
+                            </AuthorizeView>
+                        </ul>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>
-
-        
-
     </div>
-
+    <div class="row">
+        <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
+    </div>
+</div>
 @code {
 
     protected override void OnInitialized()
