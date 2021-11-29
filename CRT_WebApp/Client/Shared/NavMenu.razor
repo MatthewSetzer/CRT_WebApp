@@ -23,20 +23,22 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="createsurvey">
-                <span class="oi oi-file" aria-hidden="true"></span> Create Survey
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
             <NavLink class="nav-link" href="createquote">
                 <span class="oi oi-spreadsheet" aria-hidden="true"></span> Create Quote
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="adminportal">
-                <span class="oi oi-person" aria-hidden="true"></span> Admin Portal
+            <NavLink class="nav-link" href="createsurvey">
+                <span class="oi oi-file" aria-hidden="true"></span> Create Survey
             </NavLink>
         </li>
+        <AuthorizeView Roles="Admin">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="adminportal">
+                    <span class="oi oi-person" aria-hidden="true"></span> Admin Portal
+                </NavLink>
+            </li>
+        </AuthorizeView>
     </ul>
 </div>
 
