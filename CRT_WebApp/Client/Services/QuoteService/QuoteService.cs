@@ -82,6 +82,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         public async Task SoftDeleteQuoteByID(QuoteModel quoteModel)
         {
             await _http.PostAsJsonAsync("api/Quote/SoftDelete", quoteModel);
+            OnChange.Invoke();
         }
 
         /// <summary>
@@ -89,9 +90,9 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task DeleteQuote(int id)
+        public async Task DeleteQuote(QuoteModel quote)
         {
-            await _http.DeleteAsync($"api/Quote/DeleteQuote/{id}");
+            await _http.PostAsJsonAsync("api/Quote/DeleteQuote", quote);
         }
 
     }

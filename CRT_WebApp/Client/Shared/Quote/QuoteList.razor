@@ -40,7 +40,7 @@
                                 </li>
                                 <AuthorizeView Roles="Admin">
                                     <li class="list-inline-item">
-                                        <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item.Id)">
+                                        <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item)">
                                             Remove
                                         </button>
                                     </li>
@@ -65,7 +65,7 @@
 
     protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
     int deleteID;
-
+    private QuoteModel _quote;
     protected override void OnInitialized()
     {
         QuoteService.OnChange += StateHasChanged;
@@ -78,9 +78,10 @@
         QuoteService.OnChange -= StateHasChanged;
     }
 
-    public void DeleteClick(int id)
+    public void DeleteClick(QuoteModel quote)
     {
-        deleteID = id;
+        deleteID = quote.Id;
+        _quote = quote;
         DeleteConfirmation.Show();
     }
 
@@ -88,7 +89,9 @@
     {
         if (deleteConfirmed)
         {
-            await QuoteService.DeleteQuote(deleteID);
+            await QuoteService.DeleteQuote(_quote);
+            
         }
+        await QuoteService.LoadAllQuotes();
     }
 }

@@ -75,13 +75,16 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quoteID"></param>
         /// <returns></returns>
-        public async Task DeleteQuote(int id)
+        public async Task DeleteQuoteByID(int id)
         {
-            var product = _context.Quotes.FirstOrDefault(x => x.Id == id);
-            _context.Quotes.Remove(product);
+            var quote = _context.Quotes.FirstOrDefault(x => x.Id == id);//lazy loads quote? 
+            Console.WriteLine("Quotes sub groups"+quote.SubGroups.Count);
+            _context.Quotes.Remove(quote);//todo need to check this out
 
             await _context.SaveChangesAsync();
         }
+        //---------------------------------------------------------------------------------------------------------//
+
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -150,7 +153,17 @@ namespace CRT_WebApp.Server.Services.QuoteService
         {
             return await _context.Quotes.Where(x=>x.QuoteState == state).Where(u => u.QuoteUser.Equals(UserID)).ToListAsync();
         }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Deletes quote from db using model
+        /// </summary>
+        /// <param name="model">The quote</param>
+        public async Task DeleteQuote(QuoteModel model)
+        {
+            _context.Remove(model);
 
+            await _context.SaveChangesAsync();
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

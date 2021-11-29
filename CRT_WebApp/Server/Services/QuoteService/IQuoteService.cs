@@ -38,7 +38,13 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// Deletes quote in database using its ID as reference
         /// </summary>
         /// <param name="quoteID">The quotes ID</param>
-        Task DeleteQuote(int quoteID);
+        Task DeleteQuoteByID(int quoteID);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Deletes quote in database using model
+        /// </summary>
+        /// <param name="model">The model to remove</param>
+        Task DeleteQuote(QuoteModel model);
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
