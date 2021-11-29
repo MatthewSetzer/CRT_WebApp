@@ -1,4 +1,5 @@
-﻿using CRT_WebApp.Shared.DTO;
+﻿using CRT_WebApp.Server.Models;
+using CRT_WebApp.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,8 +9,8 @@ namespace CRT_WebApp.Server.Services.UserService
     //---------------------------------------------------------------------------------------------------------//
     public class UserService : IUserService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        public UserService(UserManager<IdentityUser> userManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public UserService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -32,7 +33,7 @@ namespace CRT_WebApp.Server.Services.UserService
         /// Returns a list of all the users
         /// </summary>
         /// <returns>a list of Identity users.</returns>
-        public async Task<List<IdentityUser>> GetAllUsers()
+        public async Task<List<ApplicationUser>> GetAllUsers()
         {
             return await _userManager.Users.ToListAsync();
         }
@@ -45,7 +46,7 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <returns>The result from idenitity (success errors etc)</returns>
         public async Task<IdentityResult> RegisterUser(UserRegistrationDto user)
         {
-            var newUser = new IdentityUser { UserName = user.Email, Email = user.Email };
+            var newUser = new ApplicationUser { UserName = user.Email, Email = user.Email };
 
             var result = await _userManager.CreateAsync(newUser, user.Password);
             return result;

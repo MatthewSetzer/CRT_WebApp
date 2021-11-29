@@ -66,7 +66,7 @@ namespace CRT_WebApp.Server
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<IItemService, ItemService>();
             //User
-            services.AddSingleton<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

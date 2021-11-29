@@ -1,4 +1,5 @@
-﻿using CRT_WebApp.Shared.DTO;
+﻿using CRT_WebApp.Server.Models;
+using CRT_WebApp.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace CRT_WebApp.Server.Services.UserService
         /// Gets all registered users
         /// </summary>
         /// <returns>A list of all registered users</returns>
-        Task<List<IdentityUser>> GetAllUsers();
+        Task<List<ApplicationUser>> GetAllUsers();
 
     }
 }
