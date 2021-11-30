@@ -10,8 +10,10 @@
         <EditForm Model="@Item" OnValidSubmit="@addItem">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <label>Select Assembly Item:</label>
             <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Select Assembly Item: </span>
+                </div>
                 <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description />
                 <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
                     @for (var i = 0; i < ItemService.Items.Count; i++)
@@ -41,7 +43,7 @@
             </div>
 
             <button class="btn btn-primary" type="submit">Add Item</button>
-            
+
         </EditForm>
     </div>
 
@@ -50,12 +52,16 @@
         <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <label>Sub Group Title: </label>
             <div class="input-group mb-3">
-                <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
-                <button class="btn btn-success" type="submit">Add Sub-Group</button>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Sub Group Title:</span>
+                </div>
+                <InputText class="form-control" type="text" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" @bind-Value="SubGroup.SubGroupTitle" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Add Sub-Group</button>
+                </div>
             </div>
-
         </EditForm>
         <table class="table table-striped">
             <thead class="thead-light">
@@ -78,15 +84,11 @@
                 }
             </tbody>
         </table>
-
         <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
-
-
-
     </div>
-
 </div>
-<br /><br />
+<br />
+<br />
 <div>
     <SubGroupList></SubGroupList>
 </div>
@@ -116,6 +118,8 @@
         AssemblyItemService.AddAssemblyItemToList(assemblyItem);
 
         SubGroup.SubTotal += Item.Rate * Item.Quantity;
+
+        Item = new AssemblyItemViewModel();
     }
     //---------------------------------------------------------------------------------------------------------//
     private void addSubGroup()
