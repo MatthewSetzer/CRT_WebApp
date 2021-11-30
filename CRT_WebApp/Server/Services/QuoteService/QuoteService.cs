@@ -77,9 +77,11 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task DeleteQuoteByID(int id)
         {
-            var quote = _context.Quotes.FirstOrDefault(x => x.Id == id);//lazy loads quote? 
-            Console.WriteLine("Quotes sub groups"+quote.SubGroups.Count);
-            _context.Quotes.Remove(quote);//todo need to check this out
+            var quote = _context.Quotes.OrderBy(e => e.QuoteTitle).Include(e => e.SubGroups)
+                .Include(e => e.Notes)
+                .Include(e => e.Images).First();
+            
+            _context.Quotes.Remove(quote);
 
             await _context.SaveChangesAsync();
         }

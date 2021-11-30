@@ -89,7 +89,7 @@
     {
         if (deleteConfirmed)
         {
-            await QuoteService.DeleteQuote(_quote);
+            await QuoteService.SoftDeleteQuoteByID(_quote);
             
         }
         await QuoteService.LoadAllQuotes();

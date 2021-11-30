@@ -61,7 +61,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task DeleteQuote(QuoteModel quote);
+        Task DeleteQuote(int id);
 
     }
 }

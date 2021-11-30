@@ -63,10 +63,9 @@ namespace CRT_WebApplication.Server.Controllers
         /// </summary>
         /// <param name="quoteModel"></param>
         [HttpPost("DeleteQuote")]
-        public async Task DeleteQuote(QuoteModel quote)
+        public async Task DeleteQuote(int id)
         {
-
-            await _quoteService.SoftDeleteQuote(quote.Id);
+            await _quoteService.DeleteQuoteByID(id);
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -121,10 +120,7 @@ namespace CRT_WebApplication.Server.Controllers
         public async Task<ActionResult<QuoteModel>> GetQuoteById(int Id)
         {
             return Ok(await _quoteService.FindQuoteByID(Id));
-        }
-
-
-            
+        }            
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

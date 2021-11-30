@@ -90,9 +90,9 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task DeleteQuote(QuoteModel quote)
+        public async Task DeleteQuote(int id)
         {
-            await _http.PostAsJsonAsync("api/Quote/DeleteQuote", quote);
+            await _http.PostAsJsonAsync("api/Quote/DeleteQuote", id);
         }
 
     }
