@@ -1,5 +1,7 @@
 ﻿@inject IQuoteService QuoteService
-
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
+@inject NavigationManager Navigation
 
 <div class="container">
     <div class="row">
@@ -34,14 +36,14 @@
                                     </button>
                                 </li>
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-warning btn-sm">
+                                    <button type="button" class="btn btn-warning btn-sm" @onclick="() => UpdateItem(item)">
                                         Edit
                                     </button>
                                 </li>
                                 <AuthorizeView Roles="Admin">
                                     <li class="list-inline-item">
                                         <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item)">
-                                            Remove
+                                            Soft Delete
                                         </button>
                                     </li>
                                 </AuthorizeView>
@@ -64,7 +66,6 @@
 </Confirm>
 
 @code {
-
     protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
     int deleteID;
     private QuoteModel _quote;
@@ -87,12 +88,33 @@
         DeleteConfirmation.Show();
     }
 
+    public void UpdateItem(QuoteModel quote)
+    {
+        foreach (var sub in quote.SubGroups)
+        {
+            foreach (var item in sub.ListOfItems)
+            {
+                AssemblyItemModel assemblyItem = new AssemblyItemModel
+                {
+                    Description = item.Description,
+                    Rate = item.Rate,
+                    NumberOfUnits = item.NumberOfUnits
+                };
+                AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+            }
+
+            AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
+        }
+
+        Navigation.NavigateTo("createquote");
+    }
+
     protected async Task ConfirmDelete_Click(bool deleteConfirmed)
     {
         if (deleteConfirmed)
         {
             await QuoteService.SoftDeleteQuoteByID(_quote);
-            
+
         }
         await QuoteService.LoadAllQuotes();
     }

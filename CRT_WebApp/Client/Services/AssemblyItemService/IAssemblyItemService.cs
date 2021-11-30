@@ -43,6 +43,14 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         /// </summary>
         /// <param name="Title">The title of the Subgroup of assembly items</param>
         void AddAssemblyListToSubGroup(string Title);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Adds the list of assembly items to the subgroup service from edit
+        /// </summary>
+        /// <param name="Title">The title of the Subgroup of assembly items</param>
+        void AddAssemblyListToSubGroupFromEdit(string Title);
+
+
 
     }
 }
