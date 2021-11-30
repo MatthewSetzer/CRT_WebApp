@@ -1,4 +1,6 @@
 ﻿@inject IQuoteService QuoteService
+
+
 <div class="container">
     <div class="row">
         <div class="table-title">
@@ -19,28 +21,33 @@
             <tbody>
                 @foreach (var item in QuoteService.Quotes)
                 {
-                <tr>
-                    <td>@item.QuoteTitle</td>
-                    <td>@item.QuoteDate</td>
-                    <td>@item.QuoteUser</td>
-                    <td>$@item.Total</td>
-                    <td>
-                        <ul class="list-inline m-0">
-                            <li class="list-inline-item">
-                                <button type="button" class="btn btn-warning btn-sm">
-                                    Edit
-                                </button>
-                            </li>
-                            <AuthorizeView Roles="Admin">
+                    <tr>
+                        <td>@item.QuoteTitle</td>
+                        <td>@item.QuoteDate</td>
+                        <td>@item.QuoteUser</td>
+                        <td>$@item.Total</td>
+                        <td>
+                            <ul class="list-inline m-0">
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-danger btn-sm">
-                                        Remove
+                                    <button type="button" class="btn btn-success btn-sm">
+                                        Print
                                     </button>
                                 </li>
-                            </AuthorizeView>
-                        </ul>
-                    </td>
-                </tr>
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-warning btn-sm">
+                                        Edit
+                                    </button>
+                                </li>
+                                <AuthorizeView Roles="Admin">
+                                    <li class="list-inline-item">
+                                        <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item)">
+                                            Remove
+                                        </button>
+                                    </li>
+                                </AuthorizeView>
+                            </ul>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -49,8 +56,16 @@
         <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
     </div>
 </div>
+
+<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete_Click"
+         ConfirmationMessage=@($"Are you sure you want to delete \"{deleteID}\"")>
+</Confirm>
+
 @code {
 
+    protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
+    int deleteID;
+    private QuoteModel _quote;
     protected override void OnInitialized()
     {
         QuoteService.OnChange += StateHasChanged;
@@ -61,5 +76,22 @@
     public void Dispose()
     {
         QuoteService.OnChange -= StateHasChanged;
+    }
+
+    public void DeleteClick(QuoteModel quote)
+    {
+        deleteID = quote.Id;
+        _quote = quote;
+        DeleteConfirmation.Show();
+    }
+
+    protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await QuoteService.SoftDeleteQuoteByID(_quote);
+            
+        }
+        await QuoteService.LoadAllQuotes();
     }
 }

@@ -56,6 +56,12 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// <param name="id">The id of the Quote to be soft deleted</param>
         Task SoftDeleteQuoteByID(QuoteModel quoteModel);
 
+        /// <summary>
+        /// Deletes quote from the db
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteQuote(int id);
 
     }
 }
