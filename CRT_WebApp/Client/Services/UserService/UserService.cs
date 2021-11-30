@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using Microsoft.AspNetCore.Authorization;
 namespace CRT_WebApp.Client.Services.UserService
 {
     public class UserService : IUserService

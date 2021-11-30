@@ -1,7 +1,219 @@
 ﻿@page "/adminportal"
 @attribute [Authorize(Roles = "Admin")]
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<IdentityUser> _UserManager
+@inject RoleManager<IdentityRole> _RoleManager
+
+
 <h3>AdminPortal</h3>
 
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in UserService.Users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <button type="button" name="btnRemoveUser" class="btn-primary"
+                                @onclick="() => EditUser(user.Id)">
+                            Delete
+                        </button>
+                    </td>
+
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+    @if (showPopup == true)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit User</h3>
+                        <!-- Close popup button-->
+                        <button type="button" class="close" @onclick="ClosePopup">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <!-- edit form for user-->
+                    <div class="modal-body">
+                        <!--display ID only if not new user-->
+                        @if (objUser.Id != "")
+                        {
+                            <p>@objUser.Id</p>
+                        }
+                        <!-- allow edit only if new user-->
+                        @if (objUser.Id != "")
+                        {
+                            <p>@objUser.UserName</p>
+                        }
+                        else
+                        {
+                            <input class="form-control" type="text"
+                                   placeholder="UserName"
+                                   @bind="objUser.UserName" />
+                        }
+                        <input class="form-control" type="text"
+                               placeholder="Email"
+                               @bind="objUser.Email" />
+                        <input class="form-control" type="password"
+                               placeholder="Password"
+                               @bind="objUser.PasswordHash" />
+                        <select class="form-control"
+                                @bind="@currUserRole">
+                            @foreach (var option in Options)
+                            {
+                                <option value="@option">
+                                    @option
+                                </option>
+                            }
+                        </select>
+                        <br /> <br />
+                        <!--Save user button-->
+                        <button class="btn btn-primary" @onclick="SaveUser">Save</button>
+                        <!-- show delete button only if not new record-->
+                        @if (objUser.Id != "")
+                        {
+                            <button class="btn btn-primary" @onclick="DeleteUser">Delete</button>
+                        }
+                        <br />
+                        <span style="color:red">@errString</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-success" @onclick="AddUser">Add User</button>
+</div>
+
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    string ADMIN_ROLE = "admin";
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    private IdentityUser objUser = new IdentityUser();
+    string currUserRole { get; set; } = "User";
+    List<string> Options = new List<string>() { "User", "Admin" };
+    List<IdentityUser> Users = new List<IdentityUser>();
+    string errString = "";
+    bool showPopup = false;
+
+    private void EditUser(string userID)
+    {
+
+    }
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            UserService.OnChange += StateHasChanged;
+            await UserService.LoadAllUsers();
+            CurrentUser = (await authenticationStateTask).User;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("initialization error");
+        }
+    }
+
+    public void Dispose()
+    {
+        UserService.OnChange -= StateHasChanged;
+    }
+
+    public void ShowUsers()
+    {
+        errString = "";
+
+    }
+
+    public void AddUser()
+    {
+        objUser = new IdentityUser();
+        objUser.PasswordHash = "*****";
+        objUser.Id = "";
+        showPopup = true;
+    }
+
+
+    public async Task SaveUser()
+    {
+        try
+        {
+            if (objUser.Id != "")
+            {
+
+            }
+            else
+            {
+                var newUser = new IdentityUser
+                {
+                    UserName = objUser.UserName,
+                    Email = objUser.Email
+                };
+
+                var CreateResult = await _UserManager.CreateAsync(newUser, objUser.PasswordHash);
+                if (CreateResult.Succeeded == false)
+                {
+                    if (CreateResult.Errors.FirstOrDefault() != null)
+                    {
+                        errString = CreateResult.Errors.FirstOrDefault().Description;
+                    }
+                    else
+                    {
+                        errString = "No errors";
+                    }
+                    return;
+                }
+                else
+                {
+                    if (currUserRole.Equals(ADMIN_ROLE))
+                    {
+                        await _UserManager.AddToRoleAsync(newUser, ADMIN_ROLE);
+                    }
+                }
+            }
+            showPopup = false;
+            Users = UserService.Users;
+        }
+        catch (Exception e)
+        {
+            errString = e.GetBaseException().Message;
+        }
+    }
+
+    public async Task EditUser(IdentityUser _IdentityUser)
+    {
+
+    }
+
+    public async Task DeleteUser()
+    {
+
+    }
+
+    public void ClosePopup()
+    {
+        showPopup = false;
+    }
 
 }
