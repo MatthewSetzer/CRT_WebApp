@@ -16,15 +16,20 @@
     </div>
     <div class="col-4">
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
+                </div>
+                <InputText class="form-control" type="text" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Create Quote</button>
+                </div>
+            </div>
 
-            <label>Quote Name: </label>
-            <div class="input-group mb-3">
-                <InputText @bind-Value="quote.QuoteTitle"></InputText>
-            </div>
-            <div class="input-group mb-3">
-                <label>Quote Total: @SubGroupService.GetSubGroupsTotal()</label>
-            </div>
-            <button class="btn btn-success" type="submit">Create Quote</button>
+            <label>
+                Quote Total: $@SubGroupService.GetSubGroupsTotal()
+            </label>
         </EditForm>
     </div>
 </div>
@@ -59,11 +64,14 @@
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
             SubGroups = SubGroupService.GetSubGroupList(),
-            Total = SubGroupService.GetSubGroupsTotal(),
+            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
             IsDeleted = false
         };
 
         QuoteService.AddQuote(newQuote);
+
+        quote = new QuoteViewModel();
+        SubGroupService.SubGroups.Clear();
     }
 
     private async Task GetUser()

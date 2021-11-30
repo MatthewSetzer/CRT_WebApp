@@ -36,7 +36,7 @@ namespace CRT_WebApp.Client.Services.SubGroupService
             return SubGroups;
         }
         //---------------------------------------------------------------------------------------------------------//s
-        public double GetSubGroupsTotal()
+        public string GetSubGroupsTotal()
         {
             double Total = 0;
             foreach (var subGroup in SubGroups)
@@ -44,7 +44,7 @@ namespace CRT_WebApp.Client.Services.SubGroupService
                 Total += subGroup.SubTotal;
             }
 
-            return Total;
+            return Total.ToString("0.00");
         }
 
         //---------------------------------------------------------------------------------------------------------//
