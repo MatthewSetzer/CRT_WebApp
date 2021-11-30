@@ -1,8 +1,10 @@
 ﻿@inject IItemService ItemService
 @inject ISubGroupService SubGroupService
 @inject IAssemblyItemService AssemblyItemService
+@inject IModalService modal
 @using CRT_WebApp.Shared
 @using CRT_WebApp.Client.Shared.SubGroup
+@using CRT_WebApp.Client.Shared.Notes
 @implements IDisposable;
 
 <div class="row">
@@ -40,11 +42,11 @@
                 <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
             </div>
 
-            <button class="btn btn-primary" type="submit">Add Item</button>
+            <button class="btn btn-primary" type="submit">Add Item</button> 
             
         </EditForm>
     </div>
-
+    
     <div class="col-6">
         <table class="table table-striped">
             <thead class="thead-light">
@@ -78,16 +80,23 @@
                 <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
             </div>
             <button class="btn btn-success" type="submit">Add Sub-Group</button>
+           
         </EditForm>
 
 
     </div>
-
+    <br /><br /><br />
 </div>
+      
 <br /><br />
+ <button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))"  class="btn btn-danger">Add Notes +</button>
+ <br /><br />
 <div>
     <SubGroupList></SubGroupList>
+   <NotGroupList></NotGroupList>
 </div>
+
+
 
 @code {
     private AssemblyItemViewModel Item = new();
@@ -95,6 +104,8 @@
 
     private SubGroupViewModel SubGroup = new();
     private List<SubGroupModel> SubGroups = new();
+
+   
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()

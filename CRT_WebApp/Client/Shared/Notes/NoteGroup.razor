@@ -1,0 +1,31 @@
+﻿@using CRT_WebApp.Shared
+@inject INotesService NotesService
+@implements IDisposable;
+<Accordion Title=@noteModel.NoteHeader>
+
+    <table class="table table-striped">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Description</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+           
+                <tr>
+                    <td>@noteModel.NoteContent</td>
+                </tr>
+            
+        </tbody>
+    </table>
+</Accordion>
+
+@code {
+    [Parameter]
+    public NoteModel noteModel{ get; set; }
+
+    public void Dispose()
+    {
+        
+    }
+}
