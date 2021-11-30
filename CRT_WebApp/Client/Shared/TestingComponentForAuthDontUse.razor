@@ -1,0 +1,32 @@
+﻿@inject IUserService UserService
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in UserService.Users)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Email</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    protected override void OnInitialized()
+    {
+        UserService.OnChange += StateHasChanged;
+        UserService.LoadAllUsers();
+    }
+
+
+    public void Dispose()
+    {
+        UserService.OnChange -= StateHasChanged;
+    }
+}

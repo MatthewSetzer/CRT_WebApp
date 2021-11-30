@@ -5,6 +5,7 @@ using CRT_WebApp.Client.Services.ItemService;
 using CRT_WebApp.Client.Services.NotesService;
 using CRT_WebApp.Client.Services.QuoteService;
 using CRT_WebApp.Client.Services.SubGroupService;
+using CRT_WebApp.Client.Services.UserService;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,7 @@ namespace CRT_WebApp.Client
             builder.Services.AddScoped<ISubGroupService, SubGroupService>();
             builder.Services.AddScoped<INotesService, NotesService>();
             builder.Services.AddScoped<IAssemblyItemService, AssemblyItemService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             
             await builder.Build().RunAsync();
         }
