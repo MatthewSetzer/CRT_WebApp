@@ -41,7 +41,11 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns>A list of type Quote.</returns>
         public async Task<List<QuoteModel>> GetQuotes()
         {
-            return await _context.Quotes.Where(q => q.IsDeleted == false).ToListAsync();
+            return await _context.Quotes.Where(q => q.IsDeleted == false)
+                .Include(x => x.SubGroups).ThenInclude(x => x.ListOfItems)
+                .Include(x => x.Notes)
+                .Include(x => x.Images)
+                .ToListAsync();
         }
 
         //---------------------------------------------------------------------------------------------------------//

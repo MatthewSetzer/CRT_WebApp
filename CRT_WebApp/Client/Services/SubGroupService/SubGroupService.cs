@@ -24,6 +24,10 @@ namespace CRT_WebApp.Client.Services.SubGroupService
             SubGroups.Add(subGroup);
             OnChange.Invoke();
         }
+        public void AddSubGroupToListFromEdit(SubGroupModel subGroup)
+        {
+            SubGroups.Add(subGroup);
+        }
         //---------------------------------------------------------------------------------------------------------//
         public void ClearSubGroupList()
         {
