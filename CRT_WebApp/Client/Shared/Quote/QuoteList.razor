@@ -90,22 +90,23 @@
 
     public void UpdateItem(QuoteModel quote)
     {
-        foreach (var sub in quote.SubGroups)
-        {
-            foreach (var item in sub.ListOfItems)
-            {
-                AssemblyItemModel assemblyItem = new AssemblyItemModel
-                {
-                    Description = item.Description,
-                    Rate = item.Rate,
-                    NumberOfUnits = item.NumberOfUnits
-                };
-                AssemblyItemService.AddAssemblyItemToList(assemblyItem);
-            }
+        //QuoteService.Quote = quote;
+        //foreach (var sub in quote.SubGroups)
+        //{
+        //    foreach (var item in sub.ListOfItems)
+        //    {
+        //        AssemblyItemModel assemblyItem = new AssemblyItemModel
+        //        {
+        //            Description = item.Description,
+        //            Rate = item.Rate,
+        //            NumberOfUnits = item.NumberOfUnits
+        //        };
+        //        AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+        //    }
 
-            AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
-        }
-
+        //    AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
+        //}
+        QuoteService.SelectQuoteToBeUpdated(quote);
         Navigation.NavigateTo("createquote");
     }
 

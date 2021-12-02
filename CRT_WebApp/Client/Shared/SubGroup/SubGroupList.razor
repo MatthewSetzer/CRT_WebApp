@@ -18,6 +18,11 @@
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
+                    @if(QuoteService.Quote !=null)
+                    {
+                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
+
+                    }
                     <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
                 </div>
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
