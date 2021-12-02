@@ -16,14 +16,10 @@
         }
     </div>
     <div class="col-4">
+
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    @if(QuoteService.Quote !=null)
-                    {
-                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle + id: @QuoteService.Quote.Id</span>
-
-                    }
                     <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
                 </div>
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
@@ -40,7 +36,14 @@
                 Quote Total: $@SubGroupService.GetSubGroupsTotal()
             </label>
         </EditForm>
+
+
     </div>
+    @if (QuoteService.Quote != null)
+    {
+        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle + id: @QuoteService.Quote.Id</span>
+
+    }
 </div>
 
 
@@ -95,8 +98,9 @@
     {
         QuoteModel newQuote = new QuoteModel
         {
-            Id = quote.Id,
-            QuoteTitle = quote.QuoteTitle,
+            //Id = quote.Id,
+            Id = QuoteService.Quote.Id,
+            QuoteTitle = QuoteService.Quote.QuoteTitle,
             QuoteState = true,
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
@@ -104,6 +108,18 @@
             Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
             IsDeleted = false
         };
+        try
+        {
+            QuoteService.UpdateQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
+
+            toastService.ShowSuccess("Quote Updated", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
     }
 
     private async Task GetUser()

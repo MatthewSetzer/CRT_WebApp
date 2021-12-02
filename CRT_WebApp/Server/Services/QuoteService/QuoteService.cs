@@ -81,7 +81,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task DeleteQuoteByID(int id)
         {
-            var quote = _context.Quotes.OrderBy(e => e.QuoteTitle).Include(e => e.SubGroups)
+            var quote = _context.Quotes.OrderBy(e => e.QuoteTitle).Include(e => e.SubGroups).ThenInclude(e => e.ListOfItems)
                 .Include(e => e.Notes)
                 .Include(e => e.Images).First();
             
@@ -109,10 +109,12 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quote"></param>
         /// <returns></returns>
-        public async Task<int> UpdateQuote(QuoteModel quote)
+        public async Task UpdateQuote(QuoteModel quote)
         {
+            Console.WriteLine("UpdaTED QUOTE ID "+ quote.Id);
+            //_context.Entry(quote).State = EntityState.Modified;
             _context.Update(quote);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -165,7 +167,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <param name="model">The quote</param>
         public async Task DeleteQuote(QuoteModel model)
         {
-            _context.Remove(model);
+            _context.Quotes.Remove(model);
 
             await _context.SaveChangesAsync();
         }
