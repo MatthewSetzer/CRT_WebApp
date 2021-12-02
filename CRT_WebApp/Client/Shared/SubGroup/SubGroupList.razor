@@ -25,6 +25,9 @@
                 <div class="input-group-append">
                     <button class="btn btn-success" type="submit">Create Quote</button>
                 </div>
+                <div class="input-group-append">
+                    <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
+                </div>
             </div>
 
             <label>
@@ -72,6 +75,21 @@
 
         quote = new QuoteViewModel();
         SubGroupService.SubGroups.Clear();
+    }
+
+    public void updateQuote()
+    {
+        QuoteModel newQuote = new QuoteModel
+        {
+            Id = quote.Id,
+            QuoteTitle = quote.QuoteTitle,
+            QuoteState = true,
+            QuoteDate = DateTime.Now,
+            QuoteUser = userID,
+            SubGroups = SubGroupService.GetSubGroupList(),
+            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
+            IsDeleted = false
+        };
     }
 
     private async Task GetUser()

@@ -111,7 +111,6 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task<int> UpdateQuote(QuoteModel quote)
         {
-            
             _context.Update(quote);
             return await _context.SaveChangesAsync();
         }
