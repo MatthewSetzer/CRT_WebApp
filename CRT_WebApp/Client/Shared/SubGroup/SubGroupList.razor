@@ -1,5 +1,6 @@
 ﻿@inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
+@inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using CRT_WebApp.Shared
@@ -71,10 +72,18 @@
             IsDeleted = false
         };
 
-        QuoteService.AddQuote(newQuote);
+        try
+        {
+            QuoteService.AddQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
 
-        quote = new QuoteViewModel();
-        SubGroupService.SubGroups.Clear();
+            toastService.ShowSuccess("Quote Created", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
     }
 
     public void updateQuote()
