@@ -31,9 +31,11 @@
                         <td>
                             <ul class="list-inline m-0">
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-success btn-sm">
+                                    <NavLink href="printpage">
+                                    <button type="button" class="btn btn-success btn-sm" @onclick="() => PrintItem(item)">
                                         Print
                                     </button>
+                                    </NavLink>
                                 </li>
                                 <li class="list-inline-item">
                                     <button type="button" class="btn btn-warning btn-sm" @onclick="() => UpdateItem(item)">
@@ -92,6 +94,27 @@
     {
         QuoteService.SelectQuoteToBeUpdated(quote);
         Navigation.NavigateTo("createquote");
+    }
+
+    public void PrintItem(QuoteModel quote)
+    {
+        foreach (var sub in quote.SubGroups)
+        {
+            foreach (var item in sub.ListOfItems)
+            {
+                AssemblyItemModel assemblyItem = new AssemblyItemModel
+                {
+                    Description = item.Description,
+                    Rate = item.Rate,
+                    NumberOfUnits = item.NumberOfUnits
+                };
+                AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+            }
+
+            AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
+        }
+
+        Navigation.NavigateTo("printpage");
     }
 
     protected async Task ConfirmDelete_Click(bool deleteConfirmed)
