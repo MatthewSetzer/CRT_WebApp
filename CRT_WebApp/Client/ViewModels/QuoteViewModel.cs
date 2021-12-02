@@ -8,6 +8,7 @@ namespace CRT_WebApp.Client.ViewModels
 {
     public class QuoteViewModel
     {
+        public int Id { get; set; }
         [Required]
         public string QuoteTitle { get; set; }
         [Required]
