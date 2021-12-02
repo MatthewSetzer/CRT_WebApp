@@ -44,13 +44,6 @@ namespace CRT_WebApp.Server.Services.UserService
         /// </summary>
         /// <param name="user">The user to be registered</param>
         /// <returns>The result from idenitity (success errors etc)</returns>
-        //public async Task<IdentityResult> RegisterUser(UserRegistrationDto user)
-        //{
-        //    var newUser = new ApplicationUser { UserName = user.Email, Email = user.Email };
-        //    System.Console.WriteLine("user "+user.Email);
-        //    var result = await _userManager.CreateAsync(newUser, user.Password);
-        //    return result;
-        //}
 
         public async Task RegisterUser(UserDto user)
         {

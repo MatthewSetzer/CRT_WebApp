@@ -42,8 +42,9 @@ namespace CRT_WebApp.Client.Services.UserService
         Task RemoveRoleFromUser(string userID, string role);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
-        /// Gets all registered users
+        /// Deletes the user account with the specified account ID
+        /// <param name="userID">The id of the user to be deleted</param>
         /// </summary>
-        /// <returns>A list of all registered users</returns>
+        Task DeleteUser(string userID);
     }
 }

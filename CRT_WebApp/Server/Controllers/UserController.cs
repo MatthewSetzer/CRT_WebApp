@@ -19,7 +19,6 @@ namespace CRT_WebApp.Server.Controllers
     {
         //---------------------------------------------------------------------------------------------------------//
         private readonly IUserService _userService;
-        private JSRuntime jsRuntime;
 
         //private UserRegistrationDto registrationDto = new UserRegistrationDto();
         //---------------------------------------------------------------------------------------------------------//
@@ -56,6 +55,8 @@ namespace CRT_WebApp.Server.Controllers
             }
         }
 
+        //---------------------------------------------------------------------------------------------------------------//
+
         [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
         public async Task AddUser(UserDto user)
@@ -75,8 +76,31 @@ namespace CRT_WebApp.Server.Controllers
             //}
          
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("RemoveRole")]
+
+        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string userID, string roleID)
+        {
+            var result = await _userService.RemoveRoleFromUser(userID, roleID);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new RegistrationResponseDto { Errors = errors });
+            }
+            return Ok();
+        }
+
+        //---------------------------------------------------------------------------------------------------------------//
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteUser")]
+        public async Task DeleteUser(string userID)
+        {
+           //var result = await _userService.DeleteUser(userID);
+        }
     }
-    //---------------------------------------------------------------------------------------------------------------//
+
 
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

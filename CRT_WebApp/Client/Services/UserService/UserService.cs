@@ -18,9 +18,19 @@ namespace CRT_WebApp.Client.Services.UserService
             _http = http;
         }
         public List<IdentityUser> Users { get; set; } = new List<IdentityUser>();
-        private JSRuntime jsRuntime;
 
         public event Action OnChange;
+
+        public struct UserRole
+        {
+            public string UserID { get; set; }
+            public string RoleID { get; set; }
+            public UserRole(string userID, string roleID)
+            {
+                UserID = userID;
+                RoleID = roleID;
+            }
+        }
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -35,28 +45,24 @@ namespace CRT_WebApp.Client.Services.UserService
 
         public async Task RegisterUser(UserDto user)
         {
-            //try
-            //{
-            //   HttpResponseMessage responseMessage = await _http.PostAsJsonAsync("api/User/AddUser", user);
-            //    //await JSRuntime.InvokeAsync<string>("Alert", responseMessage.ToString());
-            //    OnChange.Invoke();
-            //}
-            //catch(Exception e)
-            //{
-            //    Console.WriteLine(e.ToString());
-            //    //await jsRuntime.InvokeAsync<string>("Alert", e.ToString());
-            //}
             await _http.PostAsJsonAsync("api/User/AddUser", user);
         }
 
-        public async Task AddRoleToUser(string userID, string role)
+        public async Task AddRoleToUser(string userID, string roleID)
         {
-            
+            UserRole userRole = new UserRole(userID, roleID);
+            await _http.PostAsJsonAsync("api/User/AddRole", userRole);
         }
 
-        public async Task RemoveRoleFromUser(string userID, string role)
+        public async Task RemoveRoleFromUser(string userID, string roleID)
         {
-            
+            UserRole userRole = new UserRole(userID, roleID);
+            await _http.PostAsJsonAsync("api/User/RemoveRole", userRole);
+        }
+
+        public async Task DeleteUser(string userID)
+        {
+            //await _http.DeleteAsync("api/User/DeleteUser", userID);
         }
     }
 }

@@ -76,27 +76,43 @@
                         <input class="form-control" type="password"
                                placeholder="Password"
                                @bind="objUser.PasswordHash" />
-                        <select class="form-control"
-                                @bind="@currUserRole">
-                            @foreach (var option in Options)
-                            {
-                                <option value="@option">
-                                    @option
-                                </option>
-                            }
-                        </select>
+                        <!--
+                    <select class="form-control"
+                            @bind="@currUserRole">
+                        @foreach (var option in Options)
+                        {
+                            <option value="@option">
+                                @option
+                            </option>
+                        }
+                    </select>
+                        -->
                         <br /> <br />
+
                         <!--Save user button-->
                         <button class="btn btn-primary" @onclick="() => CreateUser(objUser.Email, objUser.PasswordHash)">Save</button>
+
+                        <!-- edit form for user
+    <div class="modal-body">
+    <EditForm Model="@userRegistrationDto" OnValidSubmit="@CreateUser">
+        <div class="input-group mb-3">
+            <InputText class="form-control" placeholder="Email" @bind-Value="@userRegistrationDto.Email" />
+            <InputText class="form-control" placeholder="Password" @bind-Value="@userRegistrationDto.Password" />
+            <InputText class="form-control" placeholder="Confirm password" />
+        </div>
+    </EditForm>
+    <br /> <br />
+    Save user button
+    <button class="btn btn-success" type="submit">Save</button> -->
                         <!-- show delete button only if not new record-->
                         @if (objUser.Id != "")
                         {
-                            <button class="btn btn-primary" @onclick="DeleteUser">Delete</button>
+                            <button class="btn btn-primary" @onclick="@(() => DeleteUser(objUser.Id))">Delete</button>
                         }
                         <br />
                         <span style="color:red">@errString</span>
                     </div>
-                </div>
+                    </div>
             </div>
         </div>
     }
@@ -166,49 +182,25 @@
         errString = "";
 
     }
-    public void AssignRole()
+    public void AssignRole(string userID, string roleID)
     {
-        //if(objUser.)
+        UserService.AddRoleToUser(userID, roleID);
     }
 
-
-    //public async Task SaveUser()
-    //{
-    //    try
-    //    {           
-    //        await UserService.RegisterUser(userRegistrationDto);
-
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        errString = e.ToString();
-    //    }
-    //}
     public void SaveUser()
     {
-        Console.WriteLine(" save user email" + userRegistrationDto.Email);
-        //try
-        //{   
+        Console.WriteLine(" save user email: " + userRegistrationDto.Email);
+ 
         UserDto userDto = new UserDto();
         userDto.Email = userRegistrationDto.Email;
         userDto.Password = userRegistrationDto.Password;
         UserService.RegisterUser(userDto);
 
-        //}
-        //catch (Exception e)
-        //{
-        //    errString = e.ToString();
-        //}
     }
 
-    public async Task EditUser(IdentityUser _IdentityUser)
+    public async Task DeleteUser(string userID)
     {
-
-    }
-
-    public async Task DeleteUser()
-    {
-
+        await UserService.DeleteUser(userID);
     }
 
     public void ClosePopup()
