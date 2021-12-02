@@ -3,6 +3,7 @@
 @inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
+
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
@@ -27,11 +28,17 @@
                 <div class="input-group-append">
                     <button class="btn btn-success" type="submit">Create Quote</button>
                 </div>
-                <div class="input-group-append">
-                    <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
-                </div>
-            </div>
+                @if (QuoteService.Quote.Id != 0)
+                {
+                    <div class="input-group mb-3" style="margin-top: 5px">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
+                        </div>
+                    </div>
+                }
 
+            </div>
             <label>
                 Quote Total: $@SubGroupService.GetSubGroupsTotal()
             </label>
@@ -39,11 +46,7 @@
 
 
     </div>
-    @if (QuoteService.Quote != null)
-    {
-        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle + id: @QuoteService.Quote.Id</span>
 
-    }
 </div>
 
 
@@ -62,9 +65,10 @@
     }
 
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         SubGroupService.OnChange -= StateHasChanged;
+        quote = new QuoteViewModel();
     }
 
     public void addQuote()
@@ -98,7 +102,6 @@
     {
         QuoteModel newQuote = new QuoteModel
         {
-            //Id = quote.Id,
             Id = QuoteService.Quote.Id,
             QuoteTitle = QuoteService.Quote.QuoteTitle,
             QuoteState = true,

@@ -75,6 +75,12 @@ namespace CRT_WebApp.Client.Services.QuoteService
         void SelectQuoteToBeUpdated(QuoteModel quote);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Selects the quote to be printed and uses other services to load up the data
+        /// </summary>
+        /// <param name="quote">The quote that will be edited</param>
+        void SelectQuoteToBePrinted(QuoteModel quote);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Clears the current selected quote
         /// </summary>
         void ClearCurrentSelectedQuote();
