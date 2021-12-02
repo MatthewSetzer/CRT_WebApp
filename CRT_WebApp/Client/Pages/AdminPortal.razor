@@ -2,12 +2,12 @@
 @attribute [Authorize(Roles = "Admin")]
 @inject IUserService UserService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+<!--inject Applic-->
 
 @using Microsoft.AspNetCore.Authorization;
 @using Microsoft.AspNetCore.Identity;
-
-@inject UserManager<IdentityUser> _UserManager
-@inject RoleManager<IdentityRole> _RoleManager
+@using CRT_WebApp.Client.Services.UserService;
+@using CRT_WebApp.Shared.DTO;
 
 
 <h3>AdminPortal</h3>
@@ -87,7 +87,7 @@
                         </select>
                         <br /> <br />
                         <!--Save user button-->
-                        <button class="btn btn-primary" @onclick="SaveUser">Save</button>
+                        <button class="btn btn-primary" @onclick="() => CreateUser(objUser.Email, objUser.PasswordHash)">Save</button>
                         <!-- show delete button only if not new record-->
                         @if (objUser.Id != "")
                         {
@@ -116,9 +116,29 @@
     string errString = "";
     bool showPopup = false;
 
+    UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+    UserService userService;
+
     private void EditUser(string userID)
     {
 
+    }
+
+    private async void CreateUser(string email, string password)
+    {
+        this.userRegistrationDto.Email = email;
+        this.userRegistrationDto.Password = password;
+        this.userRegistrationDto.ConfirmPassword = password;
+
+        await SaveUser();
+    }
+
+    private void AddUser()
+    {
+        objUser = new IdentityUser();
+        objUser.PasswordHash = "*****";
+        objUser.Id = "";
+        showPopup = true;
     }
 
     protected override async void OnInitialized()
@@ -127,6 +147,7 @@
         {
             UserService.OnChange += StateHasChanged;
             await UserService.LoadAllUsers();
+            userService = new UserService(new HttpClient());
             CurrentUser = (await authenticationStateTask).User;
         }
         catch (Exception e)
@@ -145,59 +166,22 @@
         errString = "";
 
     }
-
-    public void AddUser()
+    public void AssignRole()
     {
-        objUser = new IdentityUser();
-        objUser.PasswordHash = "*****";
-        objUser.Id = "";
-        showPopup = true;
+        //if(objUser.)
     }
 
 
     public async Task SaveUser()
     {
         try
-        {
-            if (objUser.Id != "")
-            {
+        {           
+            await UserService.RegisterUser(userRegistrationDto);
 
-            }
-            else
-            {
-                var newUser = new IdentityUser
-                {
-                    UserName = objUser.UserName,
-                    Email = objUser.Email
-                };
-
-                var CreateResult = await _UserManager.CreateAsync(newUser, objUser.PasswordHash);
-                if (CreateResult.Succeeded == false)
-                {
-                    if (CreateResult.Errors.FirstOrDefault() != null)
-                    {
-                        errString = CreateResult.Errors.FirstOrDefault().Description;
-                    }
-                    else
-                    {
-                        errString = "No errors";
-                    }
-                    return;
-                }
-                else
-                {
-                    if (currUserRole.Equals(ADMIN_ROLE))
-                    {
-                        await _UserManager.AddToRoleAsync(newUser, ADMIN_ROLE);
-                    }
-                }
-            }
-            showPopup = false;
-            Users = UserService.Users;
         }
         catch (Exception e)
         {
-            errString = e.GetBaseException().Message;
+            errString = e.ToString();
         }
     }
 

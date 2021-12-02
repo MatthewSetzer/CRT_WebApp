@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace CRT_WebApp.Server.Controllers
 {
@@ -16,6 +19,9 @@ namespace CRT_WebApp.Server.Controllers
     {
         //---------------------------------------------------------------------------------------------------------//
         private readonly IUserService _userService;
+        private JSRuntime jsRuntime;
+
+        private UserRegistrationDto registrationDto = new UserRegistrationDto();
         //---------------------------------------------------------------------------------------------------------//
         public UserController(IUserService userService)
         {
@@ -50,6 +56,23 @@ namespace CRT_WebApp.Server.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddUser")]
+        public async Task AddUser()
+        {
+            try
+            {
+                IdentityResult identityResult = await _userService.RegisterUser(registrationDto);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+               // await jsRuntime.InvokeAsync<string>("Alert", e.ToString());               
+            }
+         
+        }
     }
+    //---------------------------------------------------------------------------------------------------------------//
+
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

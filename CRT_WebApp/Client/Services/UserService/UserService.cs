@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Authorization;
+using CRT_WebApp.Shared.DTO;
+using Microsoft.JSInterop;
+
 namespace CRT_WebApp.Client.Services.UserService
 {
     public class UserService : IUserService
@@ -15,6 +18,7 @@ namespace CRT_WebApp.Client.Services.UserService
             _http = http;
         }
         public List<IdentityUser> Users { get; set; } = new List<IdentityUser>();
+        private JSRuntime jsRuntime;
 
         public event Action OnChange;
 
@@ -27,6 +31,31 @@ namespace CRT_WebApp.Client.Services.UserService
         {
             Users = await _http.GetFromJsonAsync < List<IdentityUser>>("api/User/GetUsers");
             OnChange.Invoke();
+        }
+
+        public async Task RegisterUser(UserRegistrationDto user)
+        {
+            try
+            {
+               HttpResponseMessage responseMessage = await _http.PostAsJsonAsync("api/User/AddUser", user);
+                //await JSRuntime.InvokeAsync<string>("Alert", responseMessage.ToString());
+                OnChange.Invoke();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                //await jsRuntime.InvokeAsync<string>("Alert", e.ToString());
+            }
+        }
+
+        public async Task AddRoleToUser(string userID, string role)
+        {
+            
+        }
+
+        public async Task RemoveRoleFromUser(string userID, string role)
+        {
+            
         }
     }
 }
