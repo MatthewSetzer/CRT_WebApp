@@ -107,7 +107,16 @@ namespace CRT_WebApp.Client.Services.QuoteService
         public void SelectQuoteToBeUpdated(QuoteModel quote)
         {
             Quote = quote;
-            
+            _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
+        }
+
+        /// <summary>
+        /// "Selects" a quote to be printed, populating the SubGroup service 
+        /// </summary>
+        /// <param name="quote"></param>
+        public void SelectQuoteToBePrinted(QuoteModel quote)
+        {
+            Quote = quote;
             _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
         }
         //---------------------------------------------------------------------------------------------------------//
