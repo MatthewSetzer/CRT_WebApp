@@ -58,17 +58,21 @@ namespace CRT_WebApp.Server.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
-        public async Task AddUser(UserRegistrationDto user)
+        public async Task AddUser(UserDto user)
         {
-            try
-            {
-                IdentityResult identityResult = await _userService.RegisterUser(user);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
-               // await jsRuntime.InvokeAsync<string>("Alert", e.ToString());               
-            }
+            Console.WriteLine("//---------------------------------------------------------------------------------------------------------//");
+            Console.WriteLine("Gets called to add a user");
+            Console.WriteLine("//---------------------------------------------------------------------------------------------------------//");
+            //try
+            //{
+            //IdentityResult identityResult = 
+            await _userService.RegisterUser(user);
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //   // await jsRuntime.InvokeAsync<string>("Alert", e.ToString());               
+            //}
          
         }
     }

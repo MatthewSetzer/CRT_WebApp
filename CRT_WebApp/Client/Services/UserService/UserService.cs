@@ -33,19 +33,20 @@ namespace CRT_WebApp.Client.Services.UserService
             OnChange.Invoke();
         }
 
-        public async Task RegisterUser(UserRegistrationDto user)
+        public async Task RegisterUser(UserDto user)
         {
-            try
-            {
-               HttpResponseMessage responseMessage = await _http.PostAsJsonAsync("api/User/AddUser", user);
-                //await JSRuntime.InvokeAsync<string>("Alert", responseMessage.ToString());
-                OnChange.Invoke();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                //await jsRuntime.InvokeAsync<string>("Alert", e.ToString());
-            }
+            //try
+            //{
+            //   HttpResponseMessage responseMessage = await _http.PostAsJsonAsync("api/User/AddUser", user);
+            //    //await JSRuntime.InvokeAsync<string>("Alert", responseMessage.ToString());
+            //    OnChange.Invoke();
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine(e.ToString());
+            //    //await jsRuntime.InvokeAsync<string>("Alert", e.ToString());
+            //}
+            await _http.PostAsJsonAsync("api/User/AddUser", user);
         }
 
         public async Task AddRoleToUser(string userID, string role)

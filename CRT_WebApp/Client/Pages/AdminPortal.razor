@@ -124,13 +124,13 @@
 
     }
 
-    private async void CreateUser(string email, string password)
+    private  void CreateUser(string email, string password)
     {
         this.userRegistrationDto.Email = email;
         this.userRegistrationDto.Password = password;
         this.userRegistrationDto.ConfirmPassword = password;
-
-        await SaveUser();
+        Console.WriteLine(userRegistrationDto.Email);
+        SaveUser();
     }
 
     private void AddUser()
@@ -172,17 +172,33 @@
     }
 
 
-    public async Task SaveUser()
-    {
-        try
-        {           
-            await UserService.RegisterUser(userRegistrationDto);
+    //public async Task SaveUser()
+    //{
+    //    try
+    //    {           
+    //        await UserService.RegisterUser(userRegistrationDto);
 
-        }
-        catch (Exception e)
-        {
-            errString = e.ToString();
-        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        errString = e.ToString();
+    //    }
+    //}
+    public void SaveUser()
+    {
+        Console.WriteLine(" save user email" + userRegistrationDto.Email);
+        //try
+        //{   
+        UserDto userDto = new UserDto();
+        userDto.Email = userRegistrationDto.Email;
+        userDto.Password = userRegistrationDto.Password;
+        UserService.RegisterUser(userDto);
+
+        //}
+        //catch (Exception e)
+        //{
+        //    errString = e.ToString();
+        //}
     }
 
     public async Task EditUser(IdentityUser _IdentityUser)
