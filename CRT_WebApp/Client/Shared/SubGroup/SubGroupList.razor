@@ -5,15 +5,9 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
+ 
 <div class="row" style="margin-top:2px">
-    <div class="col-6">
-        @foreach (var sub in SubGroupService.SubGroups)
-        {
-            <div style="margin-top:2px">
-                <SubGroup subGroup=sub></SubGroup>
-            </div>
-        }
-    </div>
+   
     <div class="col-4">
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
@@ -23,10 +17,10 @@
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="submit">Create Quote</button>
+                    <button class="btn btn-success" type="submit" style="z-index: -1">Create Quote</button>
                 </div>
                 <div class="input-group-append">
-                    <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
+                    <button class="btn btn-success" @onclick="@updateQuote" type="submit" style="z-index: -1">Update</button>
                 </div>
             </div>
 
@@ -36,6 +30,16 @@
         </EditForm>
     </div>
 </div>
+
+<div class="col-6">
+        @foreach (var sub in SubGroupService.SubGroups)
+        {
+            <div style="margin-top:2px">
+                <SubGroup subGroup=sub></SubGroup>
+            </div>
+        }
+       
+    </div>
 
 
 @code {

@@ -1,13 +1,41 @@
 ﻿@page "/printpage"
+@using System.IO
+
 
 <h3>Qoute Heading</h3>
+ <br />
+<button onclick="window.print();"  class="btn btn-success">CLICK HERE TO CREATE PDF</button> <InputFile OnChange="@OnFileSelection" ></InputFile>
+<br />
 
 <PrintList></PrintList>
 <br />
-
-<button onclick="window.print();"  class="btn btn-success">CLICK HERE TO CREATE PDF</button>
 <br />
-  <br />
+   <div class="row">
+       @foreach (var imgUrl in imgUrls)
+        {
+            <img src="@imgUrl" style="max-width: 50%">
+            <br />
+            <br />
+        } 
+    </div>
+
+ 
+   
+
+
 @code {
 
+	List<string> imgUrls = new List<string>();
+    private async Task OnFileSelection(InputFileChangeEventArgs e)
+    {
+        foreach (IBrowserFile imgFile in e.GetMultipleFiles(5))
+        {
+            var buffers = new byte[imgFile.Size];
+            await imgFile.OpenReadStream().ReadAsync(buffers);
+            string imageType = imgFile.ContentType;
+            string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+            imgUrls.Add(imgUrl);
+        }
+    }
+   
 }

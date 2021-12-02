@@ -1,7 +1,8 @@
 ﻿@using CRT_WebApp.Shared
 @inject ISubGroupService SubGroupService
 @implements IDisposable;
-<Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString()>
+<div style="width: 200%">
+<Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString() >
 
         <table class="table table-striped">
             <thead class="thead-light">
@@ -33,7 +34,7 @@
         </table>
 
 </Accordion>
-
+</div>
 @code {
     [Parameter]
     public SubGroupModel subGroup { get; set; }
