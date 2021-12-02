@@ -16,27 +16,27 @@
         }
     </div>
     <div class="col-4">
-        
-            <EditForm Model="@quote" OnValidSubmit="@addQuote">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
-                    </div>
-                    <InputText class="form-control" type="text" aria-label="Sizing example input"
-                               aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
-                    <div class="input-group-append">
-                        <button class="btn btn-success" type="submit">Create Quote</button>
-                    </div>
-                    <div class="input-group-append">
-                        <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
-                    </div>
-                </div>
 
-                <label>
-                    Quote Total: $@SubGroupService.GetSubGroupsTotal()
-                </label>
-            </EditForm>
-        
+        <EditForm Model="@quote" OnValidSubmit="@addQuote">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
+                </div>
+                <InputText class="form-control" type="text" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit">Create Quote</button>
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
+                </div>
+            </div>
+
+            <label>
+                Quote Total: $@SubGroupService.GetSubGroupsTotal()
+            </label>
+        </EditForm>
+
 
     </div>
     @if (QuoteService.Quote != null)
@@ -97,10 +97,10 @@
     public void updateQuote()
     {
         QuoteModel newQuote = new QuoteModel
-            {
-                //Id = quote.Id,
-                Id = QuoteService.Quote.Id,
-        QuoteTitle = QuoteService.Quote.QuoteTitle,
+        {
+            //Id = quote.Id,
+            Id = QuoteService.Quote.Id,
+            QuoteTitle = QuoteService.Quote.QuoteTitle,
             QuoteState = true,
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
