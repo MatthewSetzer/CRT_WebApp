@@ -109,10 +109,12 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quote"></param>
         /// <returns></returns>
-        public async Task<int> UpdateQuote(QuoteModel quote)
+        public async Task UpdateQuote(QuoteModel quote)
         {
-            _context.Quotes.Update(quote);
-            return await _context.SaveChangesAsync();
+            Console.WriteLine("UpdaTED QUOTE ID "+ quote.Id);
+            //_context.Entry(quote).State = EntityState.Modified;
+            _context.Update(quote);
+            await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>

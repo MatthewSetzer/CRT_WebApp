@@ -97,9 +97,10 @@
     public void updateQuote()
     {
         QuoteModel newQuote = new QuoteModel
-        {
-            Id = quote.Id,
-            QuoteTitle = QuoteService.Quote.QuoteTitle,
+            {
+                //Id = quote.Id,
+                Id = QuoteService.Quote.Id,
+        QuoteTitle = QuoteService.Quote.QuoteTitle,
             QuoteState = true,
             QuoteDate = DateTime.Now,
             QuoteUser = userID,

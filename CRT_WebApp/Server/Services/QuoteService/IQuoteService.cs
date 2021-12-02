@@ -68,7 +68,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quote"></param>
         /// <returns></returns>
-        Task<int> UpdateQuote(QuoteModel quote);
+        Task UpdateQuote(QuoteModel quote);
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
