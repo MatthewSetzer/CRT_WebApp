@@ -32,9 +32,9 @@
                             <ul class="list-inline m-0">
                                 <li class="list-inline-item">
                                     <NavLink href="printpage">
-                                    <button type="button" class="btn btn-success btn-sm" @onclick="() => PrintItem(item)">
-                                        Print
-                                    </button>
+                                        <button type="button" class="btn btn-success btn-sm" @onclick="() => PrintItem(item)">
+                                            Print
+                                        </button>
                                     </NavLink>
                                 </li>
                                 <li class="list-inline-item">
@@ -58,7 +58,7 @@
     </div>
     <div class="row">
         <NavLink class="nav-link" href="createquote">
-            <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
+            <button type="button" @onclick="ClearGroups" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
         </NavLink>
     </div>
 </div>
@@ -92,43 +92,13 @@
 
     public void UpdateItem(QuoteModel quote)
     {
-        foreach (var sub in quote.SubGroups)
-        {
-            foreach (var item in sub.ListOfItems)
-            {
-                AssemblyItemModel assemblyItem = new AssemblyItemModel
-                {
-                    Description = item.Description,
-                    Rate = item.Rate,
-                    NumberOfUnits = item.NumberOfUnits
-                };
-                AssemblyItemService.AddAssemblyItemToList(assemblyItem);
-            }
-
-            AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
-        }
-
+        QuoteService.SelectQuoteToBeUpdated(quote);
         Navigation.NavigateTo("createquote");
     }
 
     public void PrintItem(QuoteModel quote)
     {
-        foreach (var sub in quote.SubGroups)
-        {
-            foreach (var item in sub.ListOfItems)
-            {
-                AssemblyItemModel assemblyItem = new AssemblyItemModel
-                {
-                    Description = item.Description,
-                    Rate = item.Rate,
-                    NumberOfUnits = item.NumberOfUnits
-                };
-                AssemblyItemService.AddAssemblyItemToList(assemblyItem);
-            }
-
-            AssemblyItemService.AddAssemblyListToSubGroupFromEdit(sub.SubGroupTitle);
-        }
-
+        QuoteService.SelectQuoteToBePrinted(quote);
         Navigation.NavigateTo("printpage");
     }
 
@@ -140,5 +110,11 @@
 
         }
         await QuoteService.LoadAllQuotes();
+    }
+
+    public void ClearGroups()
+    {
+        SubGroupService.SubGroups.Clear();
+        QuoteService.Quote.Id = 0;
     }
 }

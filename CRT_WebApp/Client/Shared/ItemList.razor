@@ -24,11 +24,18 @@
             </div>
             <label>Quantity: </label>
             <div class="input-group mb-3">
-                <select class="custom-select" id="metricSelect">
-                    <option selected>Select...</option>
-                    <option value="1">Quantity</option>
-                    <option value="2">Linear Foot</option>
-                    <option value="3">Square Foot</option>
+                <select id="Item" class="custom-select" @bind="@ListItem">
+                    @foreach (var list in SelectList)
+                    {
+                        @if (ListItem != null && String.Equals(list, ListItem, StringComparison.OrdinalIgnoreCase))
+                        {
+                            <option selected value="@list">@list</option>
+                        }
+                        else
+                        {
+                            <option value="@list">@list</option>
+                        }
+                    }
                 </select>
                 <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
             </div>
@@ -76,7 +83,7 @@
                 {
                     <tr>
                         <td>@item.Description</td>
-                        <td>@item.NumberOfUnits</td>
+                        <td>@item.NumberOfUnitsWithMetric()</td>
                         <td>$@item.GetFormattedRate()</td>
                         <td>$@item.GetFormattedTotalPrice()</td>
                     </tr>
@@ -93,6 +100,9 @@
 </div>
 
 @code {
+    public IEnumerable<string> SelectList = new List<string>(){"Quantity","Square Foot","Linear Foot"};
+    private string listItem { get; set; }
+
     private AssemblyItemViewModel Item = new();
     private List<AssemblyItemModel> Items = new();
 
@@ -103,6 +113,7 @@
     protected override void OnInitialized()
     {
         ItemService.OnChange += StateHasChanged;
+
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
@@ -112,6 +123,7 @@
         {
             Description = Item.Description,
             Rate = Item.Rate,
+            Metric = listItem,
             NumberOfUnits = Item.Quantity
         };
         AssemblyItemService.AddAssemblyItemToList(assemblyItem);
@@ -140,6 +152,27 @@
     {
         ItemService.LoadItems();
     }
+
+    [Parameter]
+    public string ListItem
+    {
+        get { return listItem; }
+        set
+        {
+            if (listItem != value)
+            {
+                listItem = value;
+                if (ListItemChanged.HasDelegate)
+                {
+                    ListItemChanged.InvokeAsync(value);
+                }
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> ListItemChanged { get; set; }
+
 
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
 }

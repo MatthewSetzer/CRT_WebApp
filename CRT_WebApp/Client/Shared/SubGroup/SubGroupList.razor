@@ -1,6 +1,8 @@
-﻿@inject ISubGroupService SubGroupService
+@inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
+@inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+
 
 @using CRT_WebApp.Shared
 @implements IDisposable;
@@ -9,6 +11,7 @@
 <div class="row" style="margin-top:2px">
    
     <div class="col-4">
+
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -19,16 +22,24 @@
                 <div class="input-group-append">
                     <button class="btn btn-success" type="submit" style="z-index: -1">Create Quote</button>
                 </div>
-                <div class="input-group-append">
-                    <button class="btn btn-success" @onclick="@updateQuote" type="submit" style="z-index: -1">Update</button>
-                </div>
+                @if (QuoteService.Quote.Id != 0)
+                {
+                    <div class="input-group mb-3" style="margin-top: 5px">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" @onclick="@updateQuote" type="submit" style="z-index: -1">Update</button>
+                        </div>
+                    </div>
+                }
             </div>
-
             <label>
                 Quote Total: $@SubGroupService.GetSubGroupsTotal()
             </label>
         </EditForm>
+
+
     </div>
+
 </div>
 
 <div class="col-6">
@@ -57,9 +68,10 @@
     }
 
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         SubGroupService.OnChange -= StateHasChanged;
+        quote = new QuoteViewModel();
     }
 
     public void addQuote()
@@ -75,18 +87,26 @@
             IsDeleted = false
         };
 
-        QuoteService.AddQuote(newQuote);
+        try
+        {
+            QuoteService.AddQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
 
-        quote = new QuoteViewModel();
-        SubGroupService.SubGroups.Clear();
+            toastService.ShowSuccess("Quote Created", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
     }
 
     public void updateQuote()
     {
         QuoteModel newQuote = new QuoteModel
         {
-            Id = quote.Id,
-            QuoteTitle = quote.QuoteTitle,
+            Id = QuoteService.Quote.Id,
+            QuoteTitle = QuoteService.Quote.QuoteTitle,
             QuoteState = true,
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
@@ -94,6 +114,18 @@
             Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
             IsDeleted = false
         };
+        try
+        {
+            QuoteService.UpdateQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
+
+            toastService.ShowSuccess("Quote Updated", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
     }
 
     private async Task GetUser()
