@@ -21,7 +21,7 @@ namespace CRT_WebApp.Server.Controllers
         private readonly IUserService _userService;
         private JSRuntime jsRuntime;
 
-        private UserRegistrationDto registrationDto = new UserRegistrationDto();
+        //private UserRegistrationDto registrationDto = new UserRegistrationDto();
         //---------------------------------------------------------------------------------------------------------//
         public UserController(IUserService userService)
         {
@@ -58,11 +58,11 @@ namespace CRT_WebApp.Server.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost("AddUser")]
-        public async Task AddUser()
+        public async Task AddUser(UserRegistrationDto user)
         {
             try
             {
-                IdentityResult identityResult = await _userService.RegisterUser(registrationDto);
+                IdentityResult identityResult = await _userService.RegisterUser(user);
             }
             catch(Exception e)
             {
