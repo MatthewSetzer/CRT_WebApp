@@ -20,7 +20,7 @@
                 <div class="input-group-prepend">
                     @if(QuoteService.Quote !=null)
                     {
-                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
+                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle + id: @QuoteService.Quote.Id</span>
 
                     }
                     <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
