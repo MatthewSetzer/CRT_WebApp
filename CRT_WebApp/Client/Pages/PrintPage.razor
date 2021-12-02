@@ -1,33 +1,39 @@
 ﻿@page "/printpage"
+@inject IQuoteService QuoteService
 @using System.IO
 
-
-<h3>Qoute Heading</h3>
- <br />
-<button onclick="window.print();"  class="btn btn-success">CLICK HERE TO CREATE PDF</button> <InputFile OnChange="@OnFileSelection" ></InputFile>
-<br />
-
-
- <img src="/Logo/LogoImg.jpg" style="max-width: 70%;">
-<PrintList></PrintList>
-<br />
-<br />
-   <div class="row">
-       @foreach (var imgUrl in imgUrls)
-        {
-            <img src="@imgUrl" style="max-width: 50%">
-            <br />
-            <br />
-        } 
+<div class="row">
+    <h2>@QuoteService.Quote.QuoteTitle</h2>
+    <div class="ml-auto">
+        <img src="/Logo/LogoImg.jpg" style="max-width: 70%;">
     </div>
+</div>
 
- 
-   
+<PrintList></PrintList>
+<InputFile OnChange="@OnFileSelection"></InputFile>
+<br />
+<br />
+<div class="row">
+    @foreach (var imgUrl in imgUrls)
+    {
+        <img src="@imgUrl" style="max-width: 50%">
+        <br />
+        <br />
+    }
+</div>
+
+<div class="row">
+    <button onclick="window.print();" class="btn btn-success">Create PDF</button>
+</div>
+
+
+
+
 
 
 @code {
 
-	List<string> imgUrls = new List<string>();
+    List<string> imgUrls = new List<string>();
     private async Task OnFileSelection(InputFileChangeEventArgs e)
     {
         foreach (IBrowserFile imgFile in e.GetMultipleFiles(5))
@@ -39,5 +45,5 @@
             imgUrls.Add(imgUrl);
         }
     }
-   
+
 }

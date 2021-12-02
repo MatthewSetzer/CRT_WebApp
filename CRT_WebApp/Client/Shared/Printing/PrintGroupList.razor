@@ -1,9 +1,4 @@
 ﻿@inject ISubGroupService SubGroupService
-@inject IQuoteService QuoteService
-@inject AuthenticationStateProvider AuthenticationStateProvider
-
-@using CRT_WebApp.Shared
-@implements IDisposable;
 
 <div class="row" style="margin-top:2px">
     <div class="col-6">
@@ -11,78 +6,21 @@
         {
             <div style="margin-top:2px">
                 <PrintGroup subGroup=sub></PrintGroup>
-
-               
             </div>
         }
     </div>
     <br />
-              
+
 </div>
-    <br />
-                 <H1>
-                Quote Total: $@SubGroupService.GetSubGroupsTotal()
-            </H1>
+<br />
+<div class="float-right">
+    <h2>
+        <label style="color:blueviolet">Quote Total </label> 
+        <label>$@SubGroupService.GetSubGroupsTotal() </label> 
+    </h2>
+</div>
+
 
 @code {
-    [Parameter]
-    public SubGroupModel subGroup { get; set; }
 
-    QuoteViewModel quote = new QuoteViewModel();
-
-    string userID;
-
-    protected async override void OnInitialized()
-    {
-        SubGroupService.OnChange += StateHasChanged;
-        await GetUser();
-    }
-
-
-    public void Dispose()
-    {
-        SubGroupService.OnChange -= StateHasChanged;
-    }
-
-    public void addQuote()
-    {
-        QuoteModel newQuote = new QuoteModel
-        {
-            QuoteTitle = quote.QuoteTitle,
-            QuoteState = true,
-            QuoteDate = DateTime.Now,
-            QuoteUser = userID,
-            SubGroups = SubGroupService.GetSubGroupList(),
-            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
-            IsDeleted = false
-        };
-
-        QuoteService.AddQuote(newQuote);
-
-        quote = new QuoteViewModel();
-        SubGroupService.SubGroups.Clear();
-    }
-
-    public void updateQuote()
-    {
-        QuoteModel newQuote = new QuoteModel
-        {
-            Id = quote.Id,
-            QuoteTitle = quote.QuoteTitle,
-            QuoteState = true,
-            QuoteDate = DateTime.Now,
-            QuoteUser = userID,
-            SubGroups = SubGroupService.GetSubGroupList(),
-            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
-            IsDeleted = false
-        };
-    }
-
-    private async Task GetUser()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        userID = user.Identity.Name;
-    }
 }
