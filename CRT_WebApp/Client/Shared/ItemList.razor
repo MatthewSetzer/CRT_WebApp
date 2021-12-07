@@ -1,8 +1,10 @@
-﻿@inject IItemService ItemService
+@inject IItemService ItemService
 @inject ISubGroupService SubGroupService
 @inject IAssemblyItemService AssemblyItemService
+@inject IModalService modal
 @using CRT_WebApp.Shared
 @using CRT_WebApp.Client.Shared.SubGroup
+@using CRT_WebApp.Client.Shared.Notes
 @implements IDisposable;
 
 <div class="row">
@@ -48,12 +50,11 @@
                 <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
             </div>
 
+
             <button class="btn btn-primary" type="submit">Add Item</button>
 
         </EditForm>
     </div>
-
-
     <div class="col-6">
         <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
             <DataAnnotationsValidator />
@@ -91,13 +92,40 @@
             </tbody>
         </table>
         <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
+
+        <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <label>Sub Group Title: </label>
+            <div class="input-group mb-3">
+                <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
+            </div>
+            <button class="btn btn-success" type="submit">Add Sub-Group</button>
+           
+        </EditForm>
+
+
     </div>
+    <br /><br /><br />
 </div>
-<br />
-<br />
+      
+<br /><br />
+ <button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))"  class="btn btn-danger">Add Notes +</button>
+ <br /><br />
 <div>
+
+
+<h2>Sub Group(s)</h2>
+ <br />
     <SubGroupList></SubGroupList>
+    <br />
+    <br />
+    <h2>Note(s)</h2>
+     <br />
+   <NotGroupList></NotGroupList>
 </div>
+
+
 
 @code {
     public IEnumerable<string> SelectList = new List<string>(){"Quantity","Square Foot","Linear Foot"};
@@ -108,6 +136,8 @@
 
     private SubGroupViewModel SubGroup = new();
     private List<SubGroupModel> SubGroups = new();
+
+   
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()

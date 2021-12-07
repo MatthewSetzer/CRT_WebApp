@@ -1,0 +1,43 @@
+﻿@inject INotesService NoteService
+
+
+<EditForm Model="@Notes" OnValidSubmit="@addNotes">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+	<label>Note Title: </label>
+	<div class="input-group mb-3">
+		<InputText class="form-control" type="text" @bind-Value="Notes.NoteHeader" />
+
+	</div>
+
+	<br />
+
+	<label>Note Body: </label>
+	<div class="input-group mb-3">
+		<InputTextArea class="form-control" type="text" @bind-Value="Notes.NoteContent" />
+
+	</div>
+	<button class="btn btn-success" type="submit">Add Note</button>
+
+</EditForm>
+
+
+@code {
+	private NotesViewModel Notes = new();
+	private List<NoteModel> noteModel = new();
+
+	private void addNotes()
+	{
+		NoteService.AddNoteToList(new NoteModel
+		{
+			NoteHeader = Notes.NoteHeader,
+			NoteContent = Notes.NoteContent
+		});
+
+		//Console.WriteLine(Notes.NoteHeader);
+		
+
+		Notes = new NotesViewModel();
+
+	}
+}
