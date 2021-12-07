@@ -1,26 +1,138 @@
-﻿@inject ISubGroupService SubGroupService
+@inject ISubGroupService SubGroupService
+@inject IQuoteService QuoteService
+@inject IToastService toastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-@foreach(var sub in SubGroupService.SubGroups)
-{
-    <div>
-        <SubGroup subGroup=sub></SubGroup>
+ 
+<div class="row" style="margin-top:2px">
+   
+    <div class="col-4">
+
+        <EditForm Model="@quote" OnValidSubmit="@addQuote">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
+                </div>
+                <InputText class="form-control" type="text" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit" style="z-index: -1">Create Quote</button>
+                </div>
+                @if (QuoteService.Quote.Id != 0)
+                {
+                    <div class="input-group mb-3" style="margin-top: 5px">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
+                        <div class="input-group-append">
+                            <button class="btn btn-success" @onclick="@updateQuote" type="submit" style="z-index: -1">Update</button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <label>
+                Quote Total: $@SubGroupService.GetSubGroupsTotal()
+            </label>
+        </EditForm>
+
+
     </div>
 
-}
+</div>
+
+<div class="col-6">
+        @foreach (var sub in SubGroupService.SubGroups)
+        {
+            <div style="margin-top:2px">
+                <SubGroup subGroup=sub></SubGroup>
+            </div>
+        }
+       
+    </div>
+
 
 @code {
+    [Parameter]
+    public SubGroupModel subGroup { get; set; }
 
-    protected override void OnInitialized()
+    QuoteViewModel quote = new QuoteViewModel();
+
+    string userID;
+
+    protected async override void OnInitialized()
     {
         SubGroupService.OnChange += StateHasChanged;
+        await GetUser();
     }
 
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         SubGroupService.OnChange -= StateHasChanged;
+        quote = new QuoteViewModel();
+    }
 
+    public void addQuote()
+    {
+        QuoteModel newQuote = new QuoteModel
+        {
+            QuoteTitle = quote.QuoteTitle,
+            QuoteState = true,
+            QuoteDate = DateTime.Now,
+            QuoteUser = userID,
+            SubGroups = SubGroupService.GetSubGroupList(),
+            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
+            IsDeleted = false
+        };
+
+        try
+        {
+            QuoteService.AddQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
+
+            toastService.ShowSuccess("Quote Created", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
+    }
+
+    public void updateQuote()
+    {
+        QuoteModel newQuote = new QuoteModel
+        {
+            Id = QuoteService.Quote.Id,
+            QuoteTitle = QuoteService.Quote.QuoteTitle,
+            QuoteState = true,
+            QuoteDate = DateTime.Now,
+            QuoteUser = userID,
+            SubGroups = SubGroupService.GetSubGroupList(),
+            Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
+            IsDeleted = false
+        };
+        try
+        {
+            QuoteService.UpdateQuote(newQuote);
+            quote = new QuoteViewModel();
+            SubGroupService.SubGroups.Clear();
+
+            toastService.ShowSuccess("Quote Updated", "Success");
+        }
+        catch
+        {
+            toastService.ShowError("An error has occured", "Error");
+        }
+    }
+
+    private async Task GetUser()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        userID = user.Identity.Name;
     }
 }

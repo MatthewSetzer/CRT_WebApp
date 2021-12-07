@@ -38,7 +38,13 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// Deletes quote in database using its ID as reference
         /// </summary>
         /// <param name="quoteID">The quotes ID</param>
-        Task DeleteQuote(int quoteID);
+        Task DeleteQuoteByID(int quoteID);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Deletes quote in database using model
+        /// </summary>
+        /// <param name="model">The model to remove</param>
+        Task DeleteQuote(QuoteModel model);
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -62,7 +68,7 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// </summary>
         /// <param name="quote"></param>
         /// <returns></returns>
-        Task<int> UpdateQuote(QuoteModel quote);
+        Task UpdateQuote(QuoteModel quote);
 
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -78,6 +84,21 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <param name="quote"></param>
         /// <returns></returns>
         Task DisableQuote(QuoteModel quote);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets all quotes that matches the state
+        /// </summary>
+        /// <param name="state">The current state of the quote. False = survey; True = Quote</param>
+        /// <returns>A list of quote models</returns>
+        Task<List<QuoteModel>>GetQuotesByState(bool state);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Gets all quotes that matches the quote state and UserID
+        /// </summary>
+        /// <param name="state">The state of the quote. False = Survey; True = Quote</param>
+        /// <param name="UserID">The users ID</param>
+        /// <returns>A List of Quotes matching the condition</returns>
+        Task<List<QuoteModel>> GetQuotesByStateAndUser(bool state,string UserID);
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

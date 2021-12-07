@@ -29,6 +29,12 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         void AddSubGroupToList(SubGroupModel subGroup);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Adds the Subgroup to the  list from edit button
+        /// </summary>
+        /// <param name="subGroup">The subgroup to be added</param>
+        void AddSubGroupToListFromEdit(SubGroupModel subGroup);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Removes a subgroup from the list
         /// </summary>
         /// <param name="subGroup">The subgroup to be removed</param>
@@ -50,6 +56,11 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         /// </summary>
         /// <returns>A list of subgroups</returns>
         List<SubGroupModel> GetSubGroupList();
+        /// <summary>
+        /// Gets the grand total for current list of subgroups
+        /// </summary>
+        /// <returns></returns>
+        string GetSubGroupsTotal();
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

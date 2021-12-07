@@ -1,0 +1,120 @@
+﻿@inject IQuoteService QuoteService
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
+@inject NavigationManager Navigation
+
+<div class="container">
+    <div class="row">
+        <div class="table-title">
+            <h2>Quote <b>Details</b></h2>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Quote Name</th>
+                    <th>Creation Date</th>
+                    <th>Quote Creator</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in QuoteService.Quotes)
+                {
+                    <tr>
+                        <td>@item.QuoteTitle</td>
+                        <td>@item.QuoteDate</td>
+                        <td>@item.QuoteUser</td>
+                        <td>$@item.Total</td>
+                        <td>
+                            <ul class="list-inline m-0">
+                                <li class="list-inline-item">
+                                    <NavLink href="printpage">
+                                        <button type="button" class="btn btn-success btn-sm" @onclick="() => PrintItem(item)">
+                                            Print
+                                        </button>
+                                    </NavLink>
+                                </li>
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-warning btn-sm" @onclick="() => UpdateItem(item)">
+                                        Edit
+                                    </button>
+                                </li>
+                                <AuthorizeView Roles="Admin">
+                                    <li class="list-inline-item">
+                                        <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item)">
+                                            Soft Delete
+                                        </button>
+                                    </li>
+                                </AuthorizeView>
+                            </ul>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <NavLink class="nav-link" href="createquote">
+            <button type="button" @onclick="ClearGroups" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
+        </NavLink>
+    </div>
+</div>
+
+<Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete_Click"
+         ConfirmationMessage=@($"Are you sure you want to delete \"{deleteID}\"")>
+</Confirm>
+
+@code {
+    protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
+    int deleteID;
+    private QuoteModel _quote;
+    protected override void OnInitialized()
+    {
+        QuoteService.OnChange += StateHasChanged;
+        QuoteService.LoadAllQuotes();
+    }
+
+
+    public void Dispose()
+    {
+        QuoteService.OnChange -= StateHasChanged;
+    }
+
+    public void DeleteClick(QuoteModel quote)
+    {
+        deleteID = quote.Id;
+        _quote = quote;
+        DeleteConfirmation.Show();
+    }
+
+    public void UpdateItem(QuoteModel quote)
+    {
+        QuoteService.SelectQuoteToBeUpdated(quote);
+        Navigation.NavigateTo("createquote");
+    }
+
+    public void PrintItem(QuoteModel quote)
+    {
+        QuoteService.SelectQuoteToBePrinted(quote);
+        Navigation.NavigateTo("printpage");
+    }
+
+    protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            await QuoteService.SoftDeleteQuoteByID(_quote);
+
+        }
+        await QuoteService.LoadAllQuotes();
+    }
+
+    public void ClearGroups()
+    {
+        SubGroupService.SubGroups.Clear();
+        QuoteService.Quote.Id = 0;
+    }
+}

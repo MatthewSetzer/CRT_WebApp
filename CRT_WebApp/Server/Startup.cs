@@ -2,16 +2,21 @@ using CRT_WebApp.Server.Data;
 using CRT_WebApp.Server.Models;
 using CRT_WebApp.Server.Services.ItemService;
 using CRT_WebApp.Server.Services.QuoteService;
+using CRT_WebApp.Server.Services.UserService;
+using CRT_WebApp.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRT_WebApp.Server
 {
@@ -35,10 +40,20 @@ namespace CRT_WebApp.Server
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options =>
+            {
+                options.IdentityResources["openid"].UserClaims.Add("role");
+                options.ApiResources.Single().UserClaims.Add("role");
+            }
+            );
+            System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler
+            .DefaultInboundClaimTypeMap.Remove("role");
+
+            services.AddHttpContextAccessor();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -50,6 +65,8 @@ namespace CRT_WebApp.Server
             //Created services. 99% of the time its scoped for our use case. 
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<IItemService, ItemService>();
+            //User
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,3 +104,4 @@ namespace CRT_WebApp.Server
         }
     }
 }
+

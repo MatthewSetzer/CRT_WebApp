@@ -12,5 +12,6 @@
 
         public string GetFormattedTotalPrice() => Total.ToString("0.00");
         public string GetFormattedRate() => Rate.ToString("0.00");
+        public string NumberOfUnitsWithMetric() => NumberOfUnits + " " + Metric;
     }
 }

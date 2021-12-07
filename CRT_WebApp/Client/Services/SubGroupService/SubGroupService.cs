@@ -15,14 +15,23 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         //---------------------------------------------------------------------------------------------------------//
         public void AddRangeOfSubGroups(IEnumerable<SubGroupModel> subGroups)
         {
+            SubGroups.Clear();
             SubGroups.AddRange(subGroups);
-            OnChange.Invoke();
+            if(OnChange != null)
+            {
+                OnChange.Invoke();
+            }
+           
         }
         //---------------------------------------------------------------------------------------------------------//
         public void AddSubGroupToList(SubGroupModel subGroup)
         {
             SubGroups.Add(subGroup);
             OnChange.Invoke();
+        }
+        public void AddSubGroupToListFromEdit(SubGroupModel subGroup)
+        {
+            SubGroups.Add(subGroup);
         }
         //---------------------------------------------------------------------------------------------------------//
         public void ClearSubGroupList()
@@ -34,6 +43,17 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         public List<SubGroupModel> GetSubGroupList()
         {
             return SubGroups;
+        }
+        //---------------------------------------------------------------------------------------------------------//s
+        public string GetSubGroupsTotal()
+        {
+            double Total = 0;
+            foreach (var subGroup in SubGroups)
+            {
+                Total += subGroup.SubTotal;
+            }
+
+            return Total.ToString("0.00");
         }
 
         //---------------------------------------------------------------------------------------------------------//

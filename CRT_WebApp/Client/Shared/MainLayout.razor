@@ -1,19 +1,22 @@
 ﻿@inherits LayoutComponentBase
 @inject IModalService modal
+@using Blazored.Toast.Configuration
 
 <div class="page">
+    
     <div class="sidebar">
         <NavMenu />
     </div>
-
+    
     <div class="main">
+        
         <div class="top-row px-4 auth">
             <button @onclick="@(()=>modal.Show<Pages.ConversionCalculator>("Conversion Calculator"))"  class="btn btn-primary">Conversion Calculator</button>
             <LoginDisplay />
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
 
         </div>
-
+        <BlazoredToasts Position = "ToastPosition.BottomRight"/>
         <div class="content px-4">
             @Body
         </div>

@@ -1,4 +1,4 @@
-﻿@inject IItemService ItemService
+@inject IItemService ItemService
 @inject ISubGroupService SubGroupService
 @inject IAssemblyItemService AssemblyItemService
 @inject IModalService modal
@@ -12,8 +12,10 @@
         <EditForm Model="@Item" OnValidSubmit="@addItem">
             <DataAnnotationsValidator />
             <ValidationSummary />
-            <label>Select Assembly Item:</label>
             <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Select Assembly Item: </span>
+                </div>
                 <InputText class="form-control" type="text" list="itemList" @bind-Value=Item.Description />
                 <datalist id="itemList" @onchange="@((args) => Item.Description = args.Value.ToString())">
                     @for (var i = 0; i < ItemService.Items.Count; i++)
@@ -24,14 +26,20 @@
             </div>
             <label>Quantity: </label>
             <div class="input-group mb-3">
-                <select class="custom-select" id="metricSelect">
-                    <option selected>Select...</option>
-                    <option value="1">Quantity</option>
-                    <option value="2">Linear Foot</option>
-                    <option value="3">Square Foot</option>
+                <select id="Item" class="custom-select" @bind="@ListItem">
+                    @foreach (var list in SelectList)
+                    {
+                        @if (ListItem != null && String.Equals(list, ListItem, StringComparison.OrdinalIgnoreCase))
+                        {
+                            <option selected value="@list">@list</option>
+                        }
+                        else
+                        {
+                            <option value="@list">@list</option>
+                        }
+                    }
                 </select>
                 <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
-
             </div>
 
             <label>Rate: </label>
@@ -42,12 +50,26 @@
                 <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
             </div>
 
-            <button class="btn btn-primary" type="submit">Add Item</button> 
-            
+
+            <button class="btn btn-primary" type="submit">Add Item</button>
+
         </EditForm>
     </div>
-    
     <div class="col-6">
+        <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Sub Group Title:</span>
+                </div>
+                <InputText class="form-control" type="text" aria-label="Sizing example input"
+                           aria-describedby="inputGroup-sizing-default" @bind-Value="SubGroup.SubGroupTitle" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="submit" style="z-index: -1">Add Sub-Group</button>
+                </div>
+            </div>
+        </EditForm>
         <table class="table table-striped">
             <thead class="thead-light">
                 <tr>
@@ -62,14 +84,13 @@
                 {
                     <tr>
                         <td>@item.Description</td>
-                        <td>@item.NumberOfUnits</td>
+                        <td>@item.NumberOfUnitsWithMetric()</td>
                         <td>$@item.GetFormattedRate()</td>
                         <td>$@item.GetFormattedTotalPrice()</td>
                     </tr>
                 }
             </tbody>
         </table>
-
         <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
 
         <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
@@ -107,6 +128,9 @@
 
 
 @code {
+    public IEnumerable<string> SelectList = new List<string>(){"Quantity","Square Foot","Linear Foot"};
+    private string listItem { get; set; }
+
     private AssemblyItemViewModel Item = new();
     private List<AssemblyItemModel> Items = new();
 
@@ -119,19 +143,24 @@
     protected override void OnInitialized()
     {
         ItemService.OnChange += StateHasChanged;
+
         LoadItems();
     }
     //---------------------------------------------------------------------------------------------------------//
     private void addItem()
     {
-        AssemblyItemModel assemblyItem = new AssemblyItemModel{
+        AssemblyItemModel assemblyItem = new AssemblyItemModel
+        {
             Description = Item.Description,
             Rate = Item.Rate,
+            Metric = listItem,
             NumberOfUnits = Item.Quantity
         };
         AssemblyItemService.AddAssemblyItemToList(assemblyItem);
 
         SubGroup.SubTotal += Item.Rate * Item.Quantity;
+
+        Item = new AssemblyItemViewModel();
     }
     //---------------------------------------------------------------------------------------------------------//
     private void addSubGroup()
@@ -153,6 +182,27 @@
     {
         ItemService.LoadItems();
     }
+
+    [Parameter]
+    public string ListItem
+    {
+        get { return listItem; }
+        set
+        {
+            if (listItem != value)
+            {
+                listItem = value;
+                if (ListItemChanged.HasDelegate)
+                {
+                    ListItemChanged.InvokeAsync(value);
+                }
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> ListItemChanged { get; set; }
+
 
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
 }
