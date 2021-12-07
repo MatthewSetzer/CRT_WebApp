@@ -25,7 +25,7 @@ namespace CRT_WebApp.Client.Services.UserService
         Task LoadAllUsers();
         //---------------------------------------------------------------------------------------------------------//
 
-        Task RegisterUser(UserDto user);
+        Task RegisterUser(UserModel user);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Changes the user's role

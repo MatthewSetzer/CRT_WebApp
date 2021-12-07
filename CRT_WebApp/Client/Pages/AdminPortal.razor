@@ -27,18 +27,40 @@
                     <td>@user.Id</td>
                     <td>@user.Email</td>
                     <td>
-                        <button type="button" name="btnRemoveUser" class="btn-primary"
-                                >
+                        <button type="button" @onclick="() => DeleteUser(user.Id)" class="btn-primary">
                             Delete
                         </button>
+                        <button type="button" @onclick="() => ShowRolePopup(user.Id)" class="btn-primary">
+                            Edit Role
+                        </button>
                     </td>
-
-
                 </tr>
-
             }
         </tbody>
     </table>
+
+    @if (showRolePopup == true)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-dialog">Assign User Role</h3>
+                        <div class="modal-body">
+                            <select class="form-control" @bind="newRole">
+                                @foreach (var role in Options)
+                                {
+                                    <option>@role</option>
+                                }
+                            </select>
+                            <br><br><br>
+                            <button class="btn-primary" @onclick="() => AssignRole(currUserID, newRole)">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     @if (showPopup == true)
     {
@@ -65,48 +87,22 @@
                             <p>@objUser.Email</p>
                         }
 
-                        <!--
-                        <input class="form-control" type="text"
-                               placeholder="Email"
-                               @bind="objUser.Email" />
-                        <input class="form-control" type="password"
-                               placeholder="Password"
-                               @bind="objUser.PasswordHash" /> -->
-                        <!--
-                        <select class="form-control"
-                                @bind="@currUserRole">
-                            @foreach (var option in Options)
-                            {
-                                <option value="@option">
-                                    @option
-                                </option>
-                            }
-                        </select>
-                            -->
-
                         <br /> <br />
 
-                        <!-- Save user button
-                        <button class="btn btn-primary" @onclick="() => CreateUser(objUser.Email, objUser.PasswordHash)">Save</button>
-                        -->
-
-                        
                         <div class="modal-body">
-                        <EditForm Model="@userModel" OnValidSubmit="() => CreateUser(objUser.Email, objUser.PasswordHash)">
-                            <div class="input-group mb-3">
-                                <InputText class="form-control" placeholder="Email" @bind-Value="@userModel.Email" />
-                                <InputText class="form-control" placeholder="Password" @bind-Value="@userModel.Password" />
-                                <InputText class="form-control" placeholder="Confirm password" />
-                            </div>
-                        </EditForm>
-                            </div>
-                        <br /> <br />
-                        <button class="btn btn-success" type="submit">Save</button> 
-                        <!-- show delete button only if not new record-->
-                        @if (objUser.Id != "")
-                        {
-                            <button class="btn btn-primary" @onclick="@(() => DeleteUser(objUser.Id))">Delete</button>
-                        }
+                            <EditForm Model="@userModel" OnValidSubmit="@CreateUser" OnInvalidSubmit="InvalidTestPrint">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+                                    <InputText class="form-control" type="text" placeholder="Email" @bind-Value="@userModel.Email" />
+                                    <br>
+                                    <InputText class="form-control" type="text" placeholder="Password" @bind-Value="@userModel.Password" />
+                                    <br>
+                                    <InputText class="form-control" type="text" placeholder="Confirm password" @bind-Value="@userModel.ConfirmPassword" />
+                                <br /> <br />
+                                       <button class="btn btn-success" type="submit">Save</button>
+                            </EditForm>
+                        </div>
+                        <br /> <br />                      
                         <br />
                         <span style="color:red">@errString</span>
                     </div>
@@ -124,31 +120,36 @@
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
     private IdentityUser objUser = new IdentityUser();
-    string currUserRole { get; set; } = "User";
-    List<string> Options = new List<string>() { "User", "Admin" };
+    //string currUserRole { get; set; } = "User";
+    List<string> Options = new List<string>() { "user", "admin" };
     List<IdentityUser> Users = new List<IdentityUser>();
     string errString = "";
-    bool showPopup = false;
+    bool showPopup = false, showRolePopup = false;
 
-    UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+    //UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
     UserModel userModel = new UserModel();
     UserService userService;
 
     bool validated = false;
+    string newRole = "", currUserID = "";
 
-
-    public void ValidateFields(string email, string password)
+    private void CreateUser()
     {
-
-    }
-
-    private void CreateUser(string email, string password)
-    {
+        /*
         this.userModel.Email = email;
         this.userModel.Password = password;
+        this.userModel.ConfirmPassword = password;
+        this.userModel.Role = role;*/
         Console.WriteLine(userModel.Email);
         Console.WriteLine(userModel.Password);
+        Console.WriteLine(userModel.Role);
         SaveUser();
+        AssignRole(currUserID, userModel.Role);
+    }
+
+    private void InvalidTestPrint()
+    {
+        Console.WriteLine("Failed to validate submission");
     }
 
     private void AddUser()
@@ -182,8 +183,14 @@
     public void ShowUsers()
     {
         errString = "";
-
     }
+
+    public void ShowRolePopup(string userID)
+    {
+        showRolePopup = true;
+        currUserID = userID;
+    }
+
     public void AssignRole(string userID, string roleID)
     {
         UserService.AddRoleToUser(userID, roleID);
@@ -191,12 +198,8 @@
 
     public void SaveUser()
     {
-        Console.WriteLine(" save user email: " + userRegistrationDto.Email);
-
-        UserDto userDto = new UserDto();
-        userDto.Email = userRegistrationDto.Email;
-        userDto.Password = userRegistrationDto.Password;
-        UserService.RegisterUser(userDto);
+        Console.WriteLine(" save user email: " + userModel.Email);
+        UserService.RegisterUser(userModel);
     }
 
     public async Task DeleteUser(string userID)

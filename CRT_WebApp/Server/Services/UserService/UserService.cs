@@ -2,6 +2,7 @@
 using CRT_WebApp.Shared.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 namespace CRT_WebApp.Server.Services.UserService
@@ -23,9 +24,10 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <returns>the result from identity</returns>
         public async Task<IdentityResult> AddRoleToUser(string userID, string role)
         {
+            //Console.WriteLine("SERVER ADD ROLE TO USER"+Environment.NewLine+"userID: "+userID+Environment.NewLine+"roleID: "+role);
             var user = await _userManager.FindByIdAsync(userID);
             
-            var result = await _userManager.AddToRoleAsync(user, role);
+            var result = await _userManager.AddToRoleAsync(user, role); //user cannot be null
             return result;
         }
         //---------------------------------------------------------------------------------------------------------//
@@ -45,12 +47,11 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <param name="user">The user to be registered</param>
         /// <returns>The result from idenitity (success errors etc)</returns>
 
-        public async Task RegisterUser(UserDto user)
+        public async Task RegisterUser(UserModel user)
         {
             var newUser = new ApplicationUser { UserName = user.Email, Email = user.Email };
             System.Console.WriteLine("user " + user.Email);
-            await _userManager.CreateAsync(newUser, user.Password);
-           
+            await _userManager.CreateAsync(newUser, user.Password);         
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>

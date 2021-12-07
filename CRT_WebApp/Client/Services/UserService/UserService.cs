@@ -43,14 +43,15 @@ namespace CRT_WebApp.Client.Services.UserService
             OnChange.Invoke();
         }
 
-        public async Task RegisterUser(UserDto user)
+        public async Task RegisterUser(UserModel user)
         {
             await _http.PostAsJsonAsync("api/User/AddUser", user);
         }
 
         public async Task AddRoleToUser(string userID, string roleID)
         {
-            UserRole userRole = new UserRole(userID, roleID);
+            UserRole userRole = new UserRole(userID, roleID); //data being fed here correctly
+            //Console.WriteLine("CLIENT ADD ROLE TO USER"+Environment.NewLine+"userID: "+userRole.UserID+Environment.NewLine+"roleID: "+userRole.RoleID);
             await _http.PostAsJsonAsync("api/User/AddRole", userRole);
         }
 
@@ -62,7 +63,8 @@ namespace CRT_WebApp.Client.Services.UserService
 
         public async Task DeleteUser(string userID)
         {
-            //await _http.DeleteAsync("api/User/DeleteUser", userID);
+            //Uri address = new Uri(_http.BaseAddress, "api/User/DeleteUser");
+            //await _http.DeleteAsync(address);
         }
     }
 }
