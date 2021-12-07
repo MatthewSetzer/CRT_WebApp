@@ -16,6 +16,7 @@ namespace CRT_WebApp.Client.Services.NotesService
         public void AddNoteToList(NoteModel note)
         {
             Notes.Add(note);
+            OnChange.Invoke();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
