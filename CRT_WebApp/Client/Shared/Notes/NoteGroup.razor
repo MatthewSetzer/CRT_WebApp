@@ -1,6 +1,7 @@
 ﻿@using CRT_WebApp.Shared
 @inject INotesService NotesService
 @implements IDisposable;
+<div style="max-width: 99%">
 <Accordion Title=@noteModel.NoteHeader>
 
     <table class="table table-striped">
@@ -19,7 +20,7 @@
         </tbody>
     </table>
 </Accordion>
-
+</div>
 @code {
     [Parameter]
     public NoteModel noteModel{ get; set; }

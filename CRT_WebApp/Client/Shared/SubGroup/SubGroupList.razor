@@ -2,6 +2,7 @@
 @inject IQuoteService QuoteService
 @inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@using CRT_WebApp.Client.Shared.Notes
 
 
 @using CRT_WebApp.Shared
@@ -20,14 +21,14 @@
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="submit" style="z-index: -1">Create Quote</button>
+                    <button class="btn btn-success" type="submit"  style="z-index: 0">Create Quote</button>
                 </div>
                 @if (QuoteService.Quote.Id != 0)
                 {
                     <div class="input-group mb-3" style="margin-top: 5px">
                         <span class="input-group-text" id="inputGroup-sizing-default">Current Quote:@QuoteService.Quote.QuoteTitle</span>
                         <div class="input-group-append">
-                            <button class="btn btn-success" @onclick="@updateQuote" type="submit" style="z-index: -1">Update</button>
+                            <button class="btn btn-success" @onclick="@updateQuote" type="submit">Update</button>
                         </div>
                     </div>
                 }
@@ -41,7 +42,8 @@
     </div>
 
 </div>
-
+<h2>Sub Group(s)</h2>
+ <br />
 <div class="col-6">
         @foreach (var sub in SubGroupService.SubGroups)
         {
@@ -51,6 +53,9 @@
         }
        
     </div>
+     <h2>Note(s)</h2>
+     <br />
+    <NotGroupList></NotGroupList>
 
 
 @code {

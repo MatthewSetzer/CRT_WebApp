@@ -1,6 +1,8 @@
 ﻿@page "/printpage"
 @inject IQuoteService QuoteService
 @using System.IO
+@using Shared.Notes
+@inject IModalService modal
 
 <div class="row">
     <h2>@QuoteService.Quote.QuoteTitle</h2>
@@ -9,10 +11,24 @@
     </div>
 </div>
 
+<h3>Sub Group(s)</h3>
 <PrintList></PrintList>
+<br />
+<br />
+<br />
+<br />
+
+<h3>Note(s)</h3>
+<CRT_WebApp.Client.Shared.Notes.NotGroupList></CRT_WebApp.Client.Shared.Notes.NotGroupList>
+<br />
+<br />
+
+<div class="row">
 <InputFile OnChange="@OnFileSelection"></InputFile>
 <br />
 <br />
+</div>
+
 <div class="row">
     @foreach (var imgUrl in imgUrls)
     {
@@ -22,10 +38,13 @@
     }
 </div>
 
-<div class="row">
-    <button onclick="window.print();" class="btn btn-success">Create PDF</button>
-</div>
 
+   
+
+
+<div class="row">
+  <button onclick="window.print();" class="btn btn-success">Create PDF</button>
+ </div>
 
 
 
