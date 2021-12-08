@@ -32,6 +32,15 @@ namespace CRT_WebApp.Client.Services.UserService
             }
         }
 
+        public struct DeleteID
+        {
+            public string UserID { get; set; }
+            public DeleteID(string userID)
+            {
+                UserID = userID;
+            }
+        }
+
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Loads up all users
@@ -63,8 +72,10 @@ namespace CRT_WebApp.Client.Services.UserService
 
         public async Task DeleteUser(string userID)
         {
-            //Uri address = new Uri(_http.BaseAddress, "api/User/DeleteUser");
-            //await _http.DeleteAsync(address);
+            DeleteID deleteID = new DeleteID(userID);
+            //Console.WriteLine("CLIENT SERVICE DELETE ID: "+userID); 
+            await _http.PostAsJsonAsync("api/User/DeleteUser", deleteID);
+            //await _http.DeleteAsync("api/User/DeleteUser/"+deleteID.UserID);
         }
     }
 }

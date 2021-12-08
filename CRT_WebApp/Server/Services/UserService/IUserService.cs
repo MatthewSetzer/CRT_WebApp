@@ -36,6 +36,13 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <returns>A list of all registered users</returns>
         Task<List<ApplicationUser>> GetAllUsers();
 
+        /// <summary>
+        /// Deletes a user account from the database using its unique user ID
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        Task DeleteUser(string userID);
+
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

@@ -111,6 +111,22 @@
         </div>
     }
     <button class="btn btn-success" @onclick="AddUser">Add User</button>
+    <br><br>
+    @if(accountCreated == true)
+    {
+        <p class="form-text">Account registered!</p>
+    }
+
+    @if(accountDeleted == true)
+    {
+        <p class="form-text">Account deleted!</p>
+    }
+
+    @if(roleEdited)
+    {
+        <p class="form-text">User role assigned!</p>
+    }
+
 </div>
 
 @code {
@@ -120,26 +136,19 @@
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
     private IdentityUser objUser = new IdentityUser();
-    //string currUserRole { get; set; } = "User";
-    List<string> Options = new List<string>() { "user", "admin" };
+    List<string> Options = new List<string>() { "admin" };
     List<IdentityUser> Users = new List<IdentityUser>();
     string errString = "";
     bool showPopup = false, showRolePopup = false;
 
-    //UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
     UserModel userModel = new UserModel();
     UserService userService;
 
-    bool validated = false;
+    bool validated = false, accountDeleted = false, accountCreated = false, roleEdited = false;
     string newRole = "", currUserID = "";
 
     private void CreateUser()
     {
-        /*
-        this.userModel.Email = email;
-        this.userModel.Password = password;
-        this.userModel.ConfirmPassword = password;
-        this.userModel.Role = role;*/
         Console.WriteLine(userModel.Email);
         Console.WriteLine(userModel.Password);
         Console.WriteLine(userModel.Role);
@@ -200,11 +209,17 @@
     {
         Console.WriteLine(" save user email: " + userModel.Email);
         UserService.RegisterUser(userModel);
+        accountCreated = true;
+        accountDeleted = false;
+        roleEdited = false;
     }
 
     public async Task DeleteUser(string userID)
     {
         await UserService.DeleteUser(userID);
+        accountDeleted = true;
+        accountCreated = false;
+        roleEdited = false;
     }
 
     public void ClosePopup()
