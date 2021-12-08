@@ -32,6 +32,15 @@ namespace CRT_WebApp.Client.Services.UserService
             }
         }
 
+        public struct DeleteID
+        {
+            public string UserID { get; set; }
+            public DeleteID(string userID)
+            {
+                UserID = userID;
+            }
+        }
+
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Loads up all users
@@ -55,16 +64,19 @@ namespace CRT_WebApp.Client.Services.UserService
             await _http.PostAsJsonAsync("api/User/AddRole", userRole);
         }
 
-        public async Task RemoveRoleFromUser(string userID, string roleID)
+        public async Task RemoveRoleFromUser(string userID)
         {
-            UserRole userRole = new UserRole(userID, roleID);
-            await _http.PostAsJsonAsync("api/User/RemoveRole", userRole);
+            UserRole userRole = new UserRole(userID, "admin");
+            //await _http.PostAsJsonAsync("api/User/RemoveRole", userRole);
+            await _http.DeleteAsync("api/User/RemoveRole/"+userID);
         }
 
         public async Task DeleteUser(string userID)
         {
-            //Uri address = new Uri(_http.BaseAddress, "api/User/DeleteUser");
-            //await _http.DeleteAsync(address);
+            DeleteID deleteID = new DeleteID(userID);
+            //Console.WriteLine("CLIENT SERVICE DELETE ID: "+userID); 
+            //await _http.PostAsJsonAsync("api/User/DeleteUser", deleteID);
+            await _http.DeleteAsync("api/User/DeleteUser/"+deleteID.UserID);
         }
     }
 }
