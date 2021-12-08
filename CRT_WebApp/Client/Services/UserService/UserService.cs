@@ -74,8 +74,8 @@ namespace CRT_WebApp.Client.Services.UserService
         {
             DeleteID deleteID = new DeleteID(userID);
             //Console.WriteLine("CLIENT SERVICE DELETE ID: "+userID); 
-            await _http.PostAsJsonAsync("api/User/DeleteUser", deleteID);
-            //await _http.DeleteAsync("api/User/DeleteUser/"+deleteID.UserID);
+            //await _http.PostAsJsonAsync("api/User/DeleteUser", deleteID);
+            await _http.DeleteAsync("api/User/DeleteUser/"+deleteID.UserID);
         }
     }
 }

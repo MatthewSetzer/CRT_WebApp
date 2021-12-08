@@ -103,11 +103,11 @@ namespace CRT_WebApp.Server.Controllers
         //---------------------------------------------------------------------------------------------------------------//
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteUser")]
-        public async Task DeleteUserAccount(DeleteID userID)
+        [HttpDelete("DeleteUser/{UserID}")]
+        public async Task DeleteUserAccount(string UserID)
         {
-            Console.WriteLine("CONTROLLER DELETE ID: "+userID.UserID); 
-            await _userService.DeleteUser(userID.UserID);
+            Console.WriteLine("CONTROLLER DELETE ID: "+UserID); 
+            await _userService.DeleteUser(UserID);
         }
     }
 

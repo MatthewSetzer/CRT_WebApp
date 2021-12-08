@@ -69,10 +69,10 @@ namespace CRT_WebApp.Server.Services.UserService
 
         public async Task DeleteUser(string userID)
         {
-            Task<ApplicationUser> taskUser = _userManager.FindByIdAsync(userID);
-            Console.WriteLine("STATUSSS: "+taskUser.Status+Environment.NewLine+"Username retrieved: "+taskUser.Result.Email);
-            await _userManager.RemoveFromRoleAsync(taskUser.Result, "admin");
-            await _userManager.DeleteAsync(taskUser.Result);
+            ApplicationUser taskUser = await _userManager.FindByIdAsync(userID);
+            //Console.WriteLine("STATUSSS: "+taskUser.Status+Environment.NewLine+"Username retrieved: "+taskUser.Result.Email);
+            await _userManager.RemoveFromRoleAsync(taskUser, "admin");
+            await _userManager.DeleteAsync(taskUser);
         }
     }
 }

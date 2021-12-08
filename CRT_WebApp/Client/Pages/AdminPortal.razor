@@ -141,7 +141,7 @@
     string errString = "";
     bool showPopup = false, showRolePopup = false;
 
-    UserModel userModel = new UserModel();
+    UserModel userModel = new UserModel(), deleteUserMode = new UserModel();
     UserService userService;
 
     bool validated = false, accountDeleted = false, accountCreated = false, roleEdited = false;
@@ -217,6 +217,7 @@
     public async Task DeleteUser(string userID)
     {
         await UserService.DeleteUser(userID);
+        await UserService.LoadAllUsers();
         accountDeleted = true;
         accountCreated = false;
         roleEdited = false;
