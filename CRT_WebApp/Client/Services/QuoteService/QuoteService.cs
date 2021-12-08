@@ -13,10 +13,11 @@ namespace CRT_WebApp.Client.Services.QuoteService
         private readonly HttpClient _http;
         private readonly ISubGroupService _subGroupService;
         private readonly INotesService _notesService;
-        public QuoteService(HttpClient http, ISubGroupService subGroupService)
+        public QuoteService(HttpClient http, ISubGroupService subGroupService, INotesService notesService)
         {
             _http = http;
             _subGroupService = subGroupService;
+            _notesService = notesService;
         }
 
         public event Action OnChange;
