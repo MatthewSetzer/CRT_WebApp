@@ -14,7 +14,7 @@ namespace CRT_WebApp.Server.Services.UserService
         /// Registers a new user using the UserResgistrationDto
         /// </summary>
         /// <param name="user">The user to register</param>
-        Task<IdentityResult> RegisterUser(UserRegistrationDto user);
+        Task RegisterUser(UserModel user);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Changes the user's role

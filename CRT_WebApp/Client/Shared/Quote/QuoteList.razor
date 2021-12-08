@@ -108,8 +108,7 @@
     {
         if (deleteConfirmed)
         {
-            await QuoteService.SoftDeleteQuoteByID(_quote);
-
+            await QuoteService.SoftDeleteQuoteByID(_quote);            
         }
         await QuoteService.LoadAllQuotes();
     }

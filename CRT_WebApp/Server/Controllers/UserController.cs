@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.JSInterop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace CRT_WebApp.Server.Controllers
 {
@@ -16,6 +19,17 @@ namespace CRT_WebApp.Server.Controllers
     {
         //---------------------------------------------------------------------------------------------------------//
         private readonly IUserService _userService;
+
+        public struct UserRole
+        {
+            public string UserID { get; set; }
+            public string RoleID { get; set; }
+            public UserRole(string userID, string roleID)
+            {
+                UserID = userID;
+                RoleID = roleID;
+            }
+        }
         //---------------------------------------------------------------------------------------------------------//
         public UserController(IUserService userService)
         {
@@ -24,9 +38,10 @@ namespace CRT_WebApp.Server.Controllers
         //---------------------------------------------------------------------------------------------------------//
         [Authorize(Roles= "Admin")]
         [HttpPost("AddRole")]
-        public async Task<ActionResult<RegistrationResponseDto>> AddRoleToUser(string userID,string role)
+        public async Task<ActionResult<RegistrationResponseDto>> AddRoleToUser(UserRole userRole)
         {
-            var result = await _userService.AddRoleToUser(userID, role);
+            //Console.WriteLine("CONTROLLER ADD ROLE TO USER"+Environment.NewLine+"userID: "+userRole.UserID+Environment.NewLine+"roleID: "+userRole.RoleID);
+            var result = await _userService.AddRoleToUser(userRole.UserID, userRole.RoleID);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
@@ -50,6 +65,43 @@ namespace CRT_WebApp.Server.Controllers
             }
         }
 
+        //---------------------------------------------------------------------------------------------------------------//
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("AddUser")]
+        public async Task AddUser(UserModel user)
+        {
+            Console.WriteLine("//---------------------------------------------------------------------------------------------------------//");
+            Console.WriteLine("Gets called to add a user");
+            Console.WriteLine("//---------------------------------------------------------------------------------------------------------//");
+
+            await _userService.RegisterUser(user);       
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("RemoveRole")]
+
+        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string userID, string roleID)
+        {
+            var result = await _userService.RemoveRoleFromUser(userID, roleID);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new RegistrationResponseDto { Errors = errors });
+            }
+            return Ok();
+        }
+
+        //---------------------------------------------------------------------------------------------------------------//
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteUser")]
+        public async Task DeleteUser(string userID)
+        {
+           //var result = await _userService.DeleteUser(userID);
+        }
     }
+
+
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

@@ -1,7 +1,215 @@
 ﻿@page "/adminportal"
 @attribute [Authorize(Roles = "Admin")]
+@inject IUserService UserService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<!--inject Applic-->
+
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity;
+@using CRT_WebApp.Client.Services.UserService;
+@using CRT_WebApp.Shared.DTO;
+
+
 <h3>AdminPortal</h3>
 
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in UserService.Users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <button type="button" @onclick="() => DeleteUser(user.Id)" class="btn-primary">
+                            Delete
+                        </button>
+                        <button type="button" @onclick="() => ShowRolePopup(user.Id)" class="btn-primary">
+                            Edit Role
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (showRolePopup == true)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-dialog">Assign User Role</h3>
+                        <div class="modal-body">
+                            <select class="form-control" @bind="newRole">
+                                @foreach (var role in Options)
+                                {
+                                    <option>@role</option>
+                                }
+                            </select>
+                            <br><br><br>
+                            <button class="btn-primary" @onclick="() => AssignRole(currUserID, newRole)">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (showPopup == true)
+    {
+        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Edit User</h3>
+                        <!-- Close popup button-->
+                        <button type="button" class="close" @onclick="ClosePopup">
+                            <span aria-hidden="true">X</span>
+                        </button>
+                    </div>
+                    <!-- edit form for user-->
+                    <div class="modal-body">
+                        <!--display ID only if not new user-->
+                        @if (objUser.Id != "")
+                        {
+                            <p>@objUser.Id</p>
+                        }
+                        <!-- allow edit only if new user-->
+                        @if (objUser.Id != "")
+                        {
+                            <p>@objUser.Email</p>
+                        }
+
+                        <br /> <br />
+
+                        <div class="modal-body">
+                            <EditForm Model="@userModel" OnValidSubmit="@CreateUser" OnInvalidSubmit="InvalidTestPrint">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
+                                    <InputText class="form-control" type="text" placeholder="Email" @bind-Value="@userModel.Email" />
+                                    <br>
+                                    <InputText class="form-control" type="text" placeholder="Password" @bind-Value="@userModel.Password" />
+                                    <br>
+                                    <InputText class="form-control" type="text" placeholder="Confirm password" @bind-Value="@userModel.ConfirmPassword" />
+                                <br /> <br />
+                                       <button class="btn btn-success" type="submit">Save</button>
+                            </EditForm>
+                        </div>
+                        <br /> <br />                      
+                        <br />
+                        <span style="color:red">@errString</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <button class="btn btn-success" @onclick="AddUser">Add User</button>
+</div>
+
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    string ADMIN_ROLE = "admin";
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    private IdentityUser objUser = new IdentityUser();
+    //string currUserRole { get; set; } = "User";
+    List<string> Options = new List<string>() { "user", "admin" };
+    List<IdentityUser> Users = new List<IdentityUser>();
+    string errString = "";
+    bool showPopup = false, showRolePopup = false;
+
+    //UserRegistrationDto userRegistrationDto = new UserRegistrationDto();
+    UserModel userModel = new UserModel();
+    UserService userService;
+
+    bool validated = false;
+    string newRole = "", currUserID = "";
+
+    private void CreateUser()
+    {
+        /*
+        this.userModel.Email = email;
+        this.userModel.Password = password;
+        this.userModel.ConfirmPassword = password;
+        this.userModel.Role = role;*/
+        Console.WriteLine(userModel.Email);
+        Console.WriteLine(userModel.Password);
+        Console.WriteLine(userModel.Role);
+        SaveUser();
+        AssignRole(currUserID, userModel.Role);
+    }
+
+    private void InvalidTestPrint()
+    {
+        Console.WriteLine("Failed to validate submission");
+    }
+
+    private void AddUser()
+    {
+        objUser = new IdentityUser();
+        objUser.PasswordHash = "*****";
+        objUser.Id = "";
+        showPopup = true;
+    }
+
+    protected override async void OnInitialized()
+    {
+        try
+        {
+            UserService.OnChange += StateHasChanged;
+            await UserService.LoadAllUsers();
+            userService = new UserService(new HttpClient());
+            CurrentUser = (await authenticationStateTask).User;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("initialization error");
+        }
+    }
+
+    public void Dispose()
+    {
+        UserService.OnChange -= StateHasChanged;
+    }
+
+    public void ShowUsers()
+    {
+        errString = "";
+    }
+
+    public void ShowRolePopup(string userID)
+    {
+        showRolePopup = true;
+        currUserID = userID;
+    }
+
+    public void AssignRole(string userID, string roleID)
+    {
+        UserService.AddRoleToUser(userID, roleID);
+    }
+
+    public void SaveUser()
+    {
+        Console.WriteLine(" save user email: " + userModel.Email);
+        UserService.RegisterUser(userModel);
+    }
+
+    public async Task DeleteUser(string userID)
+    {
+        await UserService.DeleteUser(userID);
+    }
+
+    public void ClosePopup()
+    {
+        showPopup = false;
+    }
 
 }
