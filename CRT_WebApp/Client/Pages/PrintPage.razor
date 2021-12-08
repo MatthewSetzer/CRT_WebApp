@@ -1,0 +1,49 @@
+﻿@page "/printpage"
+@inject IQuoteService QuoteService
+@using System.IO
+
+<div class="row">
+    <h2>@QuoteService.Quote.QuoteTitle</h2>
+    <div class="ml-auto">
+        <img src="/Logo/LogoImg.jpg" style="max-width: 70%;">
+    </div>
+</div>
+
+<PrintList></PrintList>
+<InputFile OnChange="@OnFileSelection"></InputFile>
+<br />
+<br />
+<div class="row">
+    @foreach (var imgUrl in imgUrls)
+    {
+        <img src="@imgUrl" style="max-width: 50%">
+        <br />
+        <br />
+    }
+</div>
+
+<div class="row">
+    <button onclick="window.print();" class="btn btn-success">Create PDF</button>
+</div>
+
+
+
+
+
+
+@code {
+
+    List<string> imgUrls = new List<string>();
+    private async Task OnFileSelection(InputFileChangeEventArgs e)
+    {
+        foreach (IBrowserFile imgFile in e.GetMultipleFiles(5))
+        {
+            var buffers = new byte[imgFile.Size];
+            await imgFile.OpenReadStream().ReadAsync(buffers);
+            string imageType = imgFile.ContentType;
+            string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
+            imgUrls.Add(imgUrl);
+        }
+    }
+
+}

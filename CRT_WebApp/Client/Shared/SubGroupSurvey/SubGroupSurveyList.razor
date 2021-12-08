@@ -1,13 +1,12 @@
-@inject ISubGroupService SubGroupService
-@inject INotesService NoteService
+﻿@inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
 @inject IToastService toastService
-@inject IModalService modal
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 
 @using CRT_WebApp.Shared
 @implements IDisposable;
+
 
 <div class="row" style="margin-top:2px">
 
@@ -16,12 +15,12 @@
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
+                    <span class="input-group-text" id="inputGroup-sizing-default">Survey Name: </span>
                 </div>
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="submit">Create Quote</button>
+                    <button class="btn btn-success" type="submit">Create Survey</button>
                 </div>
                 @if (QuoteService.Quote.Id != 0)
                 {
@@ -35,24 +34,13 @@
             </div>
         </EditForm>
     </div>
-    <div class="ml-auto mr-3">
-        <h4><span style="color:blueviolet">Quote Total: </span>$@SubGroupService.GetSubGroupsTotal()</h4>
-        <div class="ml-auto mr-3">
-            <button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))" class="btn btn-info">Add Notes +</button>
-        </div>
-    </div>
 </div>
-<hr />
-<div class="row">
-    <h3 style="color:blueviolet">Sub Group(s)</h3>
-</div>
-
 
 <div class="col-6">
     @foreach (var sub in SubGroupService.SubGroups)
     {
         <div style="margin-top:2px">
-            <SubGroup subGroup=sub></SubGroup>
+            <SubGroupSurvey subGroup=sub></SubGroupSurvey>
         </div>
     }
 
@@ -89,7 +77,6 @@
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
             SubGroups = SubGroupService.GetSubGroupList(),
-            Notes = NoteService.GetNotesFromList(),
             Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
             IsDeleted = false
         };
@@ -99,9 +86,8 @@
             QuoteService.AddQuote(newQuote);
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
-            NoteService.Notes.Clear();
 
-            toastService.ShowSuccess("Quote Created", "Success");
+            toastService.ShowSuccess("Survey Created", "Success");
         }
         catch
         {
@@ -128,7 +114,7 @@
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
 
-            toastService.ShowSuccess("Quote Updated", "Success");
+            toastService.ShowSuccess("Survey Updated", "Success");
         }
         catch
         {

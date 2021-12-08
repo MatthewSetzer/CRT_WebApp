@@ -1,0 +1,26 @@
+﻿@inject ISubGroupService SubGroupService
+
+<div class="row" style="margin-top:2px">
+    <div class="col-6">
+        @foreach (var sub in SubGroupService.SubGroups)
+        {
+            <div style="margin-top:2px">
+                <PrintGroup subGroup=sub></PrintGroup>
+            </div>
+        }
+    </div>
+    <br />
+
+</div>
+<br />
+<div class="float-right">
+    <h2>
+        <label style="color:blueviolet">Quote Total </label> 
+        <label>$@SubGroupService.GetSubGroupsTotal() </label> 
+    </h2>
+</div>
+
+
+@code {
+
+}

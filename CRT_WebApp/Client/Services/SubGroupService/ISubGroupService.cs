@@ -29,6 +29,12 @@ namespace CRT_WebApp.Client.Services.SubGroupService
         void AddSubGroupToList(SubGroupModel subGroup);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Adds the Subgroup to the  list from edit button
+        /// </summary>
+        /// <param name="subGroup">The subgroup to be added</param>
+        void AddSubGroupToListFromEdit(SubGroupModel subGroup);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Removes a subgroup from the list
         /// </summary>
         /// <param name="subGroup">The subgroup to be removed</param>

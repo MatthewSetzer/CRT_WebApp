@@ -1,5 +1,7 @@
 ﻿@inject IQuoteService QuoteService
-
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
+@inject NavigationManager Navigation
 
 <div class="container">
     <div class="row">
@@ -29,19 +31,21 @@
                         <td>
                             <ul class="list-inline m-0">
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-success btn-sm">
-                                        Print
-                                    </button>
+                                    <NavLink href="printpage">
+                                        <button type="button" class="btn btn-success btn-sm" @onclick="() => PrintItem(item)">
+                                            Print
+                                        </button>
+                                    </NavLink>
                                 </li>
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-warning btn-sm">
+                                    <button type="button" class="btn btn-warning btn-sm" @onclick="() => UpdateItem(item)">
                                         Edit
                                     </button>
                                 </li>
                                 <AuthorizeView Roles="Admin">
                                     <li class="list-inline-item">
                                         <button type="button" class="btn btn-danger btn-sm" @onclick="() => DeleteClick(item)">
-                                            Remove
+                                            Soft Delete
                                         </button>
                                     </li>
                                 </AuthorizeView>
@@ -52,10 +56,12 @@
             </tbody>
         </table>
     </div>
-    <div class="row">
-        <NavLink class="nav-link" href="createquote">
-            <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
-        </NavLink>
+    <div class="ml-auto mr-3">
+        <div class="row">
+            <NavLink class="nav-link" href="createquote">
+                <button type="button" @onclick="ClearGroups" class="btn btn-info add-new"><i class="fa fa-plus"></i>New Quote</button>
+            </NavLink>
+        </div>
     </div>
 </div>
 
@@ -64,7 +70,6 @@
 </Confirm>
 
 @code {
-
     protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
     int deleteID;
     private QuoteModel _quote;
@@ -87,6 +92,18 @@
         DeleteConfirmation.Show();
     }
 
+    public void UpdateItem(QuoteModel quote)
+    {
+        QuoteService.SelectQuoteToBeUpdated(quote);
+        Navigation.NavigateTo("createquote");
+    }
+
+    public void PrintItem(QuoteModel quote)
+    {
+        QuoteService.SelectQuoteToBePrinted(quote);
+        Navigation.NavigateTo("printpage");
+    }
+
     protected async Task ConfirmDelete_Click(bool deleteConfirmed)
     {
         if (deleteConfirmed)
@@ -94,5 +111,11 @@
             await QuoteService.SoftDeleteQuoteByID(_quote);            
         }
         await QuoteService.LoadAllQuotes();
+    }
+
+    public void ClearGroups()
+    {
+        SubGroupService.SubGroups.Clear();
+        QuoteService.Quote.Id = 0;
     }
 }

@@ -1,10 +1,8 @@
-@inject IItemService ItemService
+﻿@inject IItemService ItemService
 @inject ISubGroupService SubGroupService
 @inject IAssemblyItemService AssemblyItemService
-@inject IModalService modal
 @using CRT_WebApp.Shared
-@using CRT_WebApp.Client.Shared.SubGroup
-@using CRT_WebApp.Client.Shared.Notes
+@using CRT_WebApp.Client.Shared.SubGroupSurvey
 @implements IDisposable;
 
 <div class="row">
@@ -42,19 +40,12 @@
                 <InputNumber id="Quantity" @bind-Value="Item.Quantity"></InputNumber>
             </div>
 
-            <label>Rate: </label>
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">$</span>
-                </div>
-                <InputNumber id="Rate" @bind-Value="Item.Rate"></InputNumber>
-            </div>
-
-
             <button class="btn btn-primary" type="submit">Add Item</button>
 
         </EditForm>
     </div>
+
+
     <div class="col-6">
         <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
             <DataAnnotationsValidator />
@@ -75,8 +66,6 @@
                 <tr>
                     <th scope="col">Description</th>
                     <th scope="col">Number of Units</th>
-                    <th scope="col">Rate</th>
-                    <th scope="col">Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,27 +74,17 @@
                     <tr>
                         <td>@item.Description</td>
                         <td>@item.NumberOfUnitsWithMetric()</td>
-                        <td>$@item.GetFormattedRate()</td>
-                        <td>$@item.GetFormattedTotalPrice()</td>
                     </tr>
                 }
             </tbody>
         </table>
-        <h5><span style="color:blueviolet">Sub Total: </span>$@SubGroup.GetFormattedSubTotal()</h5>
-
     </div>
 </div>
-@*
-<button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))" class="btn btn-danger">Add Notes +</button>*@
-
+<br />
+<br />
 <div>
-    <br />
-    <SubGroupList></SubGroupList>
-    <br />
-    <NotGroupList></NotGroupList>
+    <SubGroupSurveyList></SubGroupSurveyList>
 </div>
-
-
 
 @code {
     public IEnumerable<string> SelectList = new List<string>() { "Quantity", "Square Foot", "Linear Foot" };
@@ -116,8 +95,6 @@
 
     private SubGroupViewModel SubGroup = new();
     private List<SubGroupModel> SubGroups = new();
-
-
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
@@ -132,7 +109,7 @@
         AssemblyItemModel assemblyItem = new AssemblyItemModel
         {
             Description = Item.Description,
-            Rate = Item.Rate,
+            Rate = 0,
             Metric = listItem,
             NumberOfUnits = Item.Quantity
         };
@@ -185,3 +162,4 @@
 
     //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
 }
+
