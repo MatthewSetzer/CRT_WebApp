@@ -1,4 +1,4 @@
-@inject ISubGroupService SubGroupService
+﻿@inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
 @inject IToastService toastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -7,20 +7,20 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
- 
+
 <div class="row" style="margin-top:2px">
-   
+
     <div class="col-4">
 
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Quote Name: </span>
+                    <span class="input-group-text" id="inputGroup-sizing-default">Survey Name: </span>
                 </div>
                 <InputText class="form-control" type="text" aria-label="Sizing example input"
                            aria-describedby="inputGroup-sizing-default" @bind-Value="quote.QuoteTitle" />
                 <div class="input-group-append">
-                    <button class="btn btn-success" type="submit">Create Quote</button>
+                    <button class="btn btn-success" type="submit">Create Survey</button>
                 </div>
                 @if (QuoteService.Quote.Id != 0)
                 {
@@ -32,22 +32,19 @@
                     </div>
                 }
             </div>
-            <label>
-                Quote Total: $@SubGroupService.GetSubGroupsTotal()
-            </label>
         </EditForm>
     </div>
 </div>
 
 <div class="col-6">
-        @foreach (var sub in SubGroupService.SubGroups)
-        {
-            <div style="margin-top:2px">
-                <SubGroup subGroup=sub></SubGroup>
-            </div>
-        }
-       
-    </div>
+    @foreach (var sub in SubGroupService.SubGroups)
+    {
+        <div style="margin-top:2px">
+            <SubGroupSurvey subGroup=sub></SubGroupSurvey>
+        </div>
+    }
+
+</div>
 
 
 @code {
@@ -90,7 +87,7 @@
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
 
-            toastService.ShowSuccess("Quote Created", "Success");
+            toastService.ShowSuccess("Survey Created", "Success");
         }
         catch
         {
@@ -117,7 +114,7 @@
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
 
-            toastService.ShowSuccess("Quote Updated", "Success");
+            toastService.ShowSuccess("Survey Updated", "Success");
         }
         catch
         {
