@@ -1,0 +1,67 @@
+﻿@inject IItemService ItemService
+@inject ISubGroupService SubGroupService
+@inject IAssemblyItemService AssemblyItemService
+@using CRT_WebApp.Shared
+@using CRT_WebApp.Client.Shared.SubGroup
+@implements IDisposable;
+
+
+
+   
+<br />
+<br />
+<div>
+    <CRT_WebApp.Client.Shared.Printing.PrintGroupList></CRT_WebApp.Client.Shared.Printing.PrintGroupList>
+</div>
+
+@code {
+    private AssemblyItemViewModel Item = new();
+    private List<AssemblyItemModel> Items = new();
+
+    private SubGroupViewModel SubGroup = new();
+    private List<SubGroupModel> SubGroups = new();
+
+    //---------------------------------------------------------------------------------------------------------//
+    protected override void OnInitialized()
+    {
+        ItemService.OnChange += StateHasChanged;
+        LoadItems();
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    private void addItem()
+    {
+        AssemblyItemModel assemblyItem = new AssemblyItemModel
+        {
+            Description = Item.Description,
+            Rate = Item.Rate,
+            NumberOfUnits = Item.Quantity
+        };
+        AssemblyItemService.AddAssemblyItemToList(assemblyItem);
+
+        SubGroup.SubTotal += Item.Rate * Item.Quantity;
+
+        Item = new AssemblyItemViewModel();
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    private void addSubGroup()
+    {
+        AssemblyItemService.AddAssemblyListToSubGroup(SubGroup.SubGroupTitle);
+        AssemblyItemService.ClearAssemblyItemList();
+
+        SubGroup = new SubGroupViewModel();
+        Item = new AssemblyItemViewModel();
+
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    public void Dispose()
+    {
+        ItemService.OnChange -= StateHasChanged;
+    }
+    //---------------------------------------------------------------------------------------------------------//
+    public void LoadItems()
+    {
+        ItemService.LoadItems();
+    }
+
+    //-------------------------------------...ooo000 END OF CODE 000ooo...-------------------------------------//
+}

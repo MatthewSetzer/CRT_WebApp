@@ -16,6 +16,7 @@ namespace CRT_WebApp.Client.Services.NotesService
         public void AddNoteToList(NoteModel note)
         {
             Notes.Add(note);
+            OnChange.Invoke();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -24,6 +25,7 @@ namespace CRT_WebApp.Client.Services.NotesService
         /// <param name="notesToAdd">The list of notes to be added</param>
         public void AddRangeOfNotesToList(List<NoteModel> notesToAdd)
         {
+            Notes.Clear();
             Notes.AddRange(notesToAdd);
         }
         //---------------------------------------------------------------------------------------------------------//

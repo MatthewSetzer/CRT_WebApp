@@ -43,6 +43,18 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
             _subGroupService.AddSubGroupToList(subGroupModel);
         }
         //---------------------------------------------------------------------------------------------------------//
+
+        public void AddAssemblyListToSubGroupFromEdit(string Title)
+        {
+            double subtotal = 0;
+            foreach (AssemblyItemModel item in AssemblyItems)
+            {
+                subtotal += item.Total;
+            }
+            SubGroupModel subGroupModel = new SubGroupModel() { ListOfItems = AssemblyItems, SubGroupTitle = Title, SubTotal = subtotal };
+            _subGroupService.AddSubGroupToListFromEdit(subGroupModel);
+        }
+        //---------------------------------------------------------------------------------------------------------//
         public void ClearAssemblyItemList()
         {
             AssemblyItems = new List<AssemblyItemModel>();

@@ -1,0 +1,30 @@
+﻿@inject INotesService NoteService
+@using CRT_WebApp.Shared
+@implements IDisposable;
+
+    <div class="row">
+        <h3 style="color:blueviolet">Note(s)</h3>
+    </div>
+
+    @foreach (var note in NoteService.Notes)
+    {
+        <div class="col-6">
+            <NoteGroup noteModel=note></NoteGroup>
+        </div>
+
+    }
+
+    @code {
+
+        protected override void OnInitialized()
+        {
+            NoteService.OnChange += StateHasChanged;
+        }
+
+
+        public void Dispose()
+        {
+            NoteService.OnChange -= StateHasChanged;
+
+        }
+    }

@@ -4,20 +4,28 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
-
+using CRT_WebApp.Client.Services.SubGroupService;
+using CRT_WebApp.Client.Services.NotesService;
 namespace CRT_WebApp.Client.Services.QuoteService
 {
     public class QuoteService : IQuoteService
     {
         private readonly HttpClient _http;
-        public QuoteService(HttpClient http)
+        private readonly ISubGroupService _subGroupService;
+        private readonly INotesService _notesService;
+        public QuoteService(HttpClient http, ISubGroupService subGroupService, INotesService notesService)
         {
             _http = http;
+            _subGroupService = subGroupService;
+            _notesService = notesService;
         }
 
         public event Action OnChange;
         public List<QuoteModel> Quotes { get; set; } = new List<QuoteModel>();
-     
+        //---------------------------------------------------------------------------------------------------------//
+        public QuoteModel Quote { get; set; } = new QuoteModel();
+
+
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Makes API call to create a Quote
@@ -84,7 +92,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
             await _http.PostAsJsonAsync("api/Quote/SoftDelete", quoteModel);
             OnChange.Invoke();
         }
-
+        //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// API call to delete entire quote
         /// </summary>
@@ -94,7 +102,45 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             await _http.PostAsJsonAsync("api/Quote/DeleteQuote", id);
         }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// "Selects" a quote to be updated, populating the SubGroup service 
+        /// </summary>
+        /// <param name="quote">The quote that will be modified or changed</param>
+        public void SelectQuoteToBeUpdated(QuoteModel quote)
+        {
+            Quote = quote;
+            _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
+            _notesService.AddRangeOfNotesToList(quote.Notes);
+        }
 
+        /// <summary>
+        /// "Selects" a quote to be printed, populating the SubGroup service 
+        /// </summary>
+        /// <param name="quote"></param>
+        public void SelectQuoteToBePrinted(QuoteModel quote)
+        {
+            Quote = quote;
+            _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
+            _notesService.AddRangeOfNotesToList(quote.Notes);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Sets the current quote to null
+        /// </summary>
+        public void ClearCurrentSelectedQuote()
+        {
+            Quote = null;
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Makes an API call to update a quote on the database
+        /// </summary>
+        /// <param name="quote">The quote with the updated information</param>
+        public async Task UpdateQuote(QuoteModel quote)
+        {
+            await _http.PostAsJsonAsync("api/Quote/UpdateQuote", quote);
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

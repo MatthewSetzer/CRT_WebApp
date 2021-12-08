@@ -1,0 +1,48 @@
+﻿@using CRT_WebApp.Shared
+@inject INotesService NotesService
+@implements IDisposable;
+    <div style="width: 200%">
+        <Accordion Title=@noteModel.NoteHeader>
+            <button type="button" style="margin:2px" class="btn btn-danger btn-sm" @onclick="() => RemoveNote(noteModel)">
+                Remove Note
+            </button>
+            <table class="table table-striped">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Description</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>@noteModel.NoteContent</td>
+                        <td>
+                            <ul class="list-inline m-0">
+                                <li class="list-inline-item">
+                                    <button type="button" class="btn btn-warning btn-sm">
+                                        Edit
+                                    </button>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </Accordion>
+    </div>
+    @code {
+        [Parameter]
+        public NoteModel noteModel { get; set; }
+
+        public void Dispose()
+        {
+
+        }
+
+        public void RemoveNote(NoteModel noteModel)
+        {
+            NotesService.RemoveNoteFromList(noteModel);
+        }
+    }

@@ -2,13 +2,13 @@
 using CRT_WebApp.Server.Data;
 using CRT_WebApp.Server.Services.QuoteService;
 using CRT_WebApp.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CRT_WebApplication.Server.Controllers
 {
-    
     [ApiController]
     [Route("api/[controller]")]
 
@@ -62,6 +62,7 @@ namespace CRT_WebApplication.Server.Controllers
         /// Hard delete Quote API, permanently deletes a quote using the QuoteService.
         /// </summary>
         /// <param name="quoteModel"></param>
+        [Authorize(Roles = "Admin")]
         [HttpPost("DeleteQuote")]
         public async Task DeleteQuote(int id)
         {
