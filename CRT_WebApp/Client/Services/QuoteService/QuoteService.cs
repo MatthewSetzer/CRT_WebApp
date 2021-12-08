@@ -5,12 +5,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using CRT_WebApp.Client.Services.SubGroupService;
+using CRT_WebApp.Client.Services.NotesService;
 namespace CRT_WebApp.Client.Services.QuoteService
 {
     public class QuoteService : IQuoteService
     {
         private readonly HttpClient _http;
         private readonly ISubGroupService _subGroupService;
+        private readonly INotesService _notesService;
         public QuoteService(HttpClient http, ISubGroupService subGroupService)
         {
             _http = http;
@@ -108,6 +110,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             Quote = quote;
             _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
+            _notesService.AddRangeOfNotesToList(quote.Notes);
         }
 
         /// <summary>
@@ -118,6 +121,7 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             Quote = quote;
             _subGroupService.AddRangeOfSubGroups(quote.SubGroups);
+            _notesService.AddRangeOfNotesToList(quote.Notes);
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
