@@ -136,7 +136,7 @@
     System.Security.Claims.ClaimsPrincipal CurrentUser;
 
     private IdentityUser objUser = new IdentityUser();
-    List<string> Options = new List<string>() { "admin" };
+    List<string> Options = new List<string>() { "user", "admin" };
     List<IdentityUser> Users = new List<IdentityUser>();
     string errString = "";
     bool showPopup = false, showRolePopup = false;
@@ -149,9 +149,7 @@
 
     private void CreateUser()
     {
-        Console.WriteLine(userModel.Email);
-        Console.WriteLine(userModel.Password);
-        Console.WriteLine(userModel.Role);
+
         SaveUser();
         AssignRole(currUserID, userModel.Role);
     }
@@ -202,12 +200,20 @@
 
     public void AssignRole(string userID, string roleID)
     {
-        UserService.AddRoleToUser(userID, roleID);
+        if(newRole.Equals("admin"))
+        {
+            UserService.AddRoleToUser(userID, roleID);
+        }
+        else if(newRole.Equals("user"))
+        {
+            UserService.RemoveRoleFromUser(userID);
+        }
+
     }
 
     public void SaveUser()
     {
-        Console.WriteLine(" save user email: " + userModel.Email);
+
         UserService.RegisterUser(userModel);
         accountCreated = true;
         accountDeleted = false;

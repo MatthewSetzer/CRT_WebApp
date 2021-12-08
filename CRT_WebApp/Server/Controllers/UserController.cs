@@ -87,11 +87,12 @@ namespace CRT_WebApp.Server.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("RemoveRole")]
+        [HttpDelete("RemoveRole/{UserID}")]
 
-        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string userID, string roleID)
+        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string UserID)
         {
-            var result = await _userService.RemoveRoleFromUser(userID, roleID);
+            Console.WriteLine("TO DELETE: "+UserID+" : "+"admin");
+            var result = await _userService.RemoveRoleFromUser(UserID);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
@@ -105,8 +106,7 @@ namespace CRT_WebApp.Server.Controllers
         [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteUser/{UserID}")]
         public async Task DeleteUserAccount(string UserID)
-        {
-            Console.WriteLine("CONTROLLER DELETE ID: "+UserID); 
+        { 
             await _userService.DeleteUser(UserID);
         }
     }

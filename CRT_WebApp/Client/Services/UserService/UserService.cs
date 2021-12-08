@@ -64,10 +64,11 @@ namespace CRT_WebApp.Client.Services.UserService
             await _http.PostAsJsonAsync("api/User/AddRole", userRole);
         }
 
-        public async Task RemoveRoleFromUser(string userID, string roleID)
+        public async Task RemoveRoleFromUser(string userID)
         {
-            UserRole userRole = new UserRole(userID, roleID);
-            await _http.PostAsJsonAsync("api/User/RemoveRole", userRole);
+            UserRole userRole = new UserRole(userID, "admin");
+            //await _http.PostAsJsonAsync("api/User/RemoveRole", userRole);
+            await _http.DeleteAsync("api/User/RemoveRole/"+userID);
         }
 
         public async Task DeleteUser(string userID)
