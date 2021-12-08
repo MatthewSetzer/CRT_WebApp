@@ -2,25 +2,29 @@
 @using CRT_WebApp.Shared
 @implements IDisposable;
 
-@foreach(var note in NoteService.Notes)
-{
-    <div>
-        <NoteGroup noteModel=note></NoteGroup>
+    <div class="row">
+        <h3 style="color:blueviolet">Note(s)</h3>
     </div>
 
-}
-
-@code {
-
-    protected override void OnInitialized()
+    @foreach (var note in NoteService.Notes)
     {
-        NoteService.OnChange += StateHasChanged;
+        <div class="col-6">
+            <NoteGroup noteModel=note></NoteGroup>
+        </div>
+
     }
 
+    @code {
 
-    public void Dispose()
-    {
-        NoteService.OnChange -= StateHasChanged;
+        protected override void OnInitialized()
+        {
+            NoteService.OnChange += StateHasChanged;
+        }
 
+
+        public void Dispose()
+        {
+            NoteService.OnChange -= StateHasChanged;
+
+        }
     }
-}

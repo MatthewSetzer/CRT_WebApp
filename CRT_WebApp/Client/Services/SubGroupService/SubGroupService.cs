@@ -21,7 +21,6 @@ namespace CRT_WebApp.Client.Services.SubGroupService
             {
                 OnChange.Invoke();
             }
-           
         }
         //---------------------------------------------------------------------------------------------------------//
         public void AddSubGroupToList(SubGroupModel subGroup)

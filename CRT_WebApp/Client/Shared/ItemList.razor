@@ -91,38 +91,18 @@
                 }
             </tbody>
         </table>
-        <label>Sub Total: $@SubGroup.GetFormattedSubTotal()</label>
-
-        <EditForm Model="@SubGroup" OnValidSubmit="@addSubGroup">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <label>Sub Group Title: </label>
-            <div class="input-group mb-3">
-                <InputText class="form-control" type="text" @bind-Value="SubGroup.SubGroupTitle" />
-            </div>
-            <button class="btn btn-success" type="submit">Add Sub-Group</button>
-           
-        </EditForm>
-
+        <h5><span style="color:blueviolet">Sub Total: </span>$@SubGroup.GetFormattedSubTotal()</h5>
 
     </div>
-    <br /><br /><br />
 </div>
-      
-<br /><br />
- <button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))"  class="btn btn-danger">Add Notes +</button>
- <br /><br />
+@*
+<button @onclick="@(()=>modal.Show<Pages.Notes>("Add Notes To The Quote"))" class="btn btn-danger">Add Notes +</button>*@
+
 <div>
-
-
-<h2>Sub Group(s)</h2>
- <br />
+    <br />
     <SubGroupList></SubGroupList>
     <br />
-    <br />
-    <h2>Note(s)</h2>
-     <br />
-   <NotGroupList></NotGroupList>
+    <NotGroupList></NotGroupList>
 </div>
 
 
@@ -137,7 +117,7 @@
     private SubGroupViewModel SubGroup = new();
     private List<SubGroupModel> SubGroups = new();
 
-   
+
 
     //---------------------------------------------------------------------------------------------------------//
     protected override void OnInitialized()
