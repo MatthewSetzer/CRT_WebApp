@@ -1,8 +1,11 @@
 ﻿@using CRT_WebApp.Shared
 @inject ISubGroupService SubGroupService
+@inject IQuoteService QuoteService
+@inject IAssemblyItemService AssemblyItemService
+
 @implements IDisposable;
 <div style="width: 200%">
-<Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString()>
+    <Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString()>
 
         <button type="button" style="margin:2px" class="btn btn-danger btn-sm" @onclick="() => RemoveSubGroup(subGroup)">
             Remove Sub-Group
@@ -29,7 +32,7 @@
                         <td>
                             <ul class="list-inline m-0">
                                 <li class="list-inline-item">
-                                    <button type="button" class="btn btn-warning btn-sm">
+                                    <button type="button" @onclick="() => AddItem(item)" class="btn btn-warning btn-sm">
                                         Edit
                                     </button>
                                 </li>
@@ -39,7 +42,7 @@
                 }
             </tbody>
         </table>
-</Accordion>
+    </Accordion>
 </div>
 @code {
     [Parameter]
@@ -52,6 +55,17 @@
 
     public void RemoveSubGroup(SubGroupModel subGroup)
     {
+
         SubGroupService.RemoveSubGroupFromList(subGroup);
+        if (subGroup.Id != 0)
+        {
+            QuoteService.DeleteSubGroup(subGroup);
+        }
+
+    }
+
+    public void AddItem(AssemblyItemModel item)
+    {
+        AssemblyItemService.AddAssemblyItemToList(item);
     }
 }

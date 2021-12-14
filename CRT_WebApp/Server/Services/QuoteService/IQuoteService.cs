@@ -41,6 +41,12 @@ namespace CRT_WebApp.Server.Services.QuoteService
         Task DeleteQuoteByID(int quoteID);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Deletes sub group in database using its ID as reference
+        /// </summary>
+        /// <param name="quoteID">The quotes ID</param>
+        Task DeleteSubGroupsByID(int id);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Deletes quote in database using model
         /// </summary>
         /// <param name="model">The model to remove</param>

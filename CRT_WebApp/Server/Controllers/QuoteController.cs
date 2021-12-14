@@ -78,6 +78,15 @@ namespace CRT_WebApplication.Server.Controllers
         {
             await _quoteService.SoftDeleteQuote(quoteModel.Id);
         }
+        /// <summary>
+        /// Hard delete SubGroup API, permanently deletes a SubGroup using the QuoteService.
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        [HttpPost("DeleteSubGroup")]
+        public async Task DeleteSubGroup(SubGroupModel subGroupModel)
+        {
+            await _quoteService.DeleteSubGroupsByID(subGroupModel.Id);
+        }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Enable quote API, Changes a survey Quote to a normal Quote

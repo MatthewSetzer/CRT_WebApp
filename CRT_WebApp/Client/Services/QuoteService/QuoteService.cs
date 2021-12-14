@@ -104,6 +104,16 @@ namespace CRT_WebApp.Client.Services.QuoteService
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// API call to delete entire quote
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task DeleteSubGroup(SubGroupModel subGroupModel)
+        {
+            await _http.PostAsJsonAsync("api/Quote/DeleteSubGroup", subGroupModel);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// "Selects" a quote to be updated, populating the SubGroup service 
         /// </summary>
         /// <param name="quote">The quote that will be modified or changed</param>

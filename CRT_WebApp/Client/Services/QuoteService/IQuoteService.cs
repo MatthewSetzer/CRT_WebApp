@@ -69,6 +69,13 @@ namespace CRT_WebApp.Client.Services.QuoteService
         Task DeleteQuote(int id);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Deletes sub group from the db
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task DeleteSubGroup(SubGroupModel subGroupModel);
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Selects the quote to be updated and uses other services to load up the data
         /// </summary>
         /// <param name="quote">The quote that will be edited</param>

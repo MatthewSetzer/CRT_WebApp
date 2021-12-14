@@ -81,12 +81,24 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <returns></returns>
         public async Task DeleteQuoteByID(int id)
         {
-            var quote = _context.Quotes.OrderBy(e => e.QuoteTitle).Include(e => e.SubGroups).ThenInclude(e => e.ListOfItems)
+            var quote = _context.Quotes.Where(e => e.Id == id).Include(e => e.SubGroups).ThenInclude(e => e.ListOfItems)
                 .Include(e => e.Notes)
                 .Include(e => e.Images).First();
             
             _context.Quotes.Remove(quote);
 
+            await _context.SaveChangesAsync();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Deletes the quote
+        /// </summary>
+        /// <param name="quoteID"></param>
+        /// <returns></returns>
+        public async Task DeleteSubGroupsByID(int id)
+        {
+            var subGroup = _context.SubGroups.Where(e => e.Id == id).Include(e => e.ListOfItems).First();
+            _context.SubGroups.Remove(subGroup);
             await _context.SaveChangesAsync();
         }
         //---------------------------------------------------------------------------------------------------------//
