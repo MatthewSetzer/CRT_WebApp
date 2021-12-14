@@ -39,7 +39,7 @@ namespace CRT_WebApp.Client.Services.UserService
         /// </summary>
         /// <param name="userID">The id of the user to be removed from a role</param>
         /// <param name="role">The role to be removed from</param>
-        Task RemoveRoleFromUser(string userID, string role);
+        Task RemoveRoleFromUser(string userID);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Deletes the user account with the specified account ID

@@ -28,13 +28,20 @@ namespace CRT_WebApp.Server.Services.UserService
         /// </summary>
         /// <param name="userID">The id of the user to be removed from a role</param>
         /// <param name="role">The role to be removed from</param>
-        Task<IdentityResult> RemoveRoleFromUser(string userID, string role);
+        Task<IdentityResult> RemoveRoleFromUser(string userID);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Gets all registered users
         /// </summary>
         /// <returns>A list of all registered users</returns>
         Task<List<ApplicationUser>> GetAllUsers();
+
+        /// <summary>
+        /// Deletes a user account from the database using its unique user ID
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        Task DeleteUser(string userID);
 
     }
 }

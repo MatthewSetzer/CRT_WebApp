@@ -25,9 +25,8 @@ namespace CRT_WebApp.Server.Services.UserService
         public async Task<IdentityResult> AddRoleToUser(string userID, string role)
         {
             //Console.WriteLine("SERVER ADD ROLE TO USER"+Environment.NewLine+"userID: "+userID+Environment.NewLine+"roleID: "+role);
-            var user = await _userManager.FindByIdAsync(userID);
-            
-            var result = await _userManager.AddToRoleAsync(user, role); //user cannot be null
+            var user = await _userManager.FindByIdAsync(userID);           
+            var result = await _userManager.AddToRoleAsync(user, role); 
             return result;
         }
         //---------------------------------------------------------------------------------------------------------//
@@ -60,11 +59,19 @@ namespace CRT_WebApp.Server.Services.UserService
         /// <param name="userID">The id of the user to be removed from the role</param>
         /// <param name="role">The role to be removed from</param>
         /// <returns>Result of task</returns>
-        public async Task<IdentityResult> RemoveRoleFromUser(string userID, string role)
+        public async Task<IdentityResult> RemoveRoleFromUser(string userID)
         {
             var user = await _userManager.FindByIdAsync(userID);
-            var result = await _userManager.RemoveFromRoleAsync(user,role);
+            var result = await _userManager.RemoveFromRoleAsync(user,"admin");
             return result;
+        }
+
+        public async Task DeleteUser(string userID)
+        {
+            ApplicationUser taskUser = await _userManager.FindByIdAsync(userID);
+            //Console.WriteLine("STATUSSS: "+taskUser.Status+Environment.NewLine+"Username retrieved: "+taskUser.Result.Email);
+            await _userManager.RemoveFromRoleAsync(taskUser, "admin");
+            await _userManager.DeleteAsync(taskUser);
         }
     }
 }

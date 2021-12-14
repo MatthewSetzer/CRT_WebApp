@@ -30,6 +30,14 @@ namespace CRT_WebApp.Server.Controllers
                 RoleID = roleID;
             }
         }
+        public struct DeleteID
+        {
+            public string UserID { get; set; }
+            public DeleteID(string userID)
+            {
+                UserID = userID;
+            }
+        }
         //---------------------------------------------------------------------------------------------------------//
         public UserController(IUserService userService)
         {
@@ -79,11 +87,12 @@ namespace CRT_WebApp.Server.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("RemoveRole")]
+        [HttpDelete("RemoveRole/{UserID}")]
 
-        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string userID, string roleID)
+        public async Task<ActionResult<List<IdentityUser>>> RemoveRoleFromUser(string UserID)
         {
-            var result = await _userService.RemoveRoleFromUser(userID, roleID);
+            Console.WriteLine("TO DELETE: "+UserID+" : "+"admin");
+            var result = await _userService.RemoveRoleFromUser(UserID);
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description);
@@ -95,10 +104,10 @@ namespace CRT_WebApp.Server.Controllers
         //---------------------------------------------------------------------------------------------------------------//
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("DeleteUser")]
-        public async Task DeleteUser(string userID)
-        {
-           //var result = await _userService.DeleteUser(userID);
+        [HttpDelete("DeleteUser/{UserID}")]
+        public async Task DeleteUserAccount(string UserID)
+        { 
+            await _userService.DeleteUser(UserID);
         }
     }
 
