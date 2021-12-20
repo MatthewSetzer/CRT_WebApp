@@ -1,6 +1,7 @@
 ﻿@page "/printpage"
 @inject IQuoteService QuoteService
-@using System.IO
+@inject IJSRuntime JSRuntime
+
 
 <div class="row">
     <h2>@QuoteService.Quote.QuoteTitle</h2>
@@ -8,8 +9,11 @@
         <img src="/Logo/LogoImg.jpg" style="max-width: 70%;">
     </div>
 </div>
+<br />
+<div id="PrintDiv" class="row">
+    <PrintList></PrintList>
+</div>
 
-<PrintList></PrintList>
 <InputFile OnChange="@OnFileSelection"></InputFile>
 <br />
 <br />
@@ -23,12 +27,8 @@
 </div>
 
 <div class="row">
-    <button onclick="window.print();" class="btn btn-success">Create PDF</button>
+    <button @onclick="@Print" class="btn btn-success">Create PDF</button>
 </div>
-
-
-
-
 
 
 @code {
@@ -44,6 +44,11 @@
             string imgUrl = $"data:{imageType};base64,{Convert.ToBase64String(buffers)}";
             imgUrls.Add(imgUrl);
         }
+    }
+
+    public async Task Print()
+    {
+        await JSRuntime.InvokeVoidAsync("printDiv");
     }
 
 }
