@@ -12,7 +12,6 @@
 <div class="row" style="margin-top:2px">
 
     <div class="col-4">
-
         <EditForm Model="@quote" OnValidSubmit="@addQuote">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -55,7 +54,6 @@
             <SubGroup subGroup=sub></SubGroup>
         </div>
     }
-
 </div>
 
 
@@ -70,6 +68,7 @@
     protected async override void OnInitialized()
     {
         SubGroupService.OnChange += StateHasChanged;
+        NoteService.OnChange += StateHasChanged;
         await GetUser();
     }
 
@@ -77,6 +76,7 @@
     void IDisposable.Dispose()
     {
         SubGroupService.OnChange -= StateHasChanged;
+        NoteService.OnChange -= StateHasChanged;
         quote = new QuoteViewModel();
     }
 
@@ -100,6 +100,7 @@
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
             NoteService.Notes.Clear();
+            NoteService.ClearNotes();
 
             toastService.ShowSuccess("Quote Created", "Success");
         }
@@ -119,6 +120,7 @@
             QuoteDate = DateTime.Now,
             QuoteUser = userID,
             SubGroups = SubGroupService.GetSubGroupList(),
+            Notes = NoteService.GetNotesFromList(),
             Total = Convert.ToDouble(SubGroupService.GetSubGroupsTotal()),
             IsDeleted = false
         };
@@ -127,6 +129,8 @@
             QuoteService.UpdateQuote(newQuote);
             quote = new QuoteViewModel();
             SubGroupService.SubGroups.Clear();
+            NoteService.Notes.Clear();
+            NoteService.ClearNotes();
 
             toastService.ShowSuccess("Quote Updated", "Success");
         }

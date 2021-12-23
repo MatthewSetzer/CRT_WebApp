@@ -23,6 +23,7 @@ namespace CRT_WebApp.Client.Services.NotesService
         /// </summary>
         /// <param name="note">The note to be added to the list</param>
         void AddNoteToList(NoteModel note);
+        void ClearNotes();
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Remove the note from the list

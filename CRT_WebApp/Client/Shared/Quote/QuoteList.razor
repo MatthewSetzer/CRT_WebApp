@@ -1,6 +1,7 @@
 ﻿@inject IQuoteService QuoteService
 @inject ISubGroupService SubGroupService
 @inject IAssemblyItemService AssemblyItemService
+@inject INotesService NotesService 
 @inject NavigationManager Navigation
 
 <div class="container">
@@ -79,7 +80,6 @@
         QuoteService.LoadAllQuotes();
     }
 
-
     public void Dispose()
     {
         QuoteService.OnChange -= StateHasChanged;
@@ -116,6 +116,9 @@
     public void ClearGroups()
     {
         SubGroupService.SubGroups.Clear();
+        AssemblyItemService.AssemblyItems.Clear();
+        NotesService.Notes.Clear();
+
         QuoteService.Quote.Id = 0;
     }
 }

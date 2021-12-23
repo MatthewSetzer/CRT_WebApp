@@ -11,6 +11,7 @@ namespace CRT_WebApp.Client.Services.NotesService
         //---------------------------------------------------------------------------------------------------------//
         public List<NoteModel> Notes { get; set ; } = new List<NoteModel>();
         //---------------------------------------------------------------------------------------------------------//
+
         public event Action OnChange;
         //---------------------------------------------------------------------------------------------------------//
         public void AddNoteToList(NoteModel note)
@@ -27,6 +28,12 @@ namespace CRT_WebApp.Client.Services.NotesService
         {
             Notes.Clear();
             Notes.AddRange(notesToAdd);
+        }
+
+        public void ClearNotes()
+        {
+            Notes.Clear();
+            OnChange.Invoke();
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
