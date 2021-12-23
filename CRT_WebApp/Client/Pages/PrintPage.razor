@@ -3,18 +3,81 @@
 @inject IJSRuntime JSRuntime
 
 
+<br />
+ <h2>Enter Adrress</h2>
+ <br />
+ <div class="row">
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"  style="width: 210px" id="inputGroup-sizing-default">Enter Unite/Street number:</span>
+                </div>
+                <input class="form-control" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" @bind="@Unite" @bind:event="oninput"/>
+            </div>      
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 210px" id="inputGroup-sizing-default">Enter Street:</span>
+                </div>
+                <input class="form-control" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" @bind="@Street" @bind:event="oninput"/>
+            </div> 
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 210px" id="inputGroup-sizing-default">Enter Suburb:</span>
+                </div>
+                <input class="form-control" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" @bind="@Suburb" @bind:event="oninput"/>
+            </div> 
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 210px" id="inputGroup-sizing-default">Enter City:</span>
+                </div>
+                <input class="form-control" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" @bind="@City" @bind:event="oninput"/>
+            </div> 
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="width: 210px" id="inputGroup-sizing-default">Enter State/Province:</span>
+                </div>
+                <input class="form-control" type="text" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" @bind="@StateProvince" @bind:event="oninput"/>
+            </div> 
+            <br />
+            
+          
+           </div>
+           <hr />
+
+ <br />
+<div  id="PrintDiv">
 <div class="row">
-    <h2>@QuoteService.Quote.QuoteTitle</h2>
+   
     <div class="ml-auto">
         <img src="/Logo/LogoImg.jpg" style="max-width: 70%;">
     </div>
-</div>
-<br />
-<div id="PrintDiv" class="row">
-    <PrintList></PrintList>
+    
 </div>
 
-<InputFile OnChange="@OnFileSelection"></InputFile>
+ <h2>@QuoteService.Quote.QuoteTitle</h2><br />
+       
+<label> @Unite </label><br />
+<label> @Street </label><br />
+<label> @Suburb </label><br />
+<label> @City </label><br />
+<label> @StateProvince </label><br />
+
+		
+
+
+<br />
+<PrintList></PrintList>
+<br />
+<br />
+<br />
+<br />
+
+
+<CRT_WebApp.Client.Shared.Notes.NotGroupList></CRT_WebApp.Client.Shared.Notes.NotGroupList>
+<br />
+<br />
+
+
 <br />
 <br />
 <div class="row">
@@ -25,15 +88,27 @@
         <br />
     }
 </div>
+</div>
 
-<div class="row">
-    <button @onclick="@Print" class="btn btn-success">Create PDF</button>
+ <hr />
+<div class="row" style="padding-bottom: 100px;">
+ <label>Add Images: </label> <InputFile OnChange="@OnFileSelection"></InputFile>
+            <button @onclick="@Print" class="btn btn-success"  style="position: absolute; right: 100px; ">Create PDF</button>
 </div>
 
 
 @code {
+     string Unite;
+      string Street;
+       string Suburb;
+        string City;
+         string StateProvince;
 
     List<string> imgUrls = new List<string>();
+
+
+
+
     private async Task OnFileSelection(InputFileChangeEventArgs e)
     {
         foreach (IBrowserFile imgFile in e.GetMultipleFiles(5))
