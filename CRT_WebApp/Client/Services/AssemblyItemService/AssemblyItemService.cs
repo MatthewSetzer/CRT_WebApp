@@ -29,7 +29,10 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         {
             item.Total = item.NumberOfUnits * item.Rate;
             AssemblyItems.Add(item);
-            //OnChange.Invoke();
+            if (OnChange != null)
+            {
+                OnChange.Invoke();
+            }
         }
         //---------------------------------------------------------------------------------------------------------//
         public void AddAssemblyListToSubGroup(string Title)
