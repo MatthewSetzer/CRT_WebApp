@@ -1,48 +1,30 @@
 ﻿@using CRT_WebApp.Shared
 @inject ISubGroupService SubGroupService
-@implements IDisposable;
-<div style="width: 200%">
-<Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString() >
 
-        <table class="table table-striped">
-            <thead class="thead-light">
-                <tr>
+    <h4><u>@subGroup.SubGroupTitle  <b>Sub Total:</b> $@subGroup.SubTotal.ToString()</u></h4>
+        <table style="width: 100%; border-collapse: collapse;">
+           
+                <tr >
                     <th scope="col">Description</th>
                     <th scope="col">Number of Units</th>
                     <th scope="col">Rate</th>
                     <th scope="col">Total</th>
-                    <th scope="col">Action</th>
                 </tr>
-            </thead>
-            <tbody>
+           
+            
                 @foreach (var item in subGroup.ListOfItems)
                 {
-                    <tr>
+                    <tr >
                         <td>@item.Description</td>
-                        <td>@item.NumberOfUnits</td>
+                        <td>@item.NumberOfUnitsWithMetric()</td>
                         <td>$@item.GetFormattedRate()</td>
                         <td>$@item.GetFormattedTotalPrice()</td>
-                        <td>
-                            <ul class="list-inline m-0">
-                                <li class="list-inline-item">
-                                </li>
-                            </ul>
-                        </td>
                     </tr>
                 }
-            </tbody>
+            
         </table>
-
-</Accordion>
-</div>
 @code {
     [Parameter]
     public SubGroupModel subGroup { get; set; }
-
-    public void Dispose()
-    {
-
-    }
-
   
 }

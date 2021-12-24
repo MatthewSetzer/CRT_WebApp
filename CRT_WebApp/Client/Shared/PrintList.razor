@@ -1,8 +1,19 @@
 ﻿@using CRT_WebApp.Client.Shared.Printing
+@inject ISubGroupService SubGroupService
+
 <br />
-<hr />
-<div>
-    <PrintGroupList></PrintGroupList>
+@foreach (var sub in SubGroupService.SubGroups)
+{
+    <br />
+    <PrintGroup subGroup=sub></PrintGroup>
+}
+
+<br />
+<div style="float:right">
+    <h2>
+        <label style="color:blueviolet">Quote Total: </label>
+        <label>$@SubGroupService.GetSubGroupsTotal() </label>
+    </h2>
 </div>
 
 @code {
