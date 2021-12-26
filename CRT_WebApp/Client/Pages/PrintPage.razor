@@ -19,7 +19,6 @@
         <h2>@QuoteService.Quote.QuoteTitle</h2>
     </div>
 
-    <br />
     <div style="text-align:right">
         <h4><b>Date:</b> @QuoteService.Quote.QuoteDate</h4>
     </div>
@@ -39,7 +38,8 @@
 
 <hr />
 <div class="row" style="padding-bottom: 100px;">
-    <label>Add Images: </label> <InputFile OnChange="@OnFileSelection"></InputFile>
+    <label>Add Images: </label> 
+    <InputFile OnChange="@OnFileSelection"></InputFile>
     <button @onclick="@Print" class="btn btn-success" style="position: absolute; right: 100px; ">Create PDF</button>
 </div>
 

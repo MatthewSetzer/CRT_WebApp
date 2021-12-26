@@ -1,5 +1,7 @@
 ﻿@using CRT_WebApp.Client.Shared.Printing
 @inject ISubGroupService SubGroupService
+@inject INotesService NoteService
+
 
 <br />
 @foreach (var sub in SubGroupService.SubGroups)
@@ -11,10 +13,44 @@
 <br />
 <div style="float:right">
     <h2>
-        <label style="color:blueviolet">Quote Total: </label>
+        <label style="color:blueviolet">Total: </label>
         <label>$@SubGroupService.GetSubGroupsTotal() </label>
     </h2>
 </div>
+<br />
+<h4>Notes:</h4>
+@foreach (var note in NoteService.Notes)
+{
+
+    <h5 style="color:blueviolet">@note.NoteHeader</h5>
+    <p>@note.NoteContent</p>
+}
+
+<h4>Warranty</h4>
+
+<p>5-year warranty on all Concrete work listed above. </p>
+
+<h4>Contractor’s Responsibility</h4>
+<p>
+    All Contractor’s Work shall be rendered in accordance with the professional standard for such contractors in Broward
+    County, Florida. Contractor shall expedite all work performance, so as to complete the project in a timely and
+    professional manner, with due consideration to maintaining all economic advantages for Client, as possible.
+    If Contractor is in breach of any of its obligations under this Contract, prior to availing itself of any rights or remedies it
+    may have as a result of the breach, Client must first provide Contractor with seven (7) days written notice of any such
+    breach and provide Contractor an additional ten (10) days within which to cure the breach.
+    If Client wishes to terminate this contract prior to any work being started, they may cancel the contract within 15 days
+    by sending a certified letter to the address listed in this contract. Any fees incurred by contractor for engineering,
+    permitting, and any other expense related to the project will be the responsibility of the Client and reimbursed to CRT.
+    Contractor shall not be responsible for any consequential or special damages incurred by Client as the result of
+    termination of this Contract or breach of any of its provisions by Contractor. This provision shall survive any termination
+    of this Contract.
+    Association is responsible for notifying home owners of work areas to be cleared and that Surtreat has access to all areas
+    that work will be performed.
+    Florida homeowners have certain rights under Florida law. If you have suffered damages caused by the financial
+    mismanagement of a licensed contractor or construction company with whom you have signed a construction contract,
+    you may be eligible for the fund. The fund is a last resort after all civil remedies have been exhausted.
+</p>
+
 
 @code {
 
