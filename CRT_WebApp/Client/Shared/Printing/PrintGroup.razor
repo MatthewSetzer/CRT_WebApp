@@ -1,48 +1,33 @@
 ﻿@using CRT_WebApp.Shared
 @inject ISubGroupService SubGroupService
-@implements IDisposable;
-<div style="width: 200%">
-<Accordion Title=@subGroup.SubGroupTitle Value=@subGroup.SubTotal.ToString() >
 
-        <table class="table table-striped">
-            <thead class="thead-light">
-                <tr>
-                    <th scope="col">Description</th>
-                    <th scope="col">Number of Units</th>
-                    <th scope="col">Rate</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Action</th>
+<h4>
+    <label>@subGroup.SubGroupTitle — </label>
+    <label style="color:blueviolet">Sub Total: </label>
+    <label>$@subGroup.SubTotal.ToString() </label>
+</h4>
+        <table style="width: 100%; border-collapse: collapse;  text-align:left">
+            <thead>
+                <tr style="padding: 10px;">
+                    <th>Description</th>
+                    <th>Number of Units</th>
+                    <th>Rate</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in subGroup.ListOfItems)
                 {
-                    <tr>
-                        <td>@item.Description</td>
-                        <td>@item.NumberOfUnits</td>
-                        <td>$@item.GetFormattedRate()</td>
-                        <td>$@item.GetFormattedTotalPrice()</td>
-                        <td>
-                            <ul class="list-inline m-0">
-                                <li class="list-inline-item">
-                                </li>
-                            </ul>
-                        </td>
+                    <tr style="padding: 10px;">
+                        <td style="width:25%">@item.Description</td>
+                        <td style="width:25%">@item.NumberOfUnitsWithMetric()</td>
+                        <td style="width:25%">$@item.GetFormattedRate()</td>
+                        <td style="width:25%">$@item.GetFormattedTotalPrice()</td>
                     </tr>
                 }
             </tbody>
         </table>
-
-</Accordion>
-</div>
 @code {
     [Parameter]
     public SubGroupModel subGroup { get; set; }
-
-    public void Dispose()
-    {
-
-    }
-
-  
 }
