@@ -2,6 +2,8 @@
 @inject ISubGroupService SubGroupService
 @inject IQuoteService QuoteService
 @inject IItemService ItemService
+@inject IToastService toastService
+
 
 @inject IAssemblyItemService AssemblyItemService
 
@@ -45,8 +47,18 @@
             </tbody>
         </table>
     </Accordion>
+
+    <Confirm @ref="DeleteConfirmation" ConfirmationChanged="ConfirmDelete_Click"
+             ConfirmationMessage=@($"Are you sure you want to remove \"{subGroupName}\"")>
+    </Confirm>
+
 </div>
 @code {
+
+    protected CRT_WebApp.Client.Shared.Confirm.ConfirmBase DeleteConfirmation { get; set; }
+
+    string subGroupName;
+
     [Parameter]
     public SubGroupModel subGroup { get; set; }
 
@@ -57,12 +69,23 @@
 
     public void RemoveSubGroup(SubGroupModel subGroup)
     {
-        SubGroupService.RemoveSubGroupFromList(subGroup);
-        if (subGroup.Id != 0)
-        {
-            QuoteService.DeleteSubGroup(subGroup);
-        }
+        subGroupName = subGroup.SubGroupTitle;
+        DeleteConfirmation.Show();
+    }
 
+    protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+    {
+        if (deleteConfirmed)
+        {
+            SubGroupService.RemoveSubGroupFromList(subGroup);
+            if (subGroup.Id != 0)
+            {
+                await QuoteService.DeleteSubGroup(subGroup);
+            }
+
+            toastService.ShowSuccess("Sub Group Removed", "Info");
+        }
+        QuoteService.OnChange += StateHasChanged;
     }
 
     public void AddItem(AssemblyItemModel item)
