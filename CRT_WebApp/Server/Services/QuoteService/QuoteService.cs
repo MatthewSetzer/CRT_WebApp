@@ -127,6 +127,17 @@ namespace CRT_WebApp.Server.Services.QuoteService
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Updates single assembly item
+        /// </summary>
+        /// <param name="quote"></param>
+        /// <returns></returns>
+        public async Task UpdateAssemblyItem(AssemblyItemModel item)
+        {
+            _context.AssemblyItems.Update(item);
+            await _context.SaveChangesAsync();
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Enables a quote
         /// </summary>
         /// <param name="quote">The quote to be enabled</param>

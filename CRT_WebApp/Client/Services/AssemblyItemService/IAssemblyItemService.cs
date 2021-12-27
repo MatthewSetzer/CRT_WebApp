@@ -14,6 +14,8 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         event Action OnChange;
         //---------------------------------------------------------------------------------------------------------//
         List<AssemblyItemModel> AssemblyItems { get; set; }
+
+        AssemblyItemModel UpdateItem { get; set; }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// Adds assembly item to the list

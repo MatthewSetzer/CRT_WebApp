@@ -151,6 +151,16 @@ namespace CRT_WebApp.Client.Services.QuoteService
         {
             await _http.PostAsJsonAsync("api/Quote/UpdateQuote", quote);
         }
+
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// Makes an API call to update an assembly item
+        /// </summary>
+        /// <param name="quote">The quote with the updated information</param>
+        public async Task UpdateItem(AssemblyItemModel item)
+        {
+            await _http.PostAsJsonAsync("api/Quote/UpdateItem", item);
+        }
     }
 }
 //-------------------------------------...ooo000 END OF FILE 000ooo...-------------------------------------//

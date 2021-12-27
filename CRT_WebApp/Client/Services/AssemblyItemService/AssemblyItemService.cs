@@ -16,6 +16,8 @@ namespace CRT_WebApp.Client.Services.AssemblyItemService
         }
         //---------------------------------------------------------------------------------------------------------//
         public List<AssemblyItemModel> AssemblyItems { get ; set; } = new List<AssemblyItemModel>();
+
+        public AssemblyItemModel UpdateItem { get; set; } = new AssemblyItemModel();
         //---------------------------------------------------------------------------------------------------------//
         public event Action OnChange;
         //---------------------------------------------------------------------------------------------------------//

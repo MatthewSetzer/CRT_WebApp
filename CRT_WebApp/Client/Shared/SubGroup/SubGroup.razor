@@ -90,7 +90,7 @@
 
     public void AddItem(AssemblyItemModel item)
     {
-        AssemblyItemService.AddAssemblyItemToList(item);
+        AssemblyItemService.UpdateItem = item;
         AssemblyItemService.OnChange += StateHasChanged;
     }
 }

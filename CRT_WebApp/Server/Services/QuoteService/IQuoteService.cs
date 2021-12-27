@@ -75,7 +75,12 @@ namespace CRT_WebApp.Server.Services.QuoteService
         /// <param name="quote"></param>
         /// <returns></returns>
         Task UpdateQuote(QuoteModel quote);
-
+        /// <summary>
+        /// Updates assembly item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        Task UpdateAssemblyItem(AssemblyItemModel item);
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// "Enables" a Quote, which represents a survey being edited into a quote. 

@@ -59,6 +59,16 @@ namespace CRT_WebApplication.Server.Controllers
         }
         //---------------------------------------------------------------------------------------------------------//
         /// <summary>
+        /// Update Quote API route, updates a quote in the database using the QuoteService. 
+        /// </summary>
+        /// <param name="quoteModel"></param>
+        [HttpPost("UpdateItem")]
+        public async Task UpdateItem(AssemblyItemModel item)
+        {
+            await _quoteService.UpdateAssemblyItem(item);
+        }
+        //---------------------------------------------------------------------------------------------------------//
+        /// <summary>
         /// Hard delete Quote API, permanently deletes a quote using the QuoteService.
         /// </summary>
         /// <param name="quoteModel"></param>

@@ -98,7 +98,12 @@ namespace CRT_WebApp.Client.Services.QuoteService
         /// <param name="quote"></param>
         /// <returns></returns>
         Task UpdateQuote(QuoteModel quote);
-
+        /// <summary>
+        /// Updates single item
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        Task UpdateItem(AssemblyItemModel item);
 
     }
 }
