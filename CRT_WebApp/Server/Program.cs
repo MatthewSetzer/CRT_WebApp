@@ -21,6 +21,13 @@ namespace CRT_WebApp.Server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureLogging((ctx, logging) =>
+                    {
+                        logging.AddEventLog(options =>
+                        {
+                            options.SourceName = "CRT_WebApp";
+                        });
+                    });
                 });
     }
 }
